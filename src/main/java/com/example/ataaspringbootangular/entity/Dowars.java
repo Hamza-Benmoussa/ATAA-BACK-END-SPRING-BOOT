@@ -1,13 +1,14 @@
 package com.example.ataaspringbootangular.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -18,4 +19,10 @@ public class Dowars {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDowars;
     private String nomDowars;
+    @ManyToOne
+    private RegionVilles regionVilles;
+    @OneToMany(mappedBy = "dowars" ,fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+    @JsonIgnore
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Residants> residants;
 }
