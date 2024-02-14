@@ -25,4 +25,14 @@ public class Dowars {
     @JsonIgnore
     @Fetch(FetchMode.SUBSELECT)
     private List<Residants> residants;
+    @ManyToMany(mappedBy = "dowars", fetch = FetchType.EAGER)
+    @JsonIgnore
+    @Fetch(FetchMode.SUBSELECT)
+    private List<BiensEssantiels> biensEssentiels;
+
+    @Transient
+    private int biensRecus;
+
+    @Transient
+    private int biensManquants;
 }
