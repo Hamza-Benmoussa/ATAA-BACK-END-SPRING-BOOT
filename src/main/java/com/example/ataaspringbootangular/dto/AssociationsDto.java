@@ -4,7 +4,6 @@ import com.example.ataaspringbootangular.entity.Associations;
 import lombok.Value;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * DTO for {@link Associations}
@@ -15,7 +14,5 @@ public class AssociationsDto implements Serializable {
     Long nomPresidantIdUser;
     String NbrSerie;
     String NomAssociation;
-    List<Long> biensEssantielIdBiens;
-    List<Long> memberIdMembers;
-    List<Long> regionVilleIdRegionVilles;
+    Long villesIdRegionVille;
 }

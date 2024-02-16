@@ -20,19 +20,12 @@ public class Dowars {
     private Long idDowars;
     private String nomDowars;
     @ManyToOne
-    private RegionVilles regionVilles;
-    @OneToMany(mappedBy = "dowars" ,fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+    private Villes villes;
+    @OneToMany(mappedBy = "dowars", fetch = FetchType.EAGER)
     @JsonIgnore
     @Fetch(FetchMode.SUBSELECT)
-    private List<Residants> residants;
-    @ManyToMany(mappedBy = "dowars", fetch = FetchType.EAGER)
-    @JsonIgnore
-    @Fetch(FetchMode.SUBSELECT)
-    private List<BiensEssantiels> biensEssentiels;
+    private List<Kafila> kafilas;
 
-    @Transient
-    private int biensRecus;
 
-    @Transient
-    private int biensManquants;
+
 }

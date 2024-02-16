@@ -23,8 +23,8 @@ public class BiensEssantiels {
     private Double quantity;
     @ManyToOne
     private Associations associations;
-    @ManyToMany(mappedBy = "biensEssentiels", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "biensEssentiels", fetch = FetchType.EAGER)
     @JsonIgnore
     @Fetch(FetchMode.SUBSELECT)
-    private List<Dowars> dowars;
+    private List<BienKafila> bienKafilas;
 }

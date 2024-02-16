@@ -23,6 +23,8 @@ public class Associations {
     private String NbrSerie;
     private String NomAssociation;
 
+    @ManyToOne
+    private Villes villes;
     @OneToMany(mappedBy = "associations" , fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     @JsonIgnore
     @Fetch(FetchMode.SUBSELECT)
@@ -32,11 +34,6 @@ public class Associations {
     @JsonIgnore
     @Fetch(FetchMode.SUBSELECT)
     private List<Members> members;
-
-    @OneToMany(mappedBy = "associations" ,fetch = FetchType.EAGER , cascade = CascadeType.ALL)
-    @JsonIgnore
-    @Fetch(FetchMode.SUBSELECT)
-    private List<RegionVilles> regionVilles;
 
 
 }
