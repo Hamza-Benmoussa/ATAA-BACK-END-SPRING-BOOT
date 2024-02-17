@@ -1,4 +1,4 @@
 package com.example.ataaspringbootangular.service.impl;
 
-public class RegionVilleServiceImpl {
+public class VilleServiceImpl {
 }

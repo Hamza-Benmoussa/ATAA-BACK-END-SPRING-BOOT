@@ -2,17 +2,21 @@ package com.example.ataaspringbootangular.dto;
 
 import com.example.ataaspringbootangular.entity.Enum.Genre;
 import com.example.ataaspringbootangular.entity.Enum.RoleMembers;
-import com.example.ataaspringbootangular.entity.Members;
-import lombok.Value;
+import com.example.ataaspringbootangular.entity.Member;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * DTO for {@link Members}
+ * DTO for {@link Member}
  */
-@Value
-public class MembersDto implements Serializable {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class MemberDto implements Serializable {
     Long idMembers;
     RoleMembers roleMembers;
     String nomMembres;
@@ -21,5 +25,7 @@ public class MembersDto implements Serializable {
     String email;
     int tele;
     String adress;
-    Long associationsIdAssociation;
+    private Long associationIdAssociation;
+
+
 }

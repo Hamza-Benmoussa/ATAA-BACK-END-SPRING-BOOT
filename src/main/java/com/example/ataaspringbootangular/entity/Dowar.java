@@ -14,18 +14,26 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Dowars {
+public class Dowar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "dowars_id")
     private Long idDowars;
+
+    @Column(name = "nom_dowars")
     private String nomDowars;
+    @Column(name = "nombre_residant")
+    private int nmbrResidant;
+
     @ManyToOne
-    private Villes villes;
-    @OneToMany(mappedBy = "dowars", fetch = FetchType.EAGER)
+    @JoinColumn(name = "villes_id")
+    private Ville ville;
+
+    @OneToMany(mappedBy = "dowar", fetch = FetchType.EAGER)
     @JsonIgnore
     @Fetch(FetchMode.SUBSELECT)
     private List<Kafila> kafilas;
-
-
-
+    @Column(name="is_deleted")
+    private boolean deleted;
 }
+

@@ -14,18 +14,25 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Villes {
+public class Ville {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_region_ville")
     private Long idRegionVille;
-    private String nomVille;
-    @OneToMany(mappedBy = "villes",fetch = FetchType.EAGER , cascade = CascadeType.ALL)
-    @JsonIgnore
-    @Fetch(FetchMode.SUBSELECT)
-    private List<Associations> associations;
 
-    @OneToMany(mappedBy = "villes",fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+    @Column(name = "nom_ville")
+    private String nomVille;
+
+    @OneToMany(mappedBy = "ville", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     @Fetch(FetchMode.SUBSELECT)
-    private List<Dowars> dowars;
+    private List<Association> associations;
+
+    @OneToMany(mappedBy = "ville", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Dowar> dowars;
+    @Column(name="is_deleted")
+    private boolean deleted;
 }
+
