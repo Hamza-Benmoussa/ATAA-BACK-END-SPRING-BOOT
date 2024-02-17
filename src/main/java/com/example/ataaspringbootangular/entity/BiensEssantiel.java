@@ -27,7 +27,7 @@ public class BiensEssantiel {
     private Double quantity;
 
     @ManyToOne
-    @JoinColumn(name = "associations_id")
+    @JoinColumn(name = "id_associations")
     private Association association;
 
     @OneToMany(mappedBy = "biensEssentiels", fetch = FetchType.EAGER)

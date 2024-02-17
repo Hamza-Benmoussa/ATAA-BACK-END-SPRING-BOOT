@@ -17,7 +17,7 @@ import java.util.List;
 public class Dowar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dowars_id")
+    @Column(name = "id_dowars")
     private Long idDowars;
 
     @Column(name = "nom_dowars")
@@ -26,7 +26,7 @@ public class Dowar {
     private int nmbrResidant;
 
     @ManyToOne
-    @JoinColumn(name = "villes_id")
+    @JoinColumn(name = "id_villes")
     private Ville ville;
 
     @OneToMany(mappedBy = "dowar", fetch = FetchType.EAGER)

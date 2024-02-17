@@ -3,6 +3,8 @@ package com.example.ataaspringbootangular.service.impl;
 import com.example.ataaspringbootangular.dto.KafilaDto;
 import com.example.ataaspringbootangular.entity.Dowar;
 import com.example.ataaspringbootangular.entity.Kafila;
+import com.example.ataaspringbootangular.exception.except.KafilaFoundException;
+import com.example.ataaspringbootangular.exception.except.UtilisateurFoundException;
 import com.example.ataaspringbootangular.repository.IDowarsRepository;
 import com.example.ataaspringbootangular.repository.IKafilaRepository;
 import com.example.ataaspringbootangular.service.IBienKafilaService;
@@ -40,10 +42,10 @@ public class KafilaSericeImpl implements IKafilaService {
     }
 
     @Override
-    public KafilaDto getKafilasById(Long id) {
+    public KafilaDto getKafilasById(Long id) throws KafilaFoundException {
         return iKafilaRepository.findByIdAndDeletedFalse(id)
                 .map(kafila -> modelMapper.map(kafila , KafilaDto.class))
-                .orElse(null);
+                .orElseThrow(() -> new KafilaFoundException("Kafila Not found" + id));
     }
 
     @Override

@@ -22,11 +22,14 @@ public class Utilisateur {
     @Column(name = "nom_complete")
     private String NomComplete;
 
+    @Column(name = "password")
+    private String password;
+
     @Column(name = "adress")
-    private String adress;
+    private String address;
 
     @Column(name = "tele")
-    private int tele;
+    private String tele;
 
     @Column(name = "email")
     private String email;

@@ -7,25 +7,34 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * DTO for {@link Member}
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberDto implements Serializable {
-    Long idMembers;
+    @NotNull(message = "Role cannot be null")
     RoleMembers roleMembers;
+    @NotNull(message = "Name member cannot be null")
+    @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
     String nomMembres;
+    @NotNull(message = "Date of birth cannot be null")
     Date dateNaissance;
+    @NotNull(message = "Genre cannot be null")
     Genre genre;
+    @Email(message = "invalid email address")
     String email;
-    int tele;
+    @Pattern(regexp = "^\\+?[0-9. ()-]{10,}$", message = "invalid mobile number")
+    String tele;
+    @NotNull(message = "Address cannot be null")
+    @Size(min = 5)
     String adress;
-    private Long associationIdAssociation;
+    String associationNomAssociation;
 
-
+    boolean deleted;
 }

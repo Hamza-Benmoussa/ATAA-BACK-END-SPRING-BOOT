@@ -2,6 +2,8 @@ package com.example.ataaspringbootangular.service.impl;
 
 import com.example.ataaspringbootangular.dto.DowarDto;
 import com.example.ataaspringbootangular.entity.Dowar;
+import com.example.ataaspringbootangular.exception.except.DowarFoundException;
+import com.example.ataaspringbootangular.exception.except.UtilisateurFoundException;
 import com.example.ataaspringbootangular.repository.IDowarsRepository;
 import com.example.ataaspringbootangular.service.IDowarService;
 import org.modelmapper.ModelMapper;
@@ -35,10 +37,10 @@ public class DowarServiceImpl implements IDowarService {
     }
 
     @Override
-    public DowarDto getDowarsById(Long id) {
+    public DowarDto getDowarsById(Long id) throws DowarFoundException {
         return iDowarsRepository.findByIdAndDeletedFalse(id)
                 .map(dowar -> modelMapper.map(dowar , DowarDto.class))
-                .orElse(null);
+                .orElseThrow(() -> new DowarFoundException("Dowar Not found" + id));
     }
 
     @Override

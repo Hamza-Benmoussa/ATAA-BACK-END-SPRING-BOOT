@@ -38,10 +38,10 @@ public class Member {
     private String email;
 
     @Column(name = "tele")
-    private int tele;
+    private String tele;
 
     @Column(name = "address")
-    private String adress;
+    private String address;
 
     @ManyToOne
     @JoinColumn(name = "associations_id")

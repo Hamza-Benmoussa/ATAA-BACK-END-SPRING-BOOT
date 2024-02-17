@@ -2,6 +2,7 @@ package com.example.ataaspringbootangular.service;
 
 import com.example.ataaspringbootangular.dto.AssociationDto;
 import com.example.ataaspringbootangular.dto.BiensEssantielDto;
+import com.example.ataaspringbootangular.exception.except.BiensEssentielFoundException;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface IBiensEssantielService {
 
     List<BiensEssantielDto> getBiensEssantiels();
 
-    BiensEssantielDto getBiensEssantielsById(Long id);
+    BiensEssantielDto getBiensEssantielsById(Long id) throws BiensEssentielFoundException;
 
     BiensEssantielDto updateAssociation(BiensEssantielDto biensEssantielDto, Long id);
 

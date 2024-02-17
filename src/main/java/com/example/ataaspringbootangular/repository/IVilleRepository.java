@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface IVille extends JpaRepository<Ville,Long> {
+public interface IVilleRepository extends JpaRepository<Ville,Long> {
     List<Ville> findByDeletedFalse();
     Optional<Ville> findByIdAndDeletedFalse(Long id);
 }

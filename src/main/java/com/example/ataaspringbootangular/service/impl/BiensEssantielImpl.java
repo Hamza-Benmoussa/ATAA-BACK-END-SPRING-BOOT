@@ -2,6 +2,8 @@ package com.example.ataaspringbootangular.service.impl;
 
 import com.example.ataaspringbootangular.dto.BiensEssantielDto;
 import com.example.ataaspringbootangular.entity.BiensEssantiel;
+import com.example.ataaspringbootangular.exception.except.BiensEssentielFoundException;
+import com.example.ataaspringbootangular.exception.except.DowarFoundException;
 import com.example.ataaspringbootangular.repository.IBiensEssantielsRepository;
 import com.example.ataaspringbootangular.service.IBienKafilaService;
 import com.example.ataaspringbootangular.service.IBiensEssantielService;
@@ -37,10 +39,10 @@ public class BiensEssantielImpl implements IBiensEssantielService {
     }
 
     @Override
-    public BiensEssantielDto getBiensEssantielsById(Long id) {
+    public BiensEssantielDto getBiensEssantielsById(Long id) throws BiensEssentielFoundException {
         return iBiensEssantielsRepository.findByIdAndDeletedFalse(id)
                 .map(biensEssantiel -> modelMapper.map(biensEssantiel , BiensEssantielDto.class))
-                .orElse(null);
+                .orElseThrow(() -> new BiensEssentielFoundException("BiensEssentiel Not found" + id));
 
     }
 

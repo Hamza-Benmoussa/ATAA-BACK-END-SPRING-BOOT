@@ -21,17 +21,17 @@ public class Association {
     private Long idAssociation;
 
     @ManyToOne
-    @JoinColumn(name = "president_name")
+    @JoinColumn(name = "nom_president")
     private Utilisateur nomPresidant;
 
-    @Column(name = "serial_number")
-    private String NbrSerie;
+    @Column(name = "nombre_serie")
+    private String nbrSerie;
 
-    @Column(name = "association_name")
-    private String NomAssociation;
+    @Column(name = "nom_association")
+    private String nomAssociation;
 
     @ManyToOne
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "ville_id")
     private Ville ville;
 
     @OneToMany(mappedBy = "association", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

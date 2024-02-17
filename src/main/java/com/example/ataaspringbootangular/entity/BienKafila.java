@@ -20,11 +20,11 @@ public class BienKafila {
     private int quantityBienKafila;
 
     @ManyToOne
-    @JoinColumn(name = "biens_essentiels_id")
+    @JoinColumn(name = "id_biens_essentiels")
     private BiensEssantiel biensEssentiels;
 
     @ManyToOne
-    @JoinColumn(name = "kafila_id")
+    @JoinColumn(name = "id_kafila")
     private Kafila kafila;
     @Column(name="is_deleted")
     private boolean deleted;

@@ -1,7 +1,13 @@
 package com.example.ataaspringbootangular.service.impl;
 
 import com.example.ataaspringbootangular.dto.AssociationDto;
+import com.example.ataaspringbootangular.dto.UtilisateurDto;
 import com.example.ataaspringbootangular.entity.Association;
+import com.example.ataaspringbootangular.entity.Utilisateur;
+import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
+import com.example.ataaspringbootangular.exception.except.DowarFoundException;
+import com.example.ataaspringbootangular.exception.except.EmailDejaExisteException;
+import com.example.ataaspringbootangular.exception.except.NbrSerieDejaExisteException;
 import com.example.ataaspringbootangular.repository.IAssociationsRepository;
 import com.example.ataaspringbootangular.service.IAssociationService;
 import org.modelmapper.ModelMapper;
@@ -22,6 +28,7 @@ public class AssociationServiceImpl implements IAssociationService {
 
     @Override
     public AssociationDto ajouterAssociation(AssociationDto associationDto) {
+        checkNbrSerieExist(associationDto);
         Association association = modelMapper.map(associationDto , Association.class);
         Association saveAssociation = iAssociationsRepository.save(association);
         return modelMapper.map(saveAssociation, AssociationDto.class);
@@ -36,16 +43,32 @@ public class AssociationServiceImpl implements IAssociationService {
     }
 
     @Override
-    public AssociationDto getAssociationsById(Long id) {
+    public AssociationDto getAssociationsById(Long id) throws AssociationFoundException {
         return iAssociationsRepository.findByIdAndDeletedFalse(id)
                 .map(association -> modelMapper.map(association , AssociationDto.class))
-                .orElse(null);
+                .orElseThrow(() -> new AssociationFoundException("Association Not found" + id));
     }
 
+    private AssociationDto checkNbrSerieExist (AssociationDto associationDto){
+        if (associationDto.getNbrSerie().equals(getByNbrSerie(associationDto.getNbrSerie()))){
+            throw new NbrSerieDejaExisteException("deja exist cette nbrSerie");
+        }
+        return associationDto;
+    }
+    public String getByNbrSerie(String nbrSerie)
+    {
+        Association association = iAssociationsRepository.findByNbrSerieAndDeletedFalse(nbrSerie);
+        if(association != null)
+        {
+            return association.getNbrSerie();
+        }
+        return null;
+    }
     @Override
     public AssociationDto updateAssociation(AssociationDto associationDto, Long id) {
         Association existingAssociation = iAssociationsRepository.findByIdAndDeletedFalse(id).orElse(null);
         if (existingAssociation != null) {
+            checkNbrSerieExist(associationDto);
             existingAssociation.setNomAssociation(associationDto.getNomAssociation());
             existingAssociation.setNbrSerie(associationDto.getNbrSerie());
             Association updateAssociation = iAssociationsRepository.save(existingAssociation);

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -17,12 +18,23 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UtilisateurDto implements Serializable {
-    Long idUser;
+    @NotNull(message = "Name utilisateur cannot be null")
+    @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
     String NomComplete;
-    String adress;
-    int tele;
+    @NotNull(message = "Password cannot be null")
+    String password;
+    @NotNull(message = " Address cannot be null")
+    @Size(min = 5)
+    String address;
+    @Pattern(regexp = "^\\+?[0-9. ()-]{10,}$", message = "invalid mobile number")
+    String tele;
+    @Email(message = "invalid email address")
     String email;
+    @NotNull(message = "dateNaissance not be null")
     Date dateNaissance;
+    @NotNull(message = "Role not be null")
     RoleUser roleUser;
+    @NotNull(message = "Genre not be null")
     Genre genre;
+    boolean deleted;
 }

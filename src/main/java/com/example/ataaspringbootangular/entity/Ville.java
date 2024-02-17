@@ -17,8 +17,8 @@ import java.util.List;
 public class Ville {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_region_ville")
-    private Long idRegionVille;
+    @Column(name = "id_ville")
+    private Long idVille;
 
     @Column(name = "nom_ville")
     private String nomVille;

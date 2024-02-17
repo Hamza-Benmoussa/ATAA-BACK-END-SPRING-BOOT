@@ -2,6 +2,7 @@ package com.example.ataaspringbootangular.service;
 
 import com.example.ataaspringbootangular.dto.BiensEssantielDto;
 import com.example.ataaspringbootangular.dto.DowarDto;
+import com.example.ataaspringbootangular.exception.except.DowarFoundException;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface IDowarService {
 
     List<DowarDto> getDowars();
 
-    DowarDto getDowarsById(Long id);
+    DowarDto getDowarsById(Long id) throws DowarFoundException;
 
     DowarDto updateDowar(DowarDto dowarDto, Long id);
 
