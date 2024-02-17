@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,17 +29,26 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
     @Override
     public List<UtilisateurDto> getUtilisateurs() {
         List<Utilisateur> utilisateurs = iUtilisateurRepository.findByDeletedFalse();
-
-        return null;
+        return utilisateurs.stream()
+                .map(utilisateur -> modelMapper.map(utilisateur , UtilisateurDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override
     public UtilisateurDto getUtilisateursById(Long id) {
-        return null;
+        return iUtilisateurRepository.findByIdAndDeletedFalse(id)
+        .map(utilisateur -> modelMapper.map(utilisateur , UtilisateurDto.class))
+        .orElse(null);
     }
 
     @Override
     public UtilisateurDto updateUtilisateur(UtilisateurDto utilisateurDto, Long id) {
+        Utilisateur existingUtilisateur = iUtilisateurRepository.findByIdAndDeletedFalse(id).orElse(null);
+        if (existingUtilisateur != null){
+            existingUtilisateur.setEmail(utilisateurDto.getEmail());
+            existingUtilisateur.set
+        }
+
         return null;
     }
 
