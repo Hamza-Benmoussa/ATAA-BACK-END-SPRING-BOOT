@@ -1,6 +1,5 @@
 package com.example.ataaspringbootangular.entity;
 
-import com.example.ataaspringbootangular.entity.Enum.CategorieBiens;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +18,7 @@ public class BiensEssantiels {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idBiens;
-    private CategorieBiens nomBiens;
+    private String nomBiens;
     private Double quantity;
     @ManyToOne
     private Associations associations;

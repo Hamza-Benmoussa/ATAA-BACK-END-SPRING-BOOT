@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface IUtilisateurRepository extends JpaRepository<Utilisateurs ,Long> {
     List<Utilisateurs> findByDeletedFalse();
     Optional<Utilisateurs> findByIdAndDeletedFalse(Long id);
