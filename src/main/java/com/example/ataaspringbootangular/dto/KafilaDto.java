@@ -18,7 +18,7 @@ import java.util.List;
 public class KafilaDto implements Serializable {
     Long idKafila;
     String nomKfila;
-    Long dowarsIdDowars;
+    String dowarNomDowars;
     List<BienKafila> bienKafilas;
 
 }

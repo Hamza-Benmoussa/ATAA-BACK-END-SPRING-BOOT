@@ -45,12 +45,15 @@ public class AssociationServiceImpl implements IAssociationService {
     @Override
     public AssociationDto updateAssociation(AssociationDto associationDto, Long id) {
         Association existingAssociation = iAssociationsRepository.findByIdAndDeletedFalse(id).orElse(null);
-        existingAssociation.setNomAssociation(associationDto.getNomAssociation());
-        existingAssociation.setNbrSerie(associationDto.getNbrSerie());
-        Association updateAssociation = iAssociationsRepository.save(existingAssociation);
-        updateAssociation.setIdAssociation(id);
-        return modelMapper.map(updateAssociation, AssociationDto.class);
-    }
+        if (existingAssociation != null) {
+            existingAssociation.setNomAssociation(associationDto.getNomAssociation());
+            existingAssociation.setNbrSerie(associationDto.getNbrSerie());
+            Association updateAssociation = iAssociationsRepository.save(existingAssociation);
+            updateAssociation.setIdAssociation(id);
+            return modelMapper.map(updateAssociation, AssociationDto.class);
+        }
+        return null;
+        }
 
     @Override
     public void deleteAssociation(Long id) {

@@ -35,5 +35,7 @@ public class Dowar {
     private List<Kafila> kafilas;
     @Column(name="is_deleted")
     private boolean deleted;
+
+
 }
 

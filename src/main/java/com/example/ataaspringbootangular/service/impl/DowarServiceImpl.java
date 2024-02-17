@@ -44,11 +44,14 @@ public class DowarServiceImpl implements IDowarService {
     @Override
     public DowarDto updateDowar(DowarDto dowarDto, Long id) {
         Dowar existingDowar = iDowarsRepository.findByIdAndDeletedFalse(id).orElse(null);
+        if (existingDowar != null){
         existingDowar.setNomDowars(dowarDto.getNomDowars());
         existingDowar.setNmbrResidant(dowarDto.getNmbrResidant());
         Dowar updateDowar = iDowarsRepository.save(existingDowar);
         updateDowar.setIdDowars(id);
         return modelMapper.map(updateDowar, DowarDto.class);
+        }
+        return null;
     }
 
     @Override
