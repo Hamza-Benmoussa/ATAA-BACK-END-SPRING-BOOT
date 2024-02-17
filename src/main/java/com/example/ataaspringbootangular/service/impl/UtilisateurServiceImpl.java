@@ -46,7 +46,7 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
         Utilisateur existingUtilisateur = iUtilisateurRepository.findByIdAndDeletedFalse(id).orElse(null);
         if (existingUtilisateur != null){
             existingUtilisateur.setEmail(utilisateurDto.getEmail());
-            existingUtilisateur.set
+            existingUtilisateur.se
         }
 
         return null;
