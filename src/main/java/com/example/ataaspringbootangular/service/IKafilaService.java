@@ -5,6 +5,7 @@ import com.example.ataaspringbootangular.dto.KafilaDto;
 import com.example.ataaspringbootangular.exception.except.KafilaFoundException;
 import com.example.ataaspringbootangular.exception.except.UtilisateurFoundException;
 
+import java.text.ParseException;
 import java.util.List;
 
 public interface IKafilaService {
@@ -15,7 +16,7 @@ public interface IKafilaService {
 
     KafilaDto getKafilasById(Long id) throws KafilaFoundException;
 
-    KafilaDto updateKafila(KafilaDto kafilaDto, Long id);
+    KafilaDto updateKafila(KafilaDto kafilaDto, Long id) throws ParseException;
 
     void deleteKafila(Long id);
 }

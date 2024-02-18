@@ -23,14 +23,12 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
     private IUtilisateurRepository iUtilisateurRepository;
     @Autowired
     private ModelMapper modelMapper;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
     @Override
     public UtilisateurDto ajouterUtilisateur(UtilisateurDto utilisateurDto) {
         checkExistEmail(utilisateurDto);
         Utilisateur utilisateur = modelMapper.map(utilisateurDto , Utilisateur.class);
-        Utilisateur saveUtilisateur = iUtilisateurRepository.save(utilisateur);
-        return modelMapper.map(saveUtilisateur, UtilisateurDto.class);
+        Utilisateur savedUtilisateur = iUtilisateurRepository.save(utilisateur);
+        return modelMapper.map(savedUtilisateur, UtilisateurDto.class);
     }
 
     @Override
@@ -49,9 +47,8 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
     }
 
     @Override
-    public UtilisateurDto updateUtilisateur(UtilisateurDto utilisateurDto, Long id) throws ParseException {
+    public UtilisateurDto updateUtilisateur(UtilisateurDto utilisateurDto, Long id){
         Utilisateur existingUtilisateur = iUtilisateurRepository.findByIdAndDeletedFalse(id).orElse(null);
-        if (existingUtilisateur != null){
             checkExistEmail(utilisateurDto);
             existingUtilisateur.setEmail(utilisateurDto.getEmail());
             existingUtilisateur.setGenre(utilisateurDto.getGenre());
@@ -59,10 +56,11 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
             existingUtilisateur.setTele(utilisateurDto.getTele());
             existingUtilisateur.setAddress(utilisateurDto.getAddress());
             existingUtilisateur.setNomComplete(utilisateurDto.getNomComplete());
-            existingUtilisateur.setDateNaissance(dateFormat.parse(String.valueOf(utilisateurDto.getDateNaissance())));
-        }
+            existingUtilisateur.setDateNaissance(utilisateurDto.getDateNaissance());
+            Utilisateur updateUtilisateur = iUtilisateurRepository.save(existingUtilisateur);
+            updateUtilisateur.setId(id);
+            return modelMapper.map(updateUtilisateur, UtilisateurDto.class);
 
-        return null;
     }
 
     private UtilisateurDto checkExistEmail (UtilisateurDto utilisateurDto){

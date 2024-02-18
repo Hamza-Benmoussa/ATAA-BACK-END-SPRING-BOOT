@@ -17,16 +17,12 @@ import java.util.List;
 public class Dowar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_dowars")
-    private Long idDowars;
+    private Long id;
 
-    @Column(name = "nom_dowars")
     private String nomDowars;
-    @Column(name = "nombre_residant")
     private int nmbrResidant;
 
     @ManyToOne
-    @JoinColumn(name = "id_villes")
     private Ville ville;
 
     @OneToMany(mappedBy = "dowar", fetch = FetchType.EAGER)

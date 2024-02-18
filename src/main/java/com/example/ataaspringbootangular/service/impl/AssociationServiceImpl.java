@@ -41,6 +41,10 @@ public class AssociationServiceImpl implements IAssociationService {
                 .map(association -> modelMapper.map(association , AssociationDto.class))
                 .collect(Collectors.toList());
     }
+    @Override
+    public Association getAssociationByName(String associationName) {
+        return iAssociationsRepository.findByNomAssociationAndDeletedFalse(associationName);
+    }
 
     @Override
     public AssociationDto getAssociationsById(Long id) throws AssociationFoundException {
@@ -67,15 +71,12 @@ public class AssociationServiceImpl implements IAssociationService {
     @Override
     public AssociationDto updateAssociation(AssociationDto associationDto, Long id) {
         Association existingAssociation = iAssociationsRepository.findByIdAndDeletedFalse(id).orElse(null);
-        if (existingAssociation != null) {
             checkNbrSerieExist(associationDto);
             existingAssociation.setNomAssociation(associationDto.getNomAssociation());
             existingAssociation.setNbrSerie(associationDto.getNbrSerie());
             Association updateAssociation = iAssociationsRepository.save(existingAssociation);
-            updateAssociation.setIdAssociation(id);
+            updateAssociation.setId(id);
             return modelMapper.map(updateAssociation, AssociationDto.class);
-        }
-        return null;
         }
 
     @Override

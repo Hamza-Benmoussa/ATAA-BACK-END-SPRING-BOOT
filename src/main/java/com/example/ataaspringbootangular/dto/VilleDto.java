@@ -19,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VilleDto implements Serializable {
+    Long id;
     @NotNull(message = "Name ville cannot be null")
     @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
     String nomVille;

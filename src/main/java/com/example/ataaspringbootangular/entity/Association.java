@@ -17,21 +17,17 @@ import java.util.List;
 public class Association {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_association")
-    private Long idAssociation;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "nom_president")
     private Utilisateur nomPresidant;
 
-    @Column(name = "nombre_serie")
+
     private String nbrSerie;
 
-    @Column(name = "nom_association")
     private String nomAssociation;
 
     @ManyToOne
-    @JoinColumn(name = "ville_id")
     private Ville ville;
 
     @OneToMany(mappedBy = "association", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

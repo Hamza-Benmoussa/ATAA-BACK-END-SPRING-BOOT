@@ -27,6 +27,12 @@ public class VilleServiceImpl implements IVilleService {
         Ville saveVille = iVilleRepository.save(ville);
         return modelMapper.map(saveVille , VilleDto.class);
     }
+
+    @Override
+    public Ville getByNomVille(String nomVille) {
+        return iVilleRepository.findByNomVilleAndDeletedFalse(nomVille);
+    }
+
     @Override
     public List<VilleDto> getVilles() {
         List<Ville> villes = iVilleRepository.findByDeletedFalse();
@@ -47,6 +53,9 @@ public class VilleServiceImpl implements IVilleService {
         Ville existingVille = iVilleRepository.findByIdAndDeletedFalse(id).orElse(null);
         if (existingVille != null) {
             existingVille.setNomVille(villeDto.getNomVille());
+            Ville updateVille = iVilleRepository.save(existingVille);
+            updateVille.setId(id);
+            return modelMapper.map(updateVille, VilleDto.class);
         }
         return null;
     }

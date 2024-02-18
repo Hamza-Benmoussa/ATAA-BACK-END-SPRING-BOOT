@@ -17,17 +17,13 @@ import java.util.List;
 public class BiensEssantiel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_biens")
-    private Long idBiens;
+    private Long id;
 
-    @Column(name = "nom_biens")
     private String nomBiens;
 
-    @Column(name = "quantity")
     private Double quantity;
 
     @ManyToOne
-    @JoinColumn(name = "id_associations")
     private Association association;
 
     @OneToMany(mappedBy = "biensEssentiels", fetch = FetchType.EAGER)

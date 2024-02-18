@@ -53,7 +53,7 @@ public class BiensEssantielImpl implements IBiensEssantielService {
             existingBiensEssentienl.setNomBiens(biensEssantielDto.getNomBiens());
             existingBiensEssentienl.setQuantity(biensEssantielDto.getQuantity());
             BiensEssantiel updateBiensEssantiel = iBiensEssantielsRepository.save(existingBiensEssentienl);
-            updateBiensEssantiel.setIdBiens(id);
+            updateBiensEssantiel.setId(id);
             return modelMapper.map(updateBiensEssantiel, BiensEssantielDto.class);
         }
         return null;

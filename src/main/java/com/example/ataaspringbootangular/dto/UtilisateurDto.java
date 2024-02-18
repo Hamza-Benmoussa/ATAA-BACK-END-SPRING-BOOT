@@ -18,9 +18,10 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UtilisateurDto implements Serializable {
+    Long id;
     @NotNull(message = "Name utilisateur cannot be null")
     @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
-    String NomComplete;
+    String nomComplete;
     @NotNull(message = "Password cannot be null")
     String password;
     @NotNull(message = " Address cannot be null")

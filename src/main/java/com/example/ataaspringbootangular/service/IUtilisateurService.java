@@ -10,7 +10,6 @@ import java.util.List;
 public interface IUtilisateurService {
     UtilisateurDto ajouterUtilisateur(UtilisateurDto utilisateurDto);
 
-
     List<UtilisateurDto> getUtilisateurs();
 
     UtilisateurDto getUtilisateursById(Long id) throws UtilisateurFoundException;

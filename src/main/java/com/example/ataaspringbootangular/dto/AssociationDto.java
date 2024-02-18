@@ -21,7 +21,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AssociationDto implements Serializable {
-    private String nomPresidantEmail;
+    Long id;
+    String nomPresidantNomComplete;
     @NotNull(message = "NbrSerie cannot be null")
     String nbrSerie;
     @NotNull(message = "Name association cannot be null")

@@ -18,6 +18,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BiensEssantielDto implements Serializable {
+    Long id;
     @NotNull(message = "Name biens cannot be null")
     @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
     String nomBiens;

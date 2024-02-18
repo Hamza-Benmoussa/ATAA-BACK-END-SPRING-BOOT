@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface IAssociationsRepository extends JpaRepository<Association, Long> {
     Association findByNbrSerieAndDeletedFalse(String nmbrSerie);
+    Association findByNomAssociationAndDeletedFalse(String nomAssociation);
     List<Association> findByDeletedFalse();
     Optional<Association> findByIdAndDeletedFalse(Long id);
 }

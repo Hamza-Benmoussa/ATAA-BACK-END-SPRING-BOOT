@@ -50,7 +50,7 @@ public class DowarServiceImpl implements IDowarService {
         existingDowar.setNomDowars(dowarDto.getNomDowars());
         existingDowar.setNmbrResidant(dowarDto.getNmbrResidant());
         Dowar updateDowar = iDowarsRepository.save(existingDowar);
-        updateDowar.setIdDowars(id);
+        updateDowar.setId(id);
         return modelMapper.map(updateDowar, DowarDto.class);
         }
         return null;

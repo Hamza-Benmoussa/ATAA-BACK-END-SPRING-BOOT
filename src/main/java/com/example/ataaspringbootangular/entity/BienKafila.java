@@ -13,18 +13,14 @@ import javax.persistence.*;
 public class BienKafila {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_bien_kafila")
-    private Long idBienKafila;
+    private Long id;
 
-    @Column(name = "quantity_bien_kafila")
     private int quantityBienKafila;
 
     @ManyToOne
-    @JoinColumn(name = "id_biens_essentiels")
     private BiensEssantiel biensEssentiels;
 
     @ManyToOne
-    @JoinColumn(name = "id_kafila")
     private Kafila kafila;
     @Column(name="is_deleted")
     private boolean deleted;

@@ -20,6 +20,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DowarDto implements Serializable {
+
+    Long id;
     @NotNull(message = "Name dowar cannot be null")
     @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
     String nomDowars;

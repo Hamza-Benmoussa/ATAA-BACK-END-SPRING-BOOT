@@ -17,10 +17,8 @@ import java.util.List;
 public class Ville {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_ville")
-    private Long idVille;
+    private Long id;
 
-    @Column(name = "nom_ville")
     private String nomVille;
 
     @OneToMany(mappedBy = "ville", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

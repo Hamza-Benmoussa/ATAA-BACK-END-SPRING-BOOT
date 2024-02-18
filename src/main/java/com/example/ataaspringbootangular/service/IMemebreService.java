@@ -11,7 +11,6 @@ import java.util.List;
 public interface IMemebreService {
     MemberDto ajouterMember(MemberDto memberDto);
 
-
     List<MemberDto> getMembers();
 
     MemberDto getMembersById(Long id) throws MemberFoundException;

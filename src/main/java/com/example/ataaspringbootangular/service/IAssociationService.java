@@ -9,8 +9,7 @@ import java.util.List;
 
 public interface IAssociationService {
     AssociationDto ajouterAssociation(AssociationDto associationDto);
-
-
+    Association getAssociationByName(String associationName);
     List<AssociationDto> getAssociations();
 
     AssociationDto getAssociationsById(Long id) throws AssociationFoundException;

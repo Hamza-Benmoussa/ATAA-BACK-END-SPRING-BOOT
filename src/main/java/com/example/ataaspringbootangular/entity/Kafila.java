@@ -8,29 +8,34 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "kafilas")
 public class Kafila {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_kafila")
-    private Long idKafila;
+    private Long id;
 
-    @Column(name = "nom_kafila")
     private String nomKfila;
 
     @ManyToOne
-    @JoinColumn(name = "dowars_id")
     private Dowar dowar;
+
+    private Date dateDepart;
+
+    private LocalDate dateArrivee;
 
     @OneToMany(mappedBy = "kafila", fetch = FetchType.EAGER)
     @JsonIgnore
     @Fetch(FetchMode.SUBSELECT)
     private List<BienKafila> bienKafilas;
+
     @Column(name="is_deleted")
     private boolean deleted;
 }

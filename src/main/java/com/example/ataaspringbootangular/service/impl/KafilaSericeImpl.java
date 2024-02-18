@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,14 +51,16 @@ public class KafilaSericeImpl implements IKafilaService {
     }
 
     @Override
-    public KafilaDto updateKafila(KafilaDto kafilaDto, Long id) {
+    public KafilaDto updateKafila(KafilaDto kafilaDto, Long id){
         Kafila existingKafila = iKafilaRepository.findByIdAndDeletedFalse(id).orElse(null);
         if (existingKafila!= null){
             existingKafila.setNomKfila(kafilaDto.getNomKfila());
             Dowar dowar = iDowarsRepository.findByNomDowars(kafilaDto.getDowarNomDowars());
             existingKafila.setDowar(dowar);
+            existingKafila.setDateArrivee(kafilaDto.getDateArrivee());
+            existingKafila.setDateDepart(kafilaDto.getDateDepart());
             Kafila updateKafila = iKafilaRepository.save(existingKafila);
-            updateKafila.setIdKafila(id);
+            updateKafila.setId(id);
             return modelMapper.map(updateKafila , KafilaDto.class);
         }
         return null;

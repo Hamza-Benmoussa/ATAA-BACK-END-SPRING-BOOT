@@ -16,35 +16,26 @@ import java.util.Date;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_members")
-    private Long idMembers;
+    private Long id;
 
-    @Column(name = "role_members")
     @Enumerated(EnumType.STRING)
     private RoleMembers roleMembers;
 
-    @Column(name = "nom_membres")
     private String nomMembres;
 
-    @Column(name = "date_naissance")
     @Temporal(TemporalType.DATE)
     private Date dateNaissance;
 
-    @Column(name = "genre")
     @Enumerated(EnumType.STRING)
     private Genre genre;
 
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "tele")
     private String tele;
 
-    @Column(name = "address")
     private String address;
 
     @ManyToOne
-    @JoinColumn(name = "associations_id")
     private Association association;
     @Column(name="is_deleted")
     private boolean deleted;

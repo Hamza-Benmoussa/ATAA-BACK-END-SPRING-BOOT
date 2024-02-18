@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface IVilleRepository extends JpaRepository<Ville,Long> {
     List<Ville> findByDeletedFalse();
+    Ville findByNomVilleAndDeletedFalse(String nomVille);
     Optional<Ville> findByIdAndDeletedFalse(Long id);
 }

@@ -18,6 +18,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberDto implements Serializable {
+    Long id;
     @NotNull(message = "Role cannot be null")
     RoleMembers roleMembers;
     @NotNull(message = "Name member cannot be null")
