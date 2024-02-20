@@ -4,7 +4,10 @@ import com.example.ataaspringbootangular.dto.*;
 import com.example.ataaspringbootangular.entity.Enum.Genre;
 import com.example.ataaspringbootangular.entity.Enum.RoleMembers;
 import com.example.ataaspringbootangular.entity.Enum.RoleUser;
+import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
 import com.example.ataaspringbootangular.exception.except.MemberFoundException;
+import com.example.ataaspringbootangular.exception.except.UtilisateurFoundException;
+import com.example.ataaspringbootangular.exception.except.VilleFoundException;
 import com.example.ataaspringbootangular.service.IAssociationService;
 import com.example.ataaspringbootangular.service.IMemebreService;
 import com.example.ataaspringbootangular.service.IUtilisateurService;
@@ -25,7 +28,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
 class MemberServiceImplTest {
 
     @Autowired
@@ -51,7 +53,7 @@ class MemberServiceImplTest {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @BeforeEach
-    void setUp() throws ParseException {
+    void setUp() throws ParseException, UtilisateurFoundException, VilleFoundException, AssociationFoundException {
         // Create Utilisateur
         utilisateurDto = new UtilisateurDto();
         utilisateurDto.setNomComplete("TestUser");
@@ -71,9 +73,9 @@ class MemberServiceImplTest {
         // Create Association
         associationDto = new AssociationDto();
         associationDto.setNomAssociation("TestAssociation");
-        associationDto.setNomPresidantNomComplete(utilisateurDto.getNomComplete());
+        associationDto.setNomPresidantId(utilisateurDto.getId());
         associationDto.setNbrSerie("fghjkfghj");
-        associationDto.setVilleNomVille(villeDto.getNomVille()); // Associate with the created Ville
+        associationDto.setVilleId(villeDto.getId()); // Associate with the created Ville
         associationDto = iAssociationService.ajouterAssociation(associationDto);
 
 
@@ -86,7 +88,7 @@ class MemberServiceImplTest {
         memberDto.setNomMembres("Member Test");
         memberDto.setDateNaissance(dateFormat.parse("2002-01-03"));
         memberDto.setRoleMembers(RoleMembers.Responsable_des_Partenariats);
-        memberDto.setAssociationNomAssociation(associationDto.getNomAssociation()); // Associate with the created Association
+        memberDto.setAssociationId(associationDto.getId()); // Associate with the created Association
         memberDto = iMemebreService.ajouterMember(memberDto);
     }
 
@@ -99,7 +101,6 @@ class MemberServiceImplTest {
         iVilleService.deleteVille(villeDto.getId());
     }
 
-    @Rollback(value = false)
     @Test
     void ajouterMember() throws MemberFoundException {
         assertNotNull(memberDto, "Member not inserted");
@@ -107,21 +108,18 @@ class MemberServiceImplTest {
         assertNotNull(retrievedMemberDto, "Member not found in the database");
     }
 
-    @Rollback(value = false)
     @Test
     void getMembers() {
         List<MemberDto> memberDtos = iMemebreService.getMembers();
         assertNotNull(memberDtos, "List is empty");
     }
 
-    @Rollback(value = false)
     @Test
     void getMembersById() throws MemberFoundException {
         MemberDto retrievedMemberDto = iMemebreService.getMembersById(memberDto.getId());
         assertNotNull(retrievedMemberDto, "Member Not found");
     }
 
-    @Rollback(value = false)
     @Test
     void updateMember() throws ParseException {
         memberDto.setEmail("updated-email@gmail.com");
@@ -129,7 +127,6 @@ class MemberServiceImplTest {
         assertEquals("updated-email@gmail.com", updateMemberDto.getEmail(), "Email should be updated");
     }
 
-    @Rollback(value = false)
     @Test
     void deleteMember() throws MemberFoundException {
         Long memberId = memberDto.getId();

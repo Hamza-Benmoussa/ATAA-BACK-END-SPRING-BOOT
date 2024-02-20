@@ -26,6 +26,8 @@ public class Kafila {
 
     @ManyToOne
     private Dowar dowar;
+    @ManyToOne
+    private Association association;
 
     private Date dateDepart;
 

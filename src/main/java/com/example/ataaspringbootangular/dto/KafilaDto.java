@@ -26,7 +26,8 @@ public class KafilaDto implements Serializable {
     Date dateDepart;
     @NotNull(message = "Date cannot be null")
     LocalDate dateArrivee;
-    String dowarNomDowars;
-    List<Long> bienKafilaIdBienKafilas;
+    Long dowarId;
+    Long associationId;
+    List<BienKafila> bienKafilas;
     boolean deleted;
 }

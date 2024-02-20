@@ -20,7 +20,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
-@Transactional
 class UtilisateurServiceImplTest {
     @Autowired
     private IUtilisateurService iUtilisateurService;
@@ -47,7 +46,7 @@ class UtilisateurServiceImplTest {
         iUtilisateurService.deleteUtilisateur(utilisateurDto.getId());
     }
 
-    @Rollback(value = false)
+
     @Test
     void ajouterUtilisateur() throws UtilisateurFoundException {
         assertNotNull(utilisateurDto,"Utilisateur not inserted");
@@ -56,7 +55,6 @@ class UtilisateurServiceImplTest {
 
     }
 
-    @Rollback(value = false)
     @Test
     void getUtilisateurs() {
         List<UtilisateurDto> utilisateurDtos = iUtilisateurService.getUtilisateurs();
@@ -64,7 +62,6 @@ class UtilisateurServiceImplTest {
     }
 
 
-    @Rollback(value = false)
     @Test
     void getUtilisateursById() throws UtilisateurFoundException {
         UtilisateurDto retrivedUtilisateurDto = iUtilisateurService.getUtilisateursById(utilisateurDto.getId());
@@ -72,7 +69,6 @@ class UtilisateurServiceImplTest {
     }
 
 
-    @Rollback(value = false)
     @Test
     void updateUtilisateur() throws ParseException {
         utilisateurDto.setEmail("beousaa@gmail.com");
@@ -82,7 +78,6 @@ class UtilisateurServiceImplTest {
     }
 
 
-    @Rollback(value = false)
     @Test
     void deleteUtilisateur() throws UtilisateurFoundException {
 

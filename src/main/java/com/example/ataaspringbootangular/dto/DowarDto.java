@@ -28,6 +28,8 @@ public class DowarDto implements Serializable {
     @Min(1)
     @Max(1000)
     int nmbrResidant;
+    Long villeId;
+
     boolean deleted;
 
 }

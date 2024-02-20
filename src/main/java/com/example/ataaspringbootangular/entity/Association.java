@@ -40,6 +40,11 @@ public class Association {
     @Fetch(FetchMode.SUBSELECT)
     private List<Member> members;
 
+    @OneToMany(mappedBy = "association", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Kafila> kafilas;
+
     @Column(name="is_deleted")
     private boolean deleted;
 }

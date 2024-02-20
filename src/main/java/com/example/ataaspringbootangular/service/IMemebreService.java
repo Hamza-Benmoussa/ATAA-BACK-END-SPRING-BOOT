@@ -2,6 +2,7 @@ package com.example.ataaspringbootangular.service;
 
 import com.example.ataaspringbootangular.dto.KafilaDto;
 import com.example.ataaspringbootangular.dto.MemberDto;
+import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
 import com.example.ataaspringbootangular.exception.except.MemberFoundException;
 import com.example.ataaspringbootangular.exception.except.UtilisateurFoundException;
 
@@ -9,7 +10,7 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface IMemebreService {
-    MemberDto ajouterMember(MemberDto memberDto);
+    MemberDto ajouterMember(MemberDto memberDto) throws AssociationFoundException;
 
     List<MemberDto> getMembers();
 

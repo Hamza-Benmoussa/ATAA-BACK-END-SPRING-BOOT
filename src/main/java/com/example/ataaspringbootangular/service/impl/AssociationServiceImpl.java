@@ -2,14 +2,15 @@ package com.example.ataaspringbootangular.service.impl;
 
 import com.example.ataaspringbootangular.dto.AssociationDto;
 import com.example.ataaspringbootangular.dto.UtilisateurDto;
+import com.example.ataaspringbootangular.dto.VilleDto;
 import com.example.ataaspringbootangular.entity.Association;
 import com.example.ataaspringbootangular.entity.Utilisateur;
-import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
-import com.example.ataaspringbootangular.exception.except.DowarFoundException;
-import com.example.ataaspringbootangular.exception.except.EmailDejaExisteException;
-import com.example.ataaspringbootangular.exception.except.NbrSerieDejaExisteException;
+import com.example.ataaspringbootangular.entity.Ville;
+import com.example.ataaspringbootangular.exception.except.*;
 import com.example.ataaspringbootangular.repository.IAssociationsRepository;
 import com.example.ataaspringbootangular.service.IAssociationService;
+import com.example.ataaspringbootangular.service.IUtilisateurService;
+import com.example.ataaspringbootangular.service.IVilleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,21 @@ public class AssociationServiceImpl implements IAssociationService {
     private IAssociationsRepository iAssociationsRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private IUtilisateurService iUtilisateurService;
+    @Autowired
+    private IVilleService iVilleService;
 
     @Override
-    public AssociationDto ajouterAssociation(AssociationDto associationDto) {
+    public AssociationDto ajouterAssociation(AssociationDto associationDto) throws UtilisateurFoundException, VilleFoundException {
         checkNbrSerieExist(associationDto);
+        VilleDto villeDto = iVilleService.getVillesById(associationDto.getVilleId());
+        Ville ville = modelMapper.map(villeDto , Ville.class);
+        UtilisateurDto utilisateurDto = iUtilisateurService.getUtilisateursById(associationDto.getNomPresidantId());
+        Utilisateur utilisateur = modelMapper.map(utilisateurDto, Utilisateur.class);
         Association association = modelMapper.map(associationDto , Association.class);
+        association.setNomPresidant(utilisateur);
+        association.setVille(ville);
         Association saveAssociation = iAssociationsRepository.save(association);
         return modelMapper.map(saveAssociation, AssociationDto.class);
     }

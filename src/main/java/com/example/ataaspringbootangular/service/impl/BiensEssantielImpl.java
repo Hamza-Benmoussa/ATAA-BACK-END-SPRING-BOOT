@@ -1,10 +1,14 @@
 package com.example.ataaspringbootangular.service.impl;
 
+import com.example.ataaspringbootangular.dto.AssociationDto;
 import com.example.ataaspringbootangular.dto.BiensEssantielDto;
+import com.example.ataaspringbootangular.entity.Association;
 import com.example.ataaspringbootangular.entity.BiensEssantiel;
+import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
 import com.example.ataaspringbootangular.exception.except.BiensEssentielFoundException;
 import com.example.ataaspringbootangular.exception.except.DowarFoundException;
 import com.example.ataaspringbootangular.repository.IBiensEssantielsRepository;
+import com.example.ataaspringbootangular.service.IAssociationService;
 import com.example.ataaspringbootangular.service.IBienKafilaService;
 import com.example.ataaspringbootangular.service.IBiensEssantielService;
 import org.modelmapper.ModelMapper;
@@ -22,9 +26,14 @@ public class BiensEssantielImpl implements IBiensEssantielService {
     private IBiensEssantielsRepository iBiensEssantielsRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private IAssociationService iAssociationService;
     @Override
-    public BiensEssantielDto ajouterBiensEssantiel(BiensEssantielDto biensEssantielDto) {
+    public BiensEssantielDto ajouterBiensEssantiel(BiensEssantielDto biensEssantielDto) throws AssociationFoundException {
+        AssociationDto associationDto = iAssociationService.getAssociationsById(biensEssantielDto.getAssociationId());
+        Association association = modelMapper.map(associationDto , Association.class);
         BiensEssantiel biensEssantiel = modelMapper.map(biensEssantielDto , BiensEssantiel.class);
+        biensEssantiel.setAssociation(association);
         BiensEssantiel saveBiensEssantiel = iBiensEssantielsRepository.save(biensEssantiel);
         return modelMapper.map(saveBiensEssantiel, BiensEssantielDto.class);
     }
@@ -47,7 +56,7 @@ public class BiensEssantielImpl implements IBiensEssantielService {
     }
 
     @Override
-    public BiensEssantielDto updateAssociation(BiensEssantielDto biensEssantielDto, Long id) {
+    public BiensEssantielDto updateBiensEssentiel(BiensEssantielDto biensEssantielDto, Long id) {
         BiensEssantiel existingBiensEssentienl = iBiensEssantielsRepository.findByIdAndDeletedFalse(id).orElse(null);
         if (existingBiensEssentienl != null) {
             existingBiensEssentienl.setNomBiens(biensEssantielDto.getNomBiens());

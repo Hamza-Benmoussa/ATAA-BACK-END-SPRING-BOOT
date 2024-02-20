@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AssociationDto implements Serializable {
     Long id;
-    String nomPresidantNomComplete;
+    private Long nomPresidantId;
     @NotNull(message = "NbrSerie cannot be null")
     String nbrSerie;
     @NotNull(message = "Name association cannot be null")
@@ -30,6 +30,7 @@ public class AssociationDto implements Serializable {
     String nomAssociation;
     List<Long> memberIdMembers;
     List<Long> biensEssentielIdBiens;
-    String villeNomVille;
+    Long villeId;
+
     boolean deleted;
 }

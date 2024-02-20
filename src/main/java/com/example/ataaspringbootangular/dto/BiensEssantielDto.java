@@ -25,5 +25,7 @@ public class BiensEssantielDto implements Serializable {
     @Min(5)
     @Max(5000)
     Double quantity;
+    Long associationId;
+
     boolean deleted;
 }

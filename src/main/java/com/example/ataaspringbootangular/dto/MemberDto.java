@@ -21,21 +21,29 @@ public class MemberDto implements Serializable {
     Long id;
     @NotNull(message = "Role cannot be null")
     RoleMembers roleMembers;
+
     @NotNull(message = "Name member cannot be null")
     @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
     String nomMembres;
+
     @NotNull(message = "Date of birth cannot be null")
     Date dateNaissance;
+
     @NotNull(message = "Genre cannot be null")
     Genre genre;
+
     @Email(message = "invalid email address")
     String email;
+
     @Pattern(regexp = "^\\+?[0-9. ()-]{10,}$", message = "invalid mobile number")
     String tele;
+
     @NotNull(message = "Address cannot be null")
     @Size(min = 5)
     String adress;
-    String associationNomAssociation;
+
+    private Long associationId;
+
 
     boolean deleted;
 }

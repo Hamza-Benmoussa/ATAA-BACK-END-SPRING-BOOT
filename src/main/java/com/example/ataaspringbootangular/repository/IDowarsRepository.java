@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface IDowarsRepository extends JpaRepository<Dowar,Long> {
     List<Dowar> findByDeletedFalse();
-    Dowar findByNomDowars(String nomDowar);
+    Optional<Dowar> findById(Long id);
     Optional<Dowar> findByIdAndDeletedFalse(Long id);
 }

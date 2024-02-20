@@ -1,11 +1,13 @@
 package com.example.ataaspringbootangular.service.impl;
 
+import com.example.ataaspringbootangular.dto.AssociationDto;
 import com.example.ataaspringbootangular.dto.MemberDto;
 import com.example.ataaspringbootangular.dto.UtilisateurDto;
 import com.example.ataaspringbootangular.entity.Association;
 import com.example.ataaspringbootangular.entity.Kafila;
 import com.example.ataaspringbootangular.entity.Member;
 import com.example.ataaspringbootangular.entity.Utilisateur;
+import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
 import com.example.ataaspringbootangular.exception.except.EmailDejaExisteException;
 import com.example.ataaspringbootangular.exception.except.MemberFoundException;
 import com.example.ataaspringbootangular.exception.except.UtilisateurFoundException;
@@ -31,12 +33,17 @@ public class MemberServiceImpl implements IMemebreService {
 
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private IAssociationService iAssociationService;
 
     @Override
-    public MemberDto ajouterMember(MemberDto memberDto) {
+    public MemberDto ajouterMember(MemberDto memberDto) throws AssociationFoundException {
         checkExistEmail(memberDto);
 
+        AssociationDto associationDto = iAssociationService.getAssociationsById(memberDto.getAssociationId());
+        Association association = modelMapper.map(associationDto , Association.class);
         Member member = modelMapper.map(memberDto, Member.class);
+        member.setAssociation(association);
         Member saveMember = iMembersRepository.save(member);
         return modelMapper.map(saveMember, MemberDto.class);
     }

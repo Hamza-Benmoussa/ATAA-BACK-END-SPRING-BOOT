@@ -1,11 +1,15 @@
 package com.example.ataaspringbootangular.service.impl;
 
 import com.example.ataaspringbootangular.dto.DowarDto;
+import com.example.ataaspringbootangular.dto.VilleDto;
 import com.example.ataaspringbootangular.entity.Dowar;
+import com.example.ataaspringbootangular.entity.Ville;
 import com.example.ataaspringbootangular.exception.except.DowarFoundException;
 import com.example.ataaspringbootangular.exception.except.UtilisateurFoundException;
+import com.example.ataaspringbootangular.exception.except.VilleFoundException;
 import com.example.ataaspringbootangular.repository.IDowarsRepository;
 import com.example.ataaspringbootangular.service.IDowarService;
+import com.example.ataaspringbootangular.service.IVilleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,9 +25,14 @@ public class DowarServiceImpl implements IDowarService {
     private IDowarsRepository iDowarsRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private IVilleService iVilleService;
     @Override
-    public DowarDto ajouterDowar(DowarDto dowarDto) {
+    public DowarDto ajouterDowar(DowarDto dowarDto) throws VilleFoundException {
+        VilleDto villeDto = iVilleService.getVillesById(dowarDto.getVilleId());
+        Ville ville = modelMapper.map(villeDto , Ville.class);
         Dowar dowar = modelMapper.map(dowarDto , Dowar.class);
+        dowar.setVille(ville);
         Dowar saveDowar = iDowarsRepository.save(dowar);
         return modelMapper.map(saveDowar , DowarDto.class);
     }
