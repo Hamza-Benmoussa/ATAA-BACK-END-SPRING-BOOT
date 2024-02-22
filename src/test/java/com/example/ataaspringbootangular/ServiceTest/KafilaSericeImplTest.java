@@ -101,8 +101,10 @@ class KafilaSericeImplTest {
     @AfterEach
     void down(){
         iKafilaService.deleteKafila(kafilaDto.getId());
-        iAssociationService.deleteAssociation(kafilaDto.getId());
-        iDowarService.deleteDowar(kafilaDto.getId());
+        iAssociationService.deleteAssociation(associationDto.getId());
+        iDowarService.deleteDowar(dowarDto.getId());
+        iVilleService.deleteVille(villeDto.getId());
+        iBiensEssantielService.deleteBiensEssantiel(biensEssantielDto.getId());
     }
     @Test
     void ajouterKafila() throws KafilaFoundException {

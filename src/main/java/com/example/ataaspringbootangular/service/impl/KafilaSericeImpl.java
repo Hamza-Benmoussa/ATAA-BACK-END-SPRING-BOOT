@@ -98,7 +98,7 @@ public class KafilaSericeImpl implements IKafilaService {
     @Override
     public KafilaDto updateKafila(KafilaDto kafilaDto, Long id){
         Kafila existingKafila = iKafilaRepository.findByIdAndDeletedFalse(id).orElse(null);
-        if (existingKafila!= null){
+        if (existingKafila != null){
             existingKafila.setNomKfila(kafilaDto.getNomKfila());
             Dowar dowar = iDowarsRepository.findById(kafilaDto.getDowarId()).orElse(null);
             existingKafila.setDowar(dowar);
