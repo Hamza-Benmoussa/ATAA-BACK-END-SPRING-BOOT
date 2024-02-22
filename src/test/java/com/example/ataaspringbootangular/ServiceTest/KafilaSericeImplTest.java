@@ -32,11 +32,17 @@ class KafilaSericeImplTest {
     private IVilleService iVilleService;
     @Autowired
     private IUtilisateurService iUtilisateurService;
+    @Autowired
+    private IBienKafilaService iBienKafilaService;
+    @Autowired
+    private IBiensEssantielService iBiensEssantielService;
     private DowarDto dowarDto;
     private AssociationDto associationDto;
     private KafilaDto kafilaDto;
     private VilleDto villeDto;
     private UtilisateurDto utilisateurDto;
+    private BiensEssantielDto biensEssantielDto;
+    private BienKafilaDto bienKafilaDto;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 
@@ -71,6 +77,12 @@ class KafilaSericeImplTest {
         associationDto.setVilleId(villeDto.getId());
         associationDto = iAssociationService.ajouterAssociation(associationDto);
 
+        biensEssantielDto = new BiensEssantielDto();
+        biensEssantielDto.setNomBiens("Zit");
+        biensEssantielDto.setQuantity(12.00);
+        biensEssantielDto.setAssociationId(associationDto.getId());
+        biensEssantielDto = iBiensEssantielService.ajouterBiensEssantiel(biensEssantielDto);
+
         kafilaDto = new KafilaDto();
         kafilaDto.setNomKfila("khayr");
         kafilaDto.setDateArrivee(LocalDate.now());
@@ -78,6 +90,13 @@ class KafilaSericeImplTest {
         kafilaDto.setDowarId(dowarDto.getId());
         kafilaDto.setDateDepart(dateFormat.parse("2002-01-03"));
         kafilaDto = iKafilaService.ajouterKafila(kafilaDto);
+
+        bienKafilaDto =new BienKafilaDto();
+        bienKafilaDto.setBiensEssentielsId(biensEssantielDto.getId());
+        bienKafilaDto.setKafilaId(kafilaDto.getId());
+        bienKafilaDto.setQuantityBienKafila(3);
+        bienKafilaDto = iBienKafilaService.ajouterBienKafila(bienKafilaDto);
+
     }
     @AfterEach
     void down(){
@@ -88,15 +107,6 @@ class KafilaSericeImplTest {
     @Test
     void ajouterKafila() throws KafilaFoundException {
         assertNotNull(kafilaDto, "Kafila not inserted");
-
-//        // Vérifier que la liste bienKafilas n'est pas null avant d'itérer
-//        if (kafilaDto.getBienKafilas() != null) {
-//            for (BienKafila bienKafila : kafilaDto.getBienKafilas()) {
-//                assertNotNull(bienKafila, "BienKafila should not be null");
-//                assertNotNull(bienKafila.getBiensEssentiels(), "BiensEssentiels in BienKafila should not be null");
-//            }
-//        }
-
         KafilaDto retrievedKafilaDto = iKafilaService.getKafilasById(kafilaDto.getId());
         assertNotNull(retrievedKafilaDto, "Kafila not found in the database");
     }

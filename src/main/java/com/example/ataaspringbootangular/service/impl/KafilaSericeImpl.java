@@ -1,11 +1,9 @@
 package com.example.ataaspringbootangular.service.impl;
 
-import com.example.ataaspringbootangular.dto.AssociationDto;
-import com.example.ataaspringbootangular.dto.BiensEssantielDto;
-import com.example.ataaspringbootangular.dto.DowarDto;
-import com.example.ataaspringbootangular.dto.KafilaDto;
+import com.example.ataaspringbootangular.dto.*;
 import com.example.ataaspringbootangular.entity.*;
 import com.example.ataaspringbootangular.exception.except.*;
+import com.example.ataaspringbootangular.repository.IBienKafilaRepository;
 import com.example.ataaspringbootangular.repository.IBiensEssantielsRepository;
 import com.example.ataaspringbootangular.repository.IDowarsRepository;
 import com.example.ataaspringbootangular.repository.IKafilaRepository;
@@ -14,9 +12,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,38 +31,51 @@ public class KafilaSericeImpl implements IKafilaService {
     @Autowired
     private IBienKafilaService iBienKafilaService;
     @Autowired
+    private IBienKafilaRepository iBienKafilaRepository;
+    @Autowired
     private IBiensEssantielsRepository iBiensEssantielsRepository;
     @Autowired
     private IBiensEssantielService iBiensEssantielService;
     @Override
     public KafilaDto ajouterKafila(KafilaDto kafilaDto) throws DowarFoundException, AssociationFoundException, BiensEssentielFoundException {
         Kafila kafila = modelMapper.map(kafilaDto, Kafila.class);
+
         DowarDto dowarDto = iDowarService.getDowarsById(kafilaDto.getDowarId());
         Dowar dowar = modelMapper.map(dowarDto, Dowar.class);
+
         AssociationDto associationDto = iAssociationService.getAssociationsById(kafilaDto.getAssociationId());
-        Association association = modelMapper.map(associationDto , Association.class);
+        Association association = modelMapper.map(associationDto, Association.class);
+
         kafila.setAssociation(association);
         kafila.setDowar(dowar);
+
         Kafila saveKafila = iKafilaRepository.save(kafila);
-        for (BienKafila bienKafila : kafilaDto.getBienKafilas()) {
-            BiensEssantiel biensEssantiel = modelMapper.map(iBiensEssantielService.getBiensEssantielsById(bienKafila.getBiensEssentiels().getId()), BiensEssantiel.class);
 
-            BiensEssantiel existingBiensEssentiel = getBiensEssentielById(biensEssantiel.getId());
+        // Vérifiez si la liste n'est pas null avant de l'itérer
+        if (kafilaDto.getBienKafilaDtos() != null) {
+            for (BienKafilaDto bienKafilaDto : kafilaDto.getBienKafilaDtos()) {
+                BiensEssantielDto biensEssentielDto = iBiensEssantielService.getBiensEssantielsById(bienKafilaDto.getBiensEssentielsId());
 
-            if (existingBiensEssentiel != null && existingBiensEssentiel.getQuantity() >= biensEssantiel.getQuantity()) {
-                existingBiensEssentiel.setQuantity(existingBiensEssentiel.getQuantity() - biensEssantiel.getQuantity());
+                if (biensEssentielDto != null && biensEssentielDto.getQuantity() >= bienKafilaDto.getQuantityBienKafila()) {
+                    BiensEssantiel biensEssentiel = modelMapper.map(biensEssentielDto, BiensEssantiel.class);
 
-               iBiensEssantielService.updateBiensEssentiel(modelMapper.map(biensEssantiel , BiensEssantielDto.class), biensEssantiel.getId());
+                    // Mise à jour de la quantité dans BiensEssentiel
+                    biensEssentiel.setQuantity(biensEssentiel.getQuantity() - bienKafilaDto.getQuantityBienKafila());
+                    iBiensEssantielService.updateBiensEssentiel(modelMapper.map(biensEssentiel, BiensEssantielDto.class), bienKafilaDto.getBiensEssentielsId());
+
+                    // Création de BienKafila
+                    BienKafila bienKafila = new BienKafila();
+                    bienKafila.setBiensEssentiels(biensEssentiel);
+                    bienKafila.setKafila(saveKafila);
+                    bienKafila.setQuantityBienKafila(bienKafilaDto.getQuantityBienKafila());
+
+                    // Enregistrement dans BienKafilaRepository
+                    iBienKafilaRepository.save(bienKafila);
+                }
             }
         }
 
-        Kafila finalSavedKafila = iKafilaRepository.save(saveKafila);
-
-        return modelMapper.map(finalSavedKafila, KafilaDto.class);
-    }
-
-    private BiensEssantiel getBiensEssentielById(Long id) {
-        return iBiensEssantielsRepository.findByIdAndDeletedFalse(id).orElse(null);
+        return modelMapper.map(saveKafila, KafilaDto.class);
     }
 
 

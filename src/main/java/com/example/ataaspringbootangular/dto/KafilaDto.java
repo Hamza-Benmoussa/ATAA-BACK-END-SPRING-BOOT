@@ -4,7 +4,6 @@ import com.example.ataaspringbootangular.entity.BienKafila;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,6 +27,6 @@ public class KafilaDto implements Serializable {
     LocalDate dateArrivee;
     Long dowarId;
     Long associationId;
-    List<BienKafila> bienKafilas;
+    List<BienKafilaDto> bienKafilaDtos;
     boolean deleted;
 }
