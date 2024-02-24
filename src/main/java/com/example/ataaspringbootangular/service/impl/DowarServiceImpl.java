@@ -49,7 +49,7 @@ public class DowarServiceImpl implements IDowarService {
     public DowarDto getDowarsById(Long id) throws DowarFoundException {
         return iDowarsRepository.findByIdAndDeletedFalse(id)
                 .map(dowar -> modelMapper.map(dowar , DowarDto.class))
-                .orElseThrow(() -> new DowarFoundException("Dowar Not found" + id));
+                .orElseThrow(() -> new DowarFoundException("Dowar Not found with id = " + id));
     }
 
     @Override

@@ -84,7 +84,7 @@ class MemberServiceImplTest {
         memberDto.setEmail("member-" + System.currentTimeMillis() + "@gmail.com");
         memberDto.setGenre(Genre.Male);
         memberDto.setTele("+212 646210352");
-        memberDto.setAdress("Res essafa gh 13 imm 3");
+        memberDto.setAddress("Res essafa gh 13 imm 3");
         memberDto.setNomMembres("Member Test");
         memberDto.setDateNaissance(dateFormat.parse("2002-01-03"));
         memberDto.setRoleMembers(RoleMembers.Responsable_des_Partenariats);

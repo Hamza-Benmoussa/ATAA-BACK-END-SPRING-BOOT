@@ -25,7 +25,7 @@ public class Dowar {
     @ManyToOne
     private Ville ville;
 
-    @OneToMany(mappedBy = "dowar", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "dowar", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JsonIgnore
     @Fetch(FetchMode.SUBSELECT)
     private List<Kafila> kafilas;

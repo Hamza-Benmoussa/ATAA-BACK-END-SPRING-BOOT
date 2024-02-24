@@ -1,9 +1,11 @@
 package com.example.ataaspringbootangular.service.impl;
 
 import com.example.ataaspringbootangular.dto.AssociationDto;
+import com.example.ataaspringbootangular.dto.MemberDto;
 import com.example.ataaspringbootangular.dto.UtilisateurDto;
 import com.example.ataaspringbootangular.dto.VilleDto;
 import com.example.ataaspringbootangular.entity.Association;
+import com.example.ataaspringbootangular.entity.Member;
 import com.example.ataaspringbootangular.entity.Utilisateur;
 import com.example.ataaspringbootangular.entity.Ville;
 import com.example.ataaspringbootangular.exception.except.*;
@@ -33,7 +35,7 @@ public class AssociationServiceImpl implements IAssociationService {
 
     @Override
     public AssociationDto ajouterAssociation(AssociationDto associationDto) throws UtilisateurFoundException, VilleFoundException {
-        checkNbrSerieExist(associationDto);
+        checkNbrSerieExist(associationDto.getNbrSerie());
         VilleDto villeDto = iVilleService.getVillesById(associationDto.getVilleId());
         Ville ville = modelMapper.map(villeDto , Ville.class);
         UtilisateurDto utilisateurDto = iUtilisateurService.getUtilisateursById(associationDto.getNomPresidantId());
@@ -61,14 +63,14 @@ public class AssociationServiceImpl implements IAssociationService {
     public AssociationDto getAssociationsById(Long id) throws AssociationFoundException {
         return iAssociationsRepository.findByIdAndDeletedFalse(id)
                 .map(association -> modelMapper.map(association , AssociationDto.class))
-                .orElseThrow(() -> new AssociationFoundException("Association Not found" + id));
+                .orElseThrow(() -> new AssociationFoundException("Association Not found with id = " + id));
     }
 
-    private AssociationDto checkNbrSerieExist (AssociationDto associationDto){
-        if (associationDto.getNbrSerie().equals(getByNbrSerie(associationDto.getNbrSerie()))){
+    private void checkNbrSerieExist (String nbrSerie){
+        if (getByNbrSerie(nbrSerie) !=null){
             throw new NbrSerieDejaExisteException("deja exist cette nbrSerie");
         }
-        return associationDto;
+
     }
     public String getByNbrSerie(String nbrSerie)
     {
@@ -82,12 +84,18 @@ public class AssociationServiceImpl implements IAssociationService {
     @Override
     public AssociationDto updateAssociation(AssociationDto associationDto, Long id) {
         Association existingAssociation = iAssociationsRepository.findByIdAndDeletedFalse(id).orElse(null);
-            checkNbrSerieExist(associationDto);
+        if (!existingAssociation.getNbrSerie().equals(associationDto.getNbrSerie())){
+            checkNbrSerieExist(associationDto.getNbrSerie());
+        }
             existingAssociation.setNomAssociation(associationDto.getNomAssociation());
             existingAssociation.setNbrSerie(associationDto.getNbrSerie());
+        try {
             Association updateAssociation = iAssociationsRepository.save(existingAssociation);
-            updateAssociation.setId(id);
             return modelMapper.map(updateAssociation, AssociationDto.class);
+        }catch (EmailDejaExisteException ex){
+            throw new NbrSerieDejaExisteException("deja exist cette nbrSerie");
+        }
+
         }
 
     @Override

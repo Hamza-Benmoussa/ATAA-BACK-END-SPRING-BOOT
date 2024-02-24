@@ -13,12 +13,12 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/biensEssentiels")
+@RequestMapping("/api/biensEssentiels")
 public class BiensEssentielController {
     @Autowired
     private IBiensEssantielService biensEssantielService;
 
-    @PostMapping
+    @PostMapping("/ajouterBiensEssentiel")
     public ResponseEntity<BiensEssantielDto> ajouterBiensEssentiel(@RequestBody @Valid BiensEssantielDto biensEssantielDto) throws AssociationFoundException, AssociationFoundException {
         BiensEssantielDto savedBiensEssentiel = biensEssantielService.ajouterBiensEssantiel(biensEssantielDto);
         return new ResponseEntity<>(savedBiensEssentiel, HttpStatus.CREATED);
@@ -36,15 +36,15 @@ public class BiensEssentielController {
         return new ResponseEntity<>(biensEssentiel, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/updateBiensEssentiel/{id}")
     public ResponseEntity<BiensEssantielDto> updateBiensEssentiel(@PathVariable Long id, @Valid @RequestBody BiensEssantielDto biensEssantielDto) {
         BiensEssantielDto updatedBiensEssentiel = biensEssantielService.updateBiensEssentiel(biensEssantielDto, id);
         return new ResponseEntity<>(updatedBiensEssentiel, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteBiensEssentiel/{id}")
     public ResponseEntity<String> deleteBiensEssentiel(@PathVariable("id") Long id) {
         biensEssantielService.deleteBiensEssantiel(id);
-        return ResponseEntity.ok("BiensEssentiel with id " +id+ "was deleted succes");
+        return ResponseEntity.ok("BiensEssentiel with id " +id+ " was deleted succes");
     }
 }

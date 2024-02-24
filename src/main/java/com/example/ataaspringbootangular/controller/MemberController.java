@@ -14,13 +14,13 @@ import java.text.ParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/members")
+@RequestMapping("/api/members")
 public class MemberController {
 
     @Autowired
     private IMemebreService memebreService;
 
-    @PostMapping
+    @PostMapping("/ajouterMember")
     public ResponseEntity<MemberDto> ajouterMember(@RequestBody @Valid MemberDto memberDto) throws AssociationFoundException, AssociationFoundException {
         MemberDto savedMember = memebreService.ajouterMember(memberDto);
         return new ResponseEntity<>(savedMember, HttpStatus.CREATED);
@@ -38,15 +38,15 @@ public class MemberController {
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/updateMember/{id}")
     public ResponseEntity<MemberDto> updateMember(@PathVariable Long id, @Valid @RequestBody MemberDto memberDto) throws ParseException, ParseException {
         MemberDto updatedMember = memebreService.updateMember(memberDto, id);
         return new ResponseEntity<>(updatedMember, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteMember/{id}")
     public ResponseEntity<String> deleteMember(@PathVariable("id") Long id) {
         memebreService.deleteMember(id);
-        return ResponseEntity.ok("Member with id " +id+ "was deleted succes");
+        return ResponseEntity.ok("Member with id " +id+ " was deleted succes");
     }
 }

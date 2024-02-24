@@ -19,17 +19,20 @@ import java.util.Date;
 @AllArgsConstructor
 public class UtilisateurDto implements Serializable {
     Long id;
-    @NotNull(message = "Name utilisateur cannot be null")
+    @NotBlank(message = "Name utilisateur cannot be blank")
     @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
     String nomComplete;
-    @NotNull(message = "Password cannot be null")
+    @NotBlank(message = "Password cannot be blank")
+    @NotNull(message = "not null")
     String password;
-    @NotNull(message = " Address cannot be null")
+
+    @NotBlank(message = " Address cannot be blank")
     @Size(min = 5)
     String address;
     @Pattern(regexp = "^\\+?[0-9. ()-]{10,}$", message = "invalid mobile number")
     String tele;
     @Email(message = "invalid email address")
+    @NotBlank(message = "not blank")
     String email;
     @NotNull(message = "dateNaissance not be null")
     Date dateNaissance;

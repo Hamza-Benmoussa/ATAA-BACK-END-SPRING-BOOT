@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 
 /**
@@ -19,12 +16,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class BiensEssantielDto implements Serializable {
     Long id;
-    @NotNull(message = "Name biens cannot be null")
+    @NotBlank(message = "Name biens cannot be blank")
     @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
     String nomBiens;
-    @Min(5)
-    @Max(5000)
-    Double quantity;
+    @NotNull(message = "quantity not be null")
+    int quantity;
     Long associationId;
 
     boolean deleted;

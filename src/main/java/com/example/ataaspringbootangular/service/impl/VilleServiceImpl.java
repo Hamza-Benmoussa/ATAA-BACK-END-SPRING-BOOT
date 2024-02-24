@@ -45,7 +45,7 @@ public class VilleServiceImpl implements IVilleService {
     public VilleDto getVillesById(Long id) throws VilleFoundException {
         return iVilleRepository.findByIdAndDeletedFalse(id)
                 .map(ville -> modelMapper.map(ville , VilleDto.class))
-                .orElseThrow(() -> new VilleFoundException("Ville Not found" + id));
+                .orElseThrow(() -> new VilleFoundException("Ville Not found with id = " + id));
     }
 
     @Override

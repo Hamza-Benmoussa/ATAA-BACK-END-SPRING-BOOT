@@ -16,13 +16,13 @@ import java.text.ParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/kafilas")
+@RequestMapping("/api/kafilas")
 public class KafilaController {
 
     @Autowired
     private IKafilaService kafilaService;
 
-    @PostMapping
+    @PostMapping("/ajouterKafila")
     public ResponseEntity<KafilaDto> ajouterKafila(@RequestBody @Valid KafilaDto kafilaDto) throws DowarFoundException, AssociationFoundException, BiensEssentielFoundException, AssociationFoundException, BiensEssentielFoundException, DowarFoundException {
         KafilaDto savedKafila = kafilaService.ajouterKafila(kafilaDto);
         return new ResponseEntity<>(savedKafila, HttpStatus.CREATED);
@@ -40,15 +40,15 @@ public class KafilaController {
         return new ResponseEntity<>(kafila, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/updateKafila{id}")
     public ResponseEntity<String> deletkafila(@PathVariable("id") Long id) {
         kafilaService.deleteKafila(id);
-        return ResponseEntity.ok("Kafila with id " +id+ "was deleted succes");
+        return ResponseEntity.ok("Kafila with id " +id+ " was deleted succes");
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteKafila(@PathVariable Long id) {
+    @DeleteMapping("/deleteMember/{id}")
+    public ResponseEntity<String> deleteKafila(@PathVariable Long id) {
         kafilaService.deleteKafila(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.ok("Member with id " +id+ " was deleted succes");
     }
 }

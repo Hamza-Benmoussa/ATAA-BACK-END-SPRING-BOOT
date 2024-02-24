@@ -7,10 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -22,7 +19,8 @@ public class MemberDto implements Serializable {
     @NotNull(message = "Role cannot be null")
     RoleMembers roleMembers;
 
-    @NotNull(message = "Name member cannot be null")
+
+    @NotBlank(message = "Name member cannot be blank")
     @Size(min = 1, max = 255, message = "Name must be between 1 and 255 characters")
     String nomMembres;
 
@@ -33,16 +31,18 @@ public class MemberDto implements Serializable {
     Genre genre;
 
     @Email(message = "invalid email address")
+    @NotBlank(message = "not blank")
     String email;
 
     @Pattern(regexp = "^\\+?[0-9. ()-]{10,}$", message = "invalid mobile number")
+    @NotBlank(message = "not blank tele ")
     String tele;
 
-    @NotNull(message = "Address cannot be null")
+    @NotBlank(message = "Address cannot be blank")
     @Size(min = 5)
-    String adress;
+    String address;
 
-    private Long associationId;
+    Long associationId;
 
 
     boolean deleted;

@@ -14,13 +14,13 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/associations")
+@RequestMapping("/api/associations")
 public class AssociationController {
 
     @Autowired
     private IAssociationService associationService;
 
-    @PostMapping
+    @PostMapping("/ajouterAssociation")
     public ResponseEntity<AssociationDto> ajouterAssociation(@RequestBody @Valid AssociationDto associationDto) throws UtilisateurFoundException, VilleFoundException {
         AssociationDto savedAssociation = associationService.ajouterAssociation(associationDto);
         return new ResponseEntity<>(savedAssociation, HttpStatus.CREATED);
@@ -38,15 +38,15 @@ public class AssociationController {
         return new ResponseEntity<>(association, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/updateAssociation/{id}")
     public ResponseEntity<AssociationDto> updateAssociation(@PathVariable Long id, @Valid @RequestBody AssociationDto associationDto) {
         AssociationDto updatedAssociation = associationService.updateAssociation(associationDto, id);
         return new ResponseEntity<>(updatedAssociation, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteAssociation/{id}")
     public ResponseEntity<String> deleteAssociation(@PathVariable("id") Long id) {
         associationService.deleteAssociation(id);
-        return ResponseEntity.ok("Association with id " +id+ "was deleted succes");
+        return ResponseEntity.ok("Association with id " +id+ " was deleted succes");
     }
 }

@@ -12,12 +12,12 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/villes")
+@RequestMapping("/api/villes")
 public class VilleController {
     @Autowired
     private IVilleService villeService;
 
-    @PostMapping
+    @PostMapping("/ajouterVille")
     public ResponseEntity<VilleDto> ajouterVille(@RequestBody @Valid VilleDto villeDto) {
         VilleDto savedVille = villeService.ajouterVille(villeDto);
         return new ResponseEntity<>(savedVille, HttpStatus.CREATED);
@@ -35,15 +35,15 @@ public class VilleController {
         return new ResponseEntity<>(ville, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/updateVille/{id}")
     public ResponseEntity<VilleDto> updateVille(@PathVariable Long id, @Valid @RequestBody VilleDto villeDto) {
         VilleDto updatedVille = villeService.updateVille(villeDto, id);
         return new ResponseEntity<>(updatedVille, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteVille/{id}")
     public ResponseEntity<String> deleteVille(@PathVariable("id") Long id) {
         villeService.deleteVille(id);
-        return ResponseEntity.ok("Ville with id " +id+ "was deleted succes");
+        return ResponseEntity.ok("Ville with id " +id+ " was deleted succes");
     }
 }

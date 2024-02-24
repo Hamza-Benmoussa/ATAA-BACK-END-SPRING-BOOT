@@ -51,7 +51,7 @@ public class BiensEssantielImpl implements IBiensEssantielService {
     public BiensEssantielDto getBiensEssantielsById(Long id) throws BiensEssentielFoundException {
         return iBiensEssantielsRepository.findByIdAndDeletedFalse(id)
                 .map(biensEssantiel -> modelMapper.map(biensEssantiel , BiensEssantielDto.class))
-                .orElseThrow(() -> new BiensEssentielFoundException("BiensEssentiel Not found" + id));
+                .orElseThrow(() -> new BiensEssentielFoundException("BiensEssentiel Not found with id = " + id));
 
     }
 

@@ -21,7 +21,7 @@ public class BiensEssantiel {
 
     private String nomBiens;
 
-    private Double quantity;
+    private int quantity;
 
     @ManyToOne
     private Association association;

@@ -33,7 +33,7 @@ public class Kafila {
 
     private LocalDate dateArrivee;
 
-    @OneToMany(mappedBy = "kafila", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "kafila", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     @Fetch(FetchMode.SUBSELECT)
     private List<BienKafila> bienKafilas;

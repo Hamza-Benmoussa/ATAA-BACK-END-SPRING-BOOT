@@ -25,7 +25,7 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
     private ModelMapper modelMapper;
     @Override
     public UtilisateurDto ajouterUtilisateur(UtilisateurDto utilisateurDto) {
-        checkExistEmail(utilisateurDto);
+        checkExistEmail(utilisateurDto.getEmail());
         Utilisateur utilisateur = modelMapper.map(utilisateurDto , Utilisateur.class);
         Utilisateur savedUtilisateur = iUtilisateurRepository.save(utilisateur);
         return modelMapper.map(savedUtilisateur, UtilisateurDto.class);
@@ -43,37 +43,50 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
     public UtilisateurDto getUtilisateursById(Long id) throws UtilisateurFoundException {
         return iUtilisateurRepository.findByIdAndDeletedFalse(id)
         .map(utilisateur -> modelMapper.map(utilisateur , UtilisateurDto.class))
-        .orElseThrow(() -> new UtilisateurFoundException("Utilisateur Not found" + id));
+        .orElseThrow(() -> new UtilisateurFoundException("Utilisateur Not found with id = " + id));
     }
 
     @Override
-    public UtilisateurDto updateUtilisateur(UtilisateurDto utilisateurDto, Long id){
+    public UtilisateurDto updateUtilisateur(UtilisateurDto utilisateurDto, Long id) {
+        // Fetch the existing user by ID
         Utilisateur existingUtilisateur = iUtilisateurRepository.findByIdAndDeletedFalse(id).orElse(null);
-            checkExistEmail(utilisateurDto);
-            existingUtilisateur.setEmail(utilisateurDto.getEmail());
-            existingUtilisateur.setGenre(utilisateurDto.getGenre());
-            existingUtilisateur.setPassword(utilisateurDto.getPassword());
-            existingUtilisateur.setTele(utilisateurDto.getTele());
-            existingUtilisateur.setAddress(utilisateurDto.getAddress());
-            existingUtilisateur.setNomComplete(utilisateurDto.getNomComplete());
-            existingUtilisateur.setDateNaissance(utilisateurDto.getDateNaissance());
-            Utilisateur updateUtilisateur = iUtilisateurRepository.save(existingUtilisateur);
-            updateUtilisateur.setId(id);
-            return modelMapper.map(updateUtilisateur, UtilisateurDto.class);
 
-    }
-
-    private UtilisateurDto checkExistEmail (UtilisateurDto utilisateurDto){
-        if (utilisateurDto.getEmail().equals(getByEmail(utilisateurDto.getEmail()))){
-            throw new EmailDejaExisteException("deja exist cette email");
+        // Check if the email is being updated
+        if (!existingUtilisateur.getEmail().equals(utilisateurDto.getEmail())) {
+            // Email is being updated, check if it already exists
+            checkExistEmail(utilisateurDto.getEmail());
         }
-        return utilisateurDto;
+
+        // Update the user fields
+        existingUtilisateur.setEmail(utilisateurDto.getEmail());
+        existingUtilisateur.setGenre(utilisateurDto.getGenre());
+        existingUtilisateur.setPassword(utilisateurDto.getPassword());
+        existingUtilisateur.setTele(utilisateurDto.getTele());
+        existingUtilisateur.setAddress(utilisateurDto.getAddress());
+        existingUtilisateur.setNomComplete(utilisateurDto.getNomComplete());
+        existingUtilisateur.setDateNaissance(utilisateurDto.getDateNaissance());
+
+        try {
+            // Save the updated user
+            Utilisateur updatedUtilisateur = iUtilisateurRepository.save(existingUtilisateur);
+
+            // Map and return the updated user DTO
+            return modelMapper.map(updatedUtilisateur, UtilisateurDto.class);
+        } catch (EmailDejaExisteException ex) {
+            throw new EmailDejaExisteException("Email déjà existant dans la base de données.");
+
+        }
     }
-    public String getByEmail(String email)
-    {
+
+    private void checkExistEmail(String email) {
+        if (getByEmail(email) != null) {
+            throw new EmailDejaExisteException("Email déjà existant dans la base de données.");
+        }
+    }
+
+    public String getByEmail(String email) {
         Utilisateur utilisateur = iUtilisateurRepository.findByEmailAndDeletedFalse(email);
-        if(utilisateur != null)
-        {
+        if (utilisateur != null) {
             return utilisateur.getEmail();
         }
         return null;

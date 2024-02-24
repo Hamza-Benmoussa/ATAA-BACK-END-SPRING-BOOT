@@ -13,13 +13,13 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/dowars")
+@RequestMapping("/api/dowars")
 public class DowarController {
 
     @Autowired
     private IDowarService dowarService;
 
-    @PostMapping
+    @PostMapping("/ajouterDowar")
     public ResponseEntity<DowarDto> ajouterDowar(@RequestBody @Valid DowarDto dowarDto) throws VilleFoundException, DowarFoundException {
         DowarDto savedDowar = dowarService.ajouterDowar(dowarDto);
         return new ResponseEntity<>(savedDowar, HttpStatus.CREATED);
@@ -37,15 +37,15 @@ public class DowarController {
         return new ResponseEntity<>(dowar, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/updateDowar/{id}")
     public ResponseEntity<DowarDto> updateDowar(@PathVariable Long id, @Valid @RequestBody DowarDto dowarDto) {
         DowarDto updatedDowar = dowarService.updateDowar(dowarDto, id);
         return new ResponseEntity<>(updatedDowar, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteDowar/{id}")
     public ResponseEntity<String> deleteDowar(@PathVariable("id") Long id) {
         dowarService.deleteDowar(id);
-        return ResponseEntity.ok("Dowar with id " +id+ "was deleted succes");
+        return ResponseEntity.ok("Dowar with id " +id+ " was deleted succes");
     }
 }

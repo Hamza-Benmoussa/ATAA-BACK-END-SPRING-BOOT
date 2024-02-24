@@ -13,13 +13,13 @@ import java.text.ParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/utilisateurs")
+@RequestMapping("/api/utilisateurs")
 public class UtilisateurController {
 
     @Autowired
     private IUtilisateurService utilisateurService;
 
-    @PostMapping
+    @PostMapping("/ajouterUtilisateur")
     public ResponseEntity<UtilisateurDto> ajouterUtilisateur(@RequestBody @Valid UtilisateurDto utilisateurDto) {
         UtilisateurDto savedUtilisateur = utilisateurService.ajouterUtilisateur(utilisateurDto);
         return new ResponseEntity<>(savedUtilisateur, HttpStatus.CREATED);
@@ -37,15 +37,15 @@ public class UtilisateurController {
         return new ResponseEntity<>(utilisateur, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/updateUtilisateur/{id}")
     public ResponseEntity<UtilisateurDto> updateUtilisateur(@PathVariable Long id, @Valid @RequestBody UtilisateurDto utilisateurDto) throws ParseException {
         UtilisateurDto updatedUtilisateur = utilisateurService.updateUtilisateur(utilisateurDto, id);
         return new ResponseEntity<>(updatedUtilisateur, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteUtilisateur/{id}")
     public ResponseEntity<String> deleteUtilisateur(@PathVariable("id") Long id) {
         utilisateurService.deleteUtilisateur(id);
-        return ResponseEntity.ok("Utilisateur with id " +id+ "was deleted succes");
+        return ResponseEntity.ok("Utilisateur with id " +id+ " was deleted succes");
     }
 }

@@ -79,7 +79,7 @@ class KafilaSericeImplTest {
 
         biensEssantielDto = new BiensEssantielDto();
         biensEssantielDto.setNomBiens("Zit");
-        biensEssantielDto.setQuantity(12.00);
+        biensEssantielDto.setQuantity(12);
         biensEssantielDto.setAssociationId(associationDto.getId());
         biensEssantielDto = iBiensEssantielService.ajouterBiensEssantiel(biensEssantielDto);
 
