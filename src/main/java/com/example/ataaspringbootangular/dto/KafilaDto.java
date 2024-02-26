@@ -29,5 +29,8 @@ public class KafilaDto implements Serializable {
     Long dowarId;
     Long associationId;
     List<BienKafilaDto> bienKafilaDtos;
+
+    boolean arrivedKafila;
+
     boolean deleted;
 }

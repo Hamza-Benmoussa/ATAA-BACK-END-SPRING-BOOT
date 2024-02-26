@@ -33,6 +33,8 @@ public class Kafila {
 
     private LocalDate dateArrivee;
 
+    private boolean arrivedKafila;
+
     @OneToMany(mappedBy = "kafila", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     @Fetch(FetchMode.SUBSELECT)

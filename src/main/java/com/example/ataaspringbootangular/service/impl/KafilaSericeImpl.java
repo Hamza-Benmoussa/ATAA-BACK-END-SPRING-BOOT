@@ -133,6 +133,7 @@
                 existingKafila.setDowar(dowar);
                 existingKafila.setDateArrivee(kafilaDto.getDateArrivee());
                 existingKafila.setDateDepart(kafilaDto.getDateDepart());
+                existingKafila.setArrivedKafila(kafilaDto.isArrivedKafila());
                 Kafila updateKafila = iKafilaRepository.save(existingKafila);
                 updateKafila.setId(id);
                 return modelMapper.map(updateKafila , KafilaDto.class);
