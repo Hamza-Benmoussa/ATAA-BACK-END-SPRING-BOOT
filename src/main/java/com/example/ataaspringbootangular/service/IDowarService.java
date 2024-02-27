@@ -18,4 +18,5 @@ public interface IDowarService {
     DowarDto updateDowar(DowarDto dowarDto, Long id);
 
     void deleteDowar(Long id);
+    int calculateTotalArrivedKafilasForDowar(Long dowarId) throws DowarFoundException;
 }

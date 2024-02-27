@@ -40,15 +40,15 @@ public class KafilaController {
         return new ResponseEntity<>(kafila, HttpStatus.OK);
     }
 
-    @PutMapping("/updateKafila{id}")
-    public ResponseEntity<String> deletkafila(@PathVariable("id") Long id) {
-        kafilaService.deleteKafila(id);
-        return ResponseEntity.ok("Kafila with id " +id+ " was deleted succes");
+    @PutMapping("/updateKafila/{id}")
+    public ResponseEntity<KafilaDto> deletkafila(@PathVariable("id") Long id , @Valid @RequestBody KafilaDto kafilaDto) throws ParseException {
+        KafilaDto updateKafila = kafilaService.updateKafila(kafilaDto,id);
+        return new ResponseEntity<>(updateKafila , HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteMember/{id}")
-    public ResponseEntity<String> deleteKafila(@PathVariable Long id) {
+    @DeleteMapping("/deleteKafila/{id}")
+    public ResponseEntity<String> deleteKafila(@PathVariable("id") Long id) {
         kafilaService.deleteKafila(id);
-        return ResponseEntity.ok("Member with id " +id+ " was deleted succes");
+        return ResponseEntity.ok("Kafila with id " +id+ " was deleted succes");
     }
 }

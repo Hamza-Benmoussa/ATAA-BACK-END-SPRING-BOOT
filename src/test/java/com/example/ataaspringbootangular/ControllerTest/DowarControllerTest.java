@@ -3,6 +3,7 @@ package com.example.ataaspringbootangular.ControllerTest;
 import com.example.ataaspringbootangular.controller.DowarController;
 import com.example.ataaspringbootangular.dto.DowarDto;
 import com.example.ataaspringbootangular.exception.except.DowarFoundException;
+import com.example.ataaspringbootangular.exception.except.VilleFoundException;
 import com.example.ataaspringbootangular.service.IDowarService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,82 +29,87 @@ public class DowarControllerTest {
 
     @Mock
     private IDowarService dowarService;
+
+    @InjectMocks
+    private DowarController dowarController;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
     }
 
-    @InjectMocks
-    private DowarController dowarController;
-
     @Test
-    void ajouterDowar() throws Exception {
-        // Mocking the behavior of dowarService.ajouterDowar()
+    void ajouterDowar() throws VilleFoundException, DowarFoundException, VilleFoundException {
         DowarDto dowarDto = new DowarDto();
-        when(dowarService.ajouterDowar(any(DowarDto.class))).thenReturn(dowarDto);
+        when(dowarService.ajouterDowar(dowarDto)).thenReturn(dowarDto);
 
-        // Testing the DowarController method
         ResponseEntity<DowarDto> responseEntity = dowarController.ajouterDowar(dowarDto);
 
-        // Assertions
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(dowarDto, responseEntity.getBody());
+        verify(dowarService, times(1)).ajouterDowar(dowarDto);
     }
 
     @Test
     void getDowars() {
-        // Mocking the behavior of dowarService.getDowars()
-        List<DowarDto> dowarList = Collections.singletonList(new DowarDto());
-        when(dowarService.getDowars()).thenReturn(dowarList);
+        List<DowarDto> dowarDtos = Collections.singletonList(new DowarDto());
+        when(dowarService.getDowars()).thenReturn(dowarDtos);
 
-        // Testing the DowarController method
         ResponseEntity<List<DowarDto>> responseEntity = dowarController.getDowars();
 
-        // Assertions
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(dowarList, responseEntity.getBody());
+        assertEquals(dowarDtos, responseEntity.getBody());
+        verify(dowarService, times(1)).getDowars();
     }
 
     @Test
     void getDowarById() throws DowarFoundException {
-        // Mocking the behavior of dowarService.getDowarsById()
+        Long id = 1L;
         DowarDto dowarDto = new DowarDto();
-        when(dowarService.getDowarsById(1L)).thenReturn(dowarDto);
+        when(dowarService.getDowarsById(id)).thenReturn(dowarDto);
 
-        // Testing the DowarController method
-        ResponseEntity<DowarDto> responseEntity = dowarController.getDowarById(1L);
+        ResponseEntity<DowarDto> responseEntity = dowarController.getDowarById(id);
 
-        // Assertions
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(dowarDto, responseEntity.getBody());
+        verify(dowarService, times(1)).getDowarsById(id);
     }
-
-
 
     @Test
     void updateDowar() {
-        // Mocking the behavior of dowarService.updateDowar()
+        Long id = 1L;
         DowarDto dowarDto = new DowarDto();
-        when(dowarService.updateDowar(any(DowarDto.class), anyLong())).thenReturn(dowarDto);
+        when(dowarService.updateDowar(dowarDto, id)).thenReturn(dowarDto);
 
-        // Testing the DowarController method
-        ResponseEntity<DowarDto> responseEntity = dowarController.updateDowar(1L, dowarDto);
+        ResponseEntity<DowarDto> responseEntity = dowarController.updateDowar(id, dowarDto);
 
-        // Assertions
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(dowarDto, responseEntity.getBody());
+        verify(dowarService, times(1)).updateDowar(dowarDto, id);
     }
 
     @Test
     void deleteDowar() {
-        // Testing the DowarController method
-        ResponseEntity<String> responseEntity = dowarController.deleteDowar(1L);
+        Long id = 1L;
+        doNothing().when(dowarService).deleteDowar(id);
 
-        // Assertions
+        ResponseEntity<String> responseEntity = dowarController.deleteDowar(id);
+
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals("Dowar with id 1 was deleted succes", responseEntity.getBody());
+        verify(dowarService, times(1)).deleteDowar(id);
+    }
 
-        // Verify that dowarService.deleteDowar() was called once with the correct argument
-        verify(dowarService, times(1)).deleteDowar(1L);
+    @Test
+    void getTotalKafilasForDowar() throws DowarFoundException {
+        Long dowarId = 1L;
+        int totalKafilas = 5;
+        when(dowarService.calculateTotalArrivedKafilasForDowar(dowarId)).thenReturn(totalKafilas);
+
+        ResponseEntity<Integer> responseEntity = dowarController.getTotalKafilasForDowar(dowarId);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(totalKafilas, responseEntity.getBody());
+        verify(dowarService, times(1)).calculateTotalArrivedKafilasForDowar(dowarId);
     }
 }

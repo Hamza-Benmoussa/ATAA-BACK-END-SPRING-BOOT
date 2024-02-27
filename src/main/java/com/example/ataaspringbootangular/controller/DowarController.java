@@ -48,4 +48,10 @@ public class DowarController {
         dowarService.deleteDowar(id);
         return ResponseEntity.ok("Dowar with id " +id+ " was deleted succes");
     }
+
+    @GetMapping("/totalKafilas/{dowarId}")
+    public ResponseEntity<Integer> getTotalKafilasForDowar(@PathVariable Long dowarId) throws DowarFoundException {
+        int totalKafilas = dowarService.calculateTotalArrivedKafilasForDowar(dowarId);
+        return new ResponseEntity<>(totalKafilas, HttpStatus.OK);
+    }
 }

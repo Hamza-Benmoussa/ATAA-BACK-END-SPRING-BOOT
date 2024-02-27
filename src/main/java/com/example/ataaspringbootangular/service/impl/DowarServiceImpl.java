@@ -3,6 +3,7 @@ package com.example.ataaspringbootangular.service.impl;
 import com.example.ataaspringbootangular.dto.DowarDto;
 import com.example.ataaspringbootangular.dto.VilleDto;
 import com.example.ataaspringbootangular.entity.Dowar;
+import com.example.ataaspringbootangular.entity.Kafila;
 import com.example.ataaspringbootangular.entity.Ville;
 import com.example.ataaspringbootangular.exception.except.DowarFoundException;
 import com.example.ataaspringbootangular.exception.except.UtilisateurFoundException;
@@ -72,5 +73,25 @@ public class DowarServiceImpl implements IDowarService {
             dowar.setDeleted(true);
             iDowarsRepository.save(dowar);
         }
+    }
+
+    @Override
+    public int calculateTotalArrivedKafilasForDowar(Long dowarId) throws DowarFoundException {
+        Dowar dowar = iDowarsRepository.findByIdAndDeletedFalse(dowarId)
+                .orElseThrow(() -> new DowarFoundException("Dowar Not found with id = " + dowarId));
+
+        int totalArrivedKafilas = 0;
+
+        if (dowar.getKafilas() != null) {
+            for (Kafila kafila : dowar.getKafilas()) {
+                if (kafila.isArrivedKafila()) {
+                    if (kafila.getAssociation() != null) {
+                        totalArrivedKafilas++;
+                    }
+                }
+            }
+        }
+
+        return totalArrivedKafilas;
     }
 }
