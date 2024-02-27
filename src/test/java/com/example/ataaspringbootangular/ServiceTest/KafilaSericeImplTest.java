@@ -93,7 +93,6 @@ class KafilaSericeImplTest {
 
         bienKafilaDto =new BienKafilaDto();
         bienKafilaDto.setBiensEssentielsId(biensEssantielDto.getId());
-        bienKafilaDto.setKafilaId(kafilaDto.getId());
         bienKafilaDto.setQuantityBienKafila(3);
         bienKafilaDto = iBienKafilaService.ajouterBienKafila(bienKafilaDto);
 

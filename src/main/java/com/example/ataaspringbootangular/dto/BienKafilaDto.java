@@ -13,9 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BienKafilaDto implements Serializable {
-    Long id;
     int quantityBienKafila;
     Long biensEssentielsId;
-    Long kafilaId;
     boolean deleted;
 }
