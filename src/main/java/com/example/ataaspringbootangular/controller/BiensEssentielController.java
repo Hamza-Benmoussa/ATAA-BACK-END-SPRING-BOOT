@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/biensEssentiels")
+@CrossOrigin("*")
 public class BiensEssentielController {
     @Autowired
     private IBiensEssantielService biensEssantielService;

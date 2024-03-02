@@ -17,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/kafilas")
+@CrossOrigin("*")
 public class KafilaController {
 
     @Autowired

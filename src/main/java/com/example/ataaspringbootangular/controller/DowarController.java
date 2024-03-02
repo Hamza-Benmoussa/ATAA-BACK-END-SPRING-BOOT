@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/dowars")
+@CrossOrigin("*")
 public class DowarController {
 
     @Autowired
