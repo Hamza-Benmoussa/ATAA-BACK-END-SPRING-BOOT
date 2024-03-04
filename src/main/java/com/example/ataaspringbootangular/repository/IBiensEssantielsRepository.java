@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface IBiensEssantielsRepository extends JpaRepository<BiensEssantiel,Long> {
     List<BiensEssantiel> findByDeletedFalse();
     Optional<BiensEssantiel> findByIdAndDeletedFalse(Long id);
+
+    List<BiensEssantiel> findByAssociationNomPresidantIdAndDeletedFalse(Long presidentAssociationId);
 }

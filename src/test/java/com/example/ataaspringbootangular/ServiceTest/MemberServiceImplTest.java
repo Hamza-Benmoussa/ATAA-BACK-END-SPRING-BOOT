@@ -109,8 +109,12 @@ class MemberServiceImplTest {
     }
 
     @Test
-    void getMembers() {
-        List<MemberDto> memberDtos = iMemebreService.getMembers();
+    void getAllMembersByPresidentAssociationId() throws AssociationFoundException, MemberFoundException {
+        Long presidentAssociationId = 123L;
+
+        List<MemberDto> memberDtos = iMemebreService.getAllMembersByPresidentAssociationId(presidentAssociationId);
+
+        // Assertions
         assertNotNull(memberDtos, "List is empty");
     }
 

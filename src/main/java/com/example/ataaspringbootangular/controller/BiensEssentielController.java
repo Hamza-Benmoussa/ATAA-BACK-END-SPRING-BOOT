@@ -1,6 +1,7 @@
 package com.example.ataaspringbootangular.controller;
 
 import com.example.ataaspringbootangular.dto.BiensEssantielDto;
+import com.example.ataaspringbootangular.dto.KafilaDto;
 import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
 import com.example.ataaspringbootangular.exception.except.BiensEssentielFoundException;
 import com.example.ataaspringbootangular.service.IBiensEssantielService;
@@ -23,6 +24,12 @@ public class BiensEssentielController {
     public ResponseEntity<BiensEssantielDto> ajouterBiensEssentiel(@RequestBody @Valid BiensEssantielDto biensEssantielDto) throws AssociationFoundException, AssociationFoundException {
         BiensEssantielDto savedBiensEssentiel = biensEssantielService.ajouterBiensEssantiel(biensEssantielDto);
         return new ResponseEntity<>(savedBiensEssentiel, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/bienByPres/{presidentAssociationId}")
+    public ResponseEntity<List<BiensEssantielDto>> getAllMembersByPresidentAssociationId(@PathVariable Long presidentAssociationId) {
+        List<BiensEssantielDto> members = biensEssantielService.getAllBiensEssentilesByPresidentAssociationId(presidentAssociationId);
+        return new ResponseEntity<>(members, HttpStatus.OK);
     }
 
     @GetMapping

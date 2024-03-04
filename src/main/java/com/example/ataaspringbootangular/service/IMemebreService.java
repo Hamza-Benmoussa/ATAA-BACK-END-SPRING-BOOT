@@ -12,7 +12,8 @@ import java.util.List;
 public interface IMemebreService {
     MemberDto ajouterMember(MemberDto memberDto) throws AssociationFoundException;
 
-    List<MemberDto> getMembers();
+//    List<MemberDto> getMembers();
+    List<MemberDto> getAllMembersByPresidentAssociationId(Long presidentAssociationId);
 
     MemberDto getMembersById(Long id) throws MemberFoundException;
 

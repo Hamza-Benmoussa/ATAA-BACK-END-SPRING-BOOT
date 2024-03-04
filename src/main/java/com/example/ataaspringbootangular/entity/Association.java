@@ -19,7 +19,7 @@ public class Association {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     private Utilisateur nomPresidant;
 
 

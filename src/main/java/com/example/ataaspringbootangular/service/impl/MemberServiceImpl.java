@@ -47,27 +47,24 @@ public class MemberServiceImpl implements IMemebreService {
         Member saveMember = iMembersRepository.save(member);
         return modelMapper.map(saveMember, MemberDto.class);
     }
-
-    @Override
-    public List<MemberDto> getMembers() {
-        List<Member> members = iMembersRepository.findByDeletedFalse();
-        return members.stream()
-                .map(member -> modelMapper.map(member, MemberDto.class))
-                .collect(Collectors.toList());
-    }
-
     @Override
     public MemberDto getMembersById(Long id) throws MemberFoundException {
         return iMembersRepository.findByIdAndDeletedFalse(id)
                 .map(member -> modelMapper.map(member, MemberDto.class))
                 .orElseThrow(() -> new MemberFoundException("Member Not found with id = " + id));
     }
+    @Override
+    public List<MemberDto> getAllMembersByPresidentAssociationId(Long presidentAssociationId) {
+        List<Member> members = iMembersRepository.findByAssociationNomPresidantIdAndDeletedFalse(presidentAssociationId);
+        return members.stream()
+                .map(member -> modelMapper.map(member, MemberDto.class))
+                .collect(Collectors.toList());
+    }
 
     @Override
     public MemberDto updateMember(MemberDto memberDto, Long id) throws ParseException {
         Member existingMember = iMembersRepository.findByIdAndDeletedFalse(id).orElse(null);
         if (!existingMember.getEmail().equals(memberDto.getEmail())) {
-            // Email is being updated, check if it already exists
             checkExistEmail(memberDto.getEmail());
         }
 

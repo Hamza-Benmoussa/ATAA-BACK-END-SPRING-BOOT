@@ -16,6 +16,7 @@ public interface IAssociationService {
 
     AssociationDto getAssociationsById(Long id) throws AssociationFoundException;
 
+//    List<AssociationDto> getAssociationsForCurrentUser() throws UtilisateurFoundException;
     AssociationDto updateAssociation(AssociationDto associationDto, Long id);
 
     void deleteAssociation(Long id);

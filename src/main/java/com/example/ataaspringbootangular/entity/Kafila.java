@@ -31,7 +31,7 @@ public class Kafila {
 
     private Date dateDepart;
 
-    private LocalDate dateArrivee;
+    private Date dateArrivee;
 
     private boolean arrivedKafila;
 

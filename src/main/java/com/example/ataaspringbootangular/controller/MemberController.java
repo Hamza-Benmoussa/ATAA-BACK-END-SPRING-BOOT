@@ -26,10 +26,9 @@ public class MemberController {
         MemberDto savedMember = memebreService.ajouterMember(memberDto);
         return new ResponseEntity<>(savedMember, HttpStatus.CREATED);
     }
-
-    @GetMapping
-    public ResponseEntity<List<MemberDto>> getMembers() {
-        List<MemberDto> members = memebreService.getMembers();
+    @GetMapping("/memberByPres/{presidentAssociationId}")
+    public ResponseEntity<List<MemberDto>> getAllMembersByPresidentAssociationId(@PathVariable Long presidentAssociationId) {
+        List<MemberDto> members = memebreService.getAllMembersByPresidentAssociationId(presidentAssociationId);
         return new ResponseEntity<>(members, HttpStatus.OK);
     }
 

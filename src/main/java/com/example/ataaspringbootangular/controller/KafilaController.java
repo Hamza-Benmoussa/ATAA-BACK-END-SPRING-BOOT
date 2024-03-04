@@ -1,6 +1,7 @@
 package com.example.ataaspringbootangular.controller;
 
 import com.example.ataaspringbootangular.dto.KafilaDto;
+import com.example.ataaspringbootangular.dto.MemberDto;
 import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
 import com.example.ataaspringbootangular.exception.except.BiensEssentielFoundException;
 import com.example.ataaspringbootangular.exception.except.DowarFoundException;
@@ -33,6 +34,12 @@ public class KafilaController {
     public ResponseEntity<List<KafilaDto>> getKafilas() {
         List<KafilaDto> kafilas = kafilaService.getKafilas();
         return new ResponseEntity<>(kafilas, HttpStatus.OK);
+    }
+
+    @GetMapping("/kafilaByPres/{presidentAssociationId}")
+    public ResponseEntity<List<KafilaDto>> getAllMembersByPresidentAssociationId(@PathVariable Long presidentAssociationId) {
+        List<KafilaDto> members = kafilaService.getAllKafilasByPresidentAssociationId(presidentAssociationId);
+        return new ResponseEntity<>(members, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

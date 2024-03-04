@@ -5,6 +5,7 @@ import com.example.ataaspringbootangular.dto.MemberDto;
 import com.example.ataaspringbootangular.dto.UtilisateurDto;
 import com.example.ataaspringbootangular.dto.VilleDto;
 import com.example.ataaspringbootangular.entity.Association;
+import com.example.ataaspringbootangular.entity.Enum.RoleUser;
 import com.example.ataaspringbootangular.entity.Member;
 import com.example.ataaspringbootangular.entity.Utilisateur;
 import com.example.ataaspringbootangular.entity.Ville;

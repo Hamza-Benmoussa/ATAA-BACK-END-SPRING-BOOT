@@ -48,12 +48,9 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
 
     @Override
     public UtilisateurDto updateUtilisateur(UtilisateurDto utilisateurDto, Long id) {
-        // Fetch the existing user by ID
         Utilisateur existingUtilisateur = iUtilisateurRepository.findByIdAndDeletedFalse(id).orElse(null);
 
-        // Check if the email is being updated
         if (!existingUtilisateur.getEmail().equals(utilisateurDto.getEmail())) {
-            // Email is being updated, check if it already exists
             checkExistEmail(utilisateurDto.getEmail());
         }
 

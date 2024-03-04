@@ -2,8 +2,10 @@ package com.example.ataaspringbootangular.service.impl;
 
 import com.example.ataaspringbootangular.dto.AssociationDto;
 import com.example.ataaspringbootangular.dto.BiensEssantielDto;
+import com.example.ataaspringbootangular.dto.KafilaDto;
 import com.example.ataaspringbootangular.entity.Association;
 import com.example.ataaspringbootangular.entity.BiensEssantiel;
+import com.example.ataaspringbootangular.entity.Kafila;
 import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
 import com.example.ataaspringbootangular.exception.except.BiensEssentielFoundException;
 import com.example.ataaspringbootangular.exception.except.DowarFoundException;
@@ -53,6 +55,14 @@ public class BiensEssantielImpl implements IBiensEssantielService {
                 .map(biensEssantiel -> modelMapper.map(biensEssantiel , BiensEssantielDto.class))
                 .orElseThrow(() -> new BiensEssentielFoundException("BiensEssentiel Not found with id = " + id));
 
+    }
+
+    @Override
+    public List<BiensEssantielDto> getAllBiensEssentilesByPresidentAssociationId(Long presidentAssociationId) {
+        List<BiensEssantiel> members = iBiensEssantielsRepository.findByAssociationNomPresidantIdAndDeletedFalse(presidentAssociationId);
+        return members.stream()
+                .map(biensEssantiel -> modelMapper.map(biensEssantiel, BiensEssantielDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override

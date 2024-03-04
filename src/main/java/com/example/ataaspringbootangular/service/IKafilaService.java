@@ -10,7 +10,7 @@ import java.util.List;
 public interface IKafilaService {
     KafilaDto ajouterKafila(KafilaDto kafilaDto) throws DowarFoundException, AssociationFoundException, BiensEssentielFoundException;
 
-
+    List<KafilaDto> getAllKafilasByPresidentAssociationId(Long presidentAssociationId);
     List<KafilaDto> getKafilas();
 
     KafilaDto getKafilasById(Long id) throws KafilaFoundException;

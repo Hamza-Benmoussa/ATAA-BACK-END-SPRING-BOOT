@@ -46,15 +46,21 @@ public class MemberControllerTest {
     }
 
     @Test
-    void getMembers() {
-        List<MemberDto> memberDtos = Collections.singletonList(new MemberDto());
-        when(memebreService.getMembers()).thenReturn(memberDtos);
+    void getAllMembersByPresidentAssociationId() throws MemberFoundException {
+        // Assuming you have a known president association ID for testing purposes
+        Long presidentAssociationId = 123L;
 
-        ResponseEntity<List<MemberDto>> responseEntity = memberController.getMembers();
+        // Mock the behavior of your service method
+        List<MemberDto> mockMembers = Collections.singletonList(new MemberDto());
+        when(memebreService.getAllMembersByPresidentAssociationId(presidentAssociationId)).thenReturn(mockMembers);
 
+        // Call the controller method
+        ResponseEntity<List<MemberDto>> responseEntity = memberController.getAllMembersByPresidentAssociationId(presidentAssociationId);
+
+        // Assertions
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(memberDtos, responseEntity.getBody());
-        verify(memebreService, times(1)).getMembers();
+        assertEquals(mockMembers, responseEntity.getBody());
+        verify(memebreService, times(1)).getAllMembersByPresidentAssociationId(presidentAssociationId);
     }
 
     @Test

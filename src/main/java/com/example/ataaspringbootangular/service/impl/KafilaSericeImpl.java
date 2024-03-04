@@ -108,6 +108,14 @@
         }
 
         @Override
+        public List<KafilaDto> getAllKafilasByPresidentAssociationId(Long presidentAssociationId) {
+            List<Kafila> members = iKafilaRepository.findByAssociationNomPresidantIdAndDeletedFalse(presidentAssociationId);
+            return members.stream()
+                    .map(kafila -> modelMapper.map(kafila, KafilaDto.class))
+                    .collect(Collectors.toList());
+        }
+
+        @Override
         public KafilaDto getKafilasById(Long id) throws KafilaFoundException {
             return iKafilaRepository.findByIdAndDeletedFalse(id)
                     .map(kafila -> {

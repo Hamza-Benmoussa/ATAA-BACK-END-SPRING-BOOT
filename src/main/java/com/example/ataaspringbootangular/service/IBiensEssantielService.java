@@ -18,4 +18,5 @@ public interface IBiensEssantielService {
     BiensEssantielDto updateBiensEssentiel(BiensEssantielDto biensEssantielDto, Long id);
 
     void deleteBiensEssantiel(Long id);
+    List<BiensEssantielDto> getAllBiensEssentilesByPresidentAssociationId(Long presidentAssociationId);
 }

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -85,16 +86,12 @@ class KafilaSericeImplTest {
 
         kafilaDto = new KafilaDto();
         kafilaDto.setNomKfila("khayr");
-        kafilaDto.setDateArrivee(LocalDate.now());
+        kafilaDto.setDateArrivee(dateFormat.parse("2003-01-03"));
         kafilaDto.setAssociationId(associationDto.getId());
         kafilaDto.setDowarId(dowarDto.getId());
         kafilaDto.setDateDepart(dateFormat.parse("2002-01-03"));
         kafilaDto = iKafilaService.ajouterKafila(kafilaDto);
 
-        bienKafilaDto =new BienKafilaDto();
-        bienKafilaDto.setBiensEssentielsId(biensEssantielDto.getId());
-        bienKafilaDto.setQuantityBienKafila(3);
-        bienKafilaDto = iBienKafilaService.ajouterBienKafila(bienKafilaDto);
 
     }
     @AfterEach

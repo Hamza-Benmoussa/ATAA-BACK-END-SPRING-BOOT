@@ -90,7 +90,7 @@ class AssociationServiceImplTest {
     void updateAssociation() {
         associationDto.setNbrSerie("kakakakaka");
         AssociationDto updateAssociation = iAssociationService.updateAssociation(associationDto, associationDto.getId());
-        assertEquals("kakakakaka+", updateAssociation.getNbrSerie(), "Association should be updated");
+        assertEquals("kakakakaka", updateAssociation.getNbrSerie(), "Association should be updated");
     }
 
     @Test

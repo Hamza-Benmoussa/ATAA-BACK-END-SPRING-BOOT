@@ -15,5 +15,6 @@ import java.io.Serializable;
 public class BienKafilaDto implements Serializable {
     int quantityBienKafila;
     Long biensEssentielsId;
+    private Long kafilaId;
     boolean deleted;
 }
