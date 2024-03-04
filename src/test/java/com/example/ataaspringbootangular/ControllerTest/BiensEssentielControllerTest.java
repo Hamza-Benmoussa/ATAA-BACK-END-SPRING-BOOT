@@ -2,8 +2,10 @@ package com.example.ataaspringbootangular.ControllerTest;
 
 import com.example.ataaspringbootangular.controller.BiensEssentielController;
 import com.example.ataaspringbootangular.dto.BiensEssantielDto;
+import com.example.ataaspringbootangular.dto.MemberDto;
 import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
 import com.example.ataaspringbootangular.exception.except.BiensEssentielFoundException;
+import com.example.ataaspringbootangular.exception.except.MemberFoundException;
 import com.example.ataaspringbootangular.service.IBiensEssantielService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,6 +74,23 @@ public class BiensEssentielControllerTest {
         verify(biensEssantielService, times(1)).getBiensEssantielsById(id);
     }
 
+    @Test
+    void getAllBiensEssentielsByPresidentAssociationId() throws MemberFoundException {
+        // Assuming you have a known president association ID for testing purposes
+        Long presidentAssociationId = 123L;
+
+        // Mock the behavior of your service method
+        List<BiensEssantielDto> mockBiens = Collections.singletonList(new BiensEssantielDto());
+        when(biensEssantielService.getAllBiensEssentilesByPresidentAssociationId(presidentAssociationId)).thenReturn(mockBiens);
+
+        // Call the controller method
+        ResponseEntity<List<BiensEssantielDto>> responseEntity = biensEssentielController.getAllMembersByPresidentAssociationId(presidentAssociationId);
+
+        // Assertions
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(mockBiens, responseEntity.getBody());
+        verify(biensEssantielService, times(1)).getAllBiensEssentilesByPresidentAssociationId(presidentAssociationId);
+    }
     @Test
     void updateBiensEssentiel() {
         Long id = 1L;

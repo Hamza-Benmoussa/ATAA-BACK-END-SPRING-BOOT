@@ -2,10 +2,8 @@ package com.example.ataaspringbootangular.ControllerTest;
 
 import com.example.ataaspringbootangular.controller.KafilaController;
 import com.example.ataaspringbootangular.dto.KafilaDto;
-import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
-import com.example.ataaspringbootangular.exception.except.BiensEssentielFoundException;
-import com.example.ataaspringbootangular.exception.except.DowarFoundException;
-import com.example.ataaspringbootangular.exception.except.KafilaFoundException;
+import com.example.ataaspringbootangular.dto.MemberDto;
+import com.example.ataaspringbootangular.exception.except.*;
 import com.example.ataaspringbootangular.service.IKafilaService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,6 +55,24 @@ public class KafilaControllerTest {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(kafilaDtos, responseEntity.getBody());
         verify(kafilaService, times(1)).getKafilas();
+    }
+
+    @Test
+    void getAllKafilasByPresidentAssociationId() throws MemberFoundException {
+        // Assuming you have a known president association ID for testing purposes
+        Long presidentAssociationId = 123L;
+
+        // Mock the behavior of your service method
+        List<KafilaDto> mockKafilas = Collections.singletonList(new KafilaDto());
+        when(kafilaService.getAllKafilasByPresidentAssociationId(presidentAssociationId)).thenReturn(mockKafilas);
+
+        // Call the controller method
+        ResponseEntity<List<KafilaDto>> responseEntity = kafilaController.getAllMembersByPresidentAssociationId(presidentAssociationId);
+
+        // Assertions
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(mockKafilas, responseEntity.getBody());
+        verify(kafilaService, times(1)).getAllKafilasByPresidentAssociationId(presidentAssociationId);
     }
 
     @Test

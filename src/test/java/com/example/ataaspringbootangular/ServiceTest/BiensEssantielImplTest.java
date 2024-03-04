@@ -3,10 +3,7 @@ package com.example.ataaspringbootangular.ServiceTest;
 import com.example.ataaspringbootangular.dto.*;
 import com.example.ataaspringbootangular.entity.Enum.Genre;
 import com.example.ataaspringbootangular.entity.Enum.RoleUser;
-import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
-import com.example.ataaspringbootangular.exception.except.BiensEssentielFoundException;
-import com.example.ataaspringbootangular.exception.except.UtilisateurFoundException;
-import com.example.ataaspringbootangular.exception.except.VilleFoundException;
+import com.example.ataaspringbootangular.exception.except.*;
 import com.example.ataaspringbootangular.service.IAssociationService;
 import com.example.ataaspringbootangular.service.IBiensEssantielService;
 import com.example.ataaspringbootangular.service.IUtilisateurService;
@@ -93,6 +90,15 @@ class BiensEssantielImplTest {
         assertNotNull(bienKafilaDtos, "List is empty");
     }
 
+    @Test
+    void getAllBienEseentielsByPresidentAssociationId() throws AssociationFoundException, MemberFoundException {
+        Long presidentAssociationId = 123L;
+
+        List<BiensEssantielDto> biensEssentielDtos = iBiensEssantielService.getAllBiensEssentilesByPresidentAssociationId(presidentAssociationId);
+
+        // Assertions
+        assertNotNull(biensEssentielDtos, "List is empty");
+    }
     @Test
     void getBiensEssantielsById() throws BiensEssentielFoundException {
         BiensEssantielDto retrievedBiensEssentielDto = iBiensEssantielService.getBiensEssantielsById(biensEssantielDto.getId());

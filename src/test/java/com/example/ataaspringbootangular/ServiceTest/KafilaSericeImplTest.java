@@ -123,6 +123,16 @@ class KafilaSericeImplTest {
     }
 
     @Test
+    void getAllKafilasByPresidentAssociationId() throws AssociationFoundException, MemberFoundException {
+        Long presidentAssociationId = 123L;
+
+        List<KafilaDto> kafilaDtos = iKafilaService.getAllKafilasByPresidentAssociationId(presidentAssociationId);
+
+        // Assertions
+        assertNotNull(kafilaDtos, "List is empty");
+    }
+
+    @Test
     void updateKafila() throws ParseException {
         kafilaDto.setNomKfila("khayrat");
         KafilaDto updateKafilaDto = iKafilaService.updateKafila(kafilaDto, kafilaDto.getId());
