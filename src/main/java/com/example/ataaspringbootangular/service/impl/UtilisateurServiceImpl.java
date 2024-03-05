@@ -8,6 +8,7 @@ import com.example.ataaspringbootangular.repository.IUtilisateurRepository;
 import com.example.ataaspringbootangular.service.IUtilisateurService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,12 +24,16 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
     private IUtilisateurRepository iUtilisateurRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     public UtilisateurDto ajouterUtilisateur(UtilisateurDto utilisateurDto) {
+        String encodedPassword = passwordEncoder.encode(utilisateurDto.getPassword());
+        utilisateurDto.setPassword(encodedPassword);
         checkExistEmail(utilisateurDto.getEmail());
         Utilisateur utilisateur = modelMapper.map(utilisateurDto , Utilisateur.class);
         Utilisateur savedUtilisateur = iUtilisateurRepository.save(utilisateur);
-        return modelMapper.map(savedUtilisateur, UtilisateurDto.class);
+        return maskPasswordInDto(modelMapper.map(savedUtilisateur, UtilisateurDto.class));
     }
 
     @Override
@@ -39,6 +44,12 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
                 .collect(Collectors.toList());
     }
 
+    private UtilisateurDto maskPasswordInDto(UtilisateurDto utilisateurDto) {
+        if (utilisateurDto != null) {
+            utilisateurDto.setPassword("****");
+        }
+        return utilisateurDto;
+    }
     @Override
     public UtilisateurDto getUtilisateursById(Long id) throws UtilisateurFoundException {
         return iUtilisateurRepository.findByIdAndDeletedFalse(id)
@@ -53,11 +64,13 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
         if (!existingUtilisateur.getEmail().equals(utilisateurDto.getEmail())) {
             checkExistEmail(utilisateurDto.getEmail());
         }
-
-        // Update the user fields
+        if (utilisateurDto.getPassword() != null && !utilisateurDto.getPassword().isEmpty() &&
+                !passwordEncoder.matches(utilisateurDto.getPassword(), existingUtilisateur.getPassword())) {
+            // Encode the new password
+            existingUtilisateur.setPassword(passwordEncoder.encode(utilisateurDto.getPassword()));
+        }
         existingUtilisateur.setEmail(utilisateurDto.getEmail());
         existingUtilisateur.setGenre(utilisateurDto.getGenre());
-        existingUtilisateur.setPassword(utilisateurDto.getPassword());
         existingUtilisateur.setTele(utilisateurDto.getTele());
         existingUtilisateur.setAddress(utilisateurDto.getAddress());
         existingUtilisateur.setNomComplete(utilisateurDto.getNomComplete());
@@ -74,6 +87,12 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
 
         }
     }
+
+    @Override
+    public Utilisateur loadUserByEmail(String email) {
+        return iUtilisateurRepository.findByEmailAndDeletedFalse(email);
+    }
+
 
     private void checkExistEmail(String email) {
         if (getByEmail(email) != null) {
