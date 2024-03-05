@@ -29,6 +29,5 @@ public class AssociationDto implements Serializable {
     List<Member> members;
     List<BiensEssantiel> biensEssantiels;
     Long villeId;
-
     boolean deleted;
 }
