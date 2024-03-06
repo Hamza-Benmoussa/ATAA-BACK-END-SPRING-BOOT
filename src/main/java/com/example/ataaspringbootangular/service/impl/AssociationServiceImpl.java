@@ -108,4 +108,8 @@ public class AssociationServiceImpl implements IAssociationService {
         }
 
     }
+    @Override
+    public Association getAssociationByPresidentEmail(String presidentEmail) {
+        return iAssociationsRepository.findByNomPresidantEmailAndDeletedFalse(presidentEmail);
+    }
 }

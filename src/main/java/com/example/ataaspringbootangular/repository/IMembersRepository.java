@@ -11,4 +11,6 @@ public interface IMembersRepository extends JpaRepository<Member,Long> {
     Optional<Member> findByIdAndDeletedFalse(Long id);
 
     List<Member> findByAssociationNomPresidantIdAndDeletedFalse(Long nomPresidantId);
+
+    List<Member> findByCreatedByAndDeletedFalse(String createdByEmail);
 }

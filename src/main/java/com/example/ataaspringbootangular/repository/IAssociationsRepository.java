@@ -11,7 +11,8 @@ public interface IAssociationsRepository extends JpaRepository<Association, Long
     Association findByNomAssociationAndDeletedFalse(String nomAssociation);
     List<Association> findByDeletedFalse();
 
+    Association findByNomPresidant_Email(String email);
     Optional<Association> findByIdAndDeletedFalse(Long id);
 
-//    List<Association> findByNomPresidantIdAndDeletedFalse(Long currentUserId);
+    Association findByNomPresidantEmailAndDeletedFalse(String presidentEmail);
 }

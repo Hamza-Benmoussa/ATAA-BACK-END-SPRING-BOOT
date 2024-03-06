@@ -20,4 +20,5 @@ public interface IAssociationService {
     AssociationDto updateAssociation(AssociationDto associationDto, Long id);
 
     void deleteAssociation(Long id);
+    Association getAssociationByPresidentEmail(String presidentEmail);
 }

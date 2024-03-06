@@ -40,11 +40,20 @@ public class MemberServiceImpl implements IMemebreService {
     public MemberDto ajouterMember(MemberDto memberDto) throws AssociationFoundException {
         checkExistEmail(memberDto.getEmail());
 
-        AssociationDto associationDto = iAssociationService.getAssociationsById(memberDto.getAssociationId());
-        Association association = modelMapper.map(associationDto , Association.class);
+        // Fetch the associationId based on the createdBy user
+        String createdByEmail = memberDto.getCreatedBy();
+        Long associationId = iAssociationService.getAssociationByPresidentEmail(createdByEmail).getId();
+
+        // Set the associationId in the MemberDto
+        memberDto.setAssociationId(associationId);
+
+        // Map the MemberDto to the Member entity
         Member member = modelMapper.map(memberDto, Member.class);
-        member.setAssociation(association);
+
+        // Save the member
         Member saveMember = iMembersRepository.save(member);
+
+        // Map the saved Member entity back to MemberDto and return
         return modelMapper.map(saveMember, MemberDto.class);
     }
     @Override
@@ -53,13 +62,20 @@ public class MemberServiceImpl implements IMemebreService {
                 .map(member -> modelMapper.map(member, MemberDto.class))
                 .orElseThrow(() -> new MemberFoundException("Member Not found with id = " + id));
     }
-    @Override
-    public List<MemberDto> getAllMembersByPresidentAssociationId(Long presidentAssociationId) {
-        List<Member> members = iMembersRepository.findByAssociationNomPresidantIdAndDeletedFalse(presidentAssociationId);
-        return members.stream()
-                .map(member -> modelMapper.map(member, MemberDto.class))
-                .collect(Collectors.toList());
-    }
+//    @Override
+//    public List<MemberDto> getAllMembersByPresidentAssociationId(Long presidentAssociationId) {
+//        List<Member> members = iMembersRepository.findByAssociationNomPresidantIdAndDeletedFalse(presidentAssociationId);
+//        return members.stream()
+//                .map(member -> modelMapper.map(member, MemberDto.class))
+//                .collect(Collectors.toList());
+//    }
+@Override
+public List<MemberDto> getMembersCreatedByUser(String createdByEmail) {
+    List<Member> members = iMembersRepository.findByCreatedByAndDeletedFalse(createdByEmail);
+    return members.stream()
+            .map(member -> modelMapper.map(member, MemberDto.class))
+            .collect(Collectors.toList());
+}
 
     @Override
     public MemberDto updateMember(MemberDto memberDto, Long id) throws ParseException {
@@ -68,19 +84,19 @@ public class MemberServiceImpl implements IMemebreService {
             checkExistEmail(memberDto.getEmail());
         }
 
-            existingMember.setEmail(memberDto.getEmail());
-            existingMember.setNomMembres(memberDto.getNomMembres());
-            existingMember.setDateNaissance(memberDto.getDateNaissance());
-            existingMember.setTele(memberDto.getTele());
-            existingMember.setAddress(memberDto.getAddress());
-            existingMember.setGenre(memberDto.getGenre());
-            existingMember.setRoleMembers(memberDto.getRoleMembers());
-            try {
-                Member updateMember = iMembersRepository.save(existingMember);
-                return modelMapper.map(updateMember,MemberDto.class);
-            }catch (EmailDejaExisteException ex){
-                throw new EmailDejaExisteException("Email déjà existant dans la base de données.");
-            }
+        existingMember.setEmail(memberDto.getEmail());
+        existingMember.setNomMembres(memberDto.getNomMembres());
+        existingMember.setDateNaissance(memberDto.getDateNaissance());
+        existingMember.setTele(memberDto.getTele());
+        existingMember.setAddress(memberDto.getAddress());
+        existingMember.setGenre(memberDto.getGenre());
+        existingMember.setRoleMembers(memberDto.getRoleMembers());
+        try {
+            Member updateMember = iMembersRepository.save(existingMember);
+            return modelMapper.map(updateMember,MemberDto.class);
+        }catch (EmailDejaExisteException ex){
+            throw new EmailDejaExisteException("Email déjà existant dans la base de données.");
+        }
 
     }
 

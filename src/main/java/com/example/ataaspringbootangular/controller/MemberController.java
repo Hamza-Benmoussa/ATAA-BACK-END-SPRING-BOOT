@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,16 +25,29 @@ public class MemberController {
 
     @PostMapping("/ajouterMember")
     @PreAuthorize("hasAuthority('PresidantAssociation')")
-    public ResponseEntity<MemberDto> ajouterMember(@RequestBody @Valid MemberDto memberDto) throws AssociationFoundException, AssociationFoundException {
+    public ResponseEntity<MemberDto> ajouterMember(@RequestBody @Valid MemberDto memberDto) throws AssociationFoundException {
         MemberDto savedMember = memebreService.ajouterMember(memberDto);
         return new ResponseEntity<>(savedMember, HttpStatus.CREATED);
     }
-    @GetMapping("/memberByPres/{presidentAssociationId}")
-    @PreAuthorize("hasAuthority('PresidantAssociation')")
-    public ResponseEntity<List<MemberDto>> getAllMembersByPresidentAssociationId(@PathVariable Long presidentAssociationId) {
-        List<MemberDto> members = memebreService.getAllMembersByPresidentAssociationId(presidentAssociationId);
-        return new ResponseEntity<>(members, HttpStatus.OK);
-    }
+//    @GetMapping("/memberByPres/{presidentAssociationId}")
+//    @PreAuthorize("hasAuthority('PresidantAssociation')")
+//    public ResponseEntity<List<MemberDto>> getAllMembersByPresidentAssociationId(@PathVariable Long presidentAssociationId) {
+//        List<MemberDto> members = memebreService.getAllMembersByPresidentAssociationId(presidentAssociationId);
+//        return new ResponseEntity<>(members, HttpStatus.OK);
+//    }
+//    @GetMapping
+//    @PreAuthorize("hasAuthority('PresidantAssociation')")
+//    public ResponseEntity<List<MemberDto>> getAllMembers() {
+//        List<MemberDto> members = memebreService.getMembers();
+//        return new ResponseEntity<>(members, HttpStatus.OK);
+//    }
+@GetMapping("/createdByCurrentUser")
+@PreAuthorize("hasAuthority('PresidantAssociation')")
+public ResponseEntity<List<MemberDto>> getMembersCreatedByCurrentUser(Authentication authentication) {
+    String currentUserEmail = authentication.getName();
+    List<MemberDto> membersCreatedByCurrentUser = memebreService.getMembersCreatedByUser(currentUserEmail);
+    return ResponseEntity.ok(membersCreatedByCurrentUser);
+}
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('PresidantAssociation')")

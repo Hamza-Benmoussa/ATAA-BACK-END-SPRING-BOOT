@@ -43,7 +43,6 @@ public class MemberDto implements Serializable {
     String address;
 
     Long associationId;
-
-
+    String createdBy;
     boolean deleted;
 }
