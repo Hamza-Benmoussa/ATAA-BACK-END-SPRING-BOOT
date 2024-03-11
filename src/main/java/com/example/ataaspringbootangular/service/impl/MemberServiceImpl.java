@@ -14,8 +14,12 @@ import com.example.ataaspringbootangular.exception.except.UtilisateurFoundExcept
 import com.example.ataaspringbootangular.repository.IMembersRepository;
 import com.example.ataaspringbootangular.service.IAssociationService;
 import com.example.ataaspringbootangular.service.IMemebreService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,11 +30,13 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Slf4j
 public class MemberServiceImpl implements IMemebreService {
 
     @Autowired
     private IMembersRepository iMembersRepository;
 
+    private static Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
@@ -40,20 +46,21 @@ public class MemberServiceImpl implements IMemebreService {
     public MemberDto ajouterMember(MemberDto memberDto) throws AssociationFoundException {
         checkExistEmail(memberDto.getEmail());
 
-        // Fetch the associationId based on the createdBy user
-        String createdByEmail = memberDto.getCreatedBy();
-        Long associationId = iAssociationService.getAssociationByPresidentEmail(createdByEmail).getId();
+        String createdByEmail = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        // Set the associationId in the MemberDto
-        memberDto.setAssociationId(associationId);
+        Association association = iAssociationService.getAssociationByPresidentEmail(createdByEmail);
 
-        // Map the MemberDto to the Member entity
+        if (association == null) {
+            throw new AssociationFoundException("Association not found for president email: " + createdByEmail);
+        }
+
+        memberDto.setCreatedBy(createdByEmail);
+        memberDto.setAssociationId(association.getId());
+
         Member member = modelMapper.map(memberDto, Member.class);
 
-        // Save the member
         Member saveMember = iMembersRepository.save(member);
 
-        // Map the saved Member entity back to MemberDto and return
         return modelMapper.map(saveMember, MemberDto.class);
     }
     @Override
@@ -62,13 +69,6 @@ public class MemberServiceImpl implements IMemebreService {
                 .map(member -> modelMapper.map(member, MemberDto.class))
                 .orElseThrow(() -> new MemberFoundException("Member Not found with id = " + id));
     }
-//    @Override
-//    public List<MemberDto> getAllMembersByPresidentAssociationId(Long presidentAssociationId) {
-//        List<Member> members = iMembersRepository.findByAssociationNomPresidantIdAndDeletedFalse(presidentAssociationId);
-//        return members.stream()
-//                .map(member -> modelMapper.map(member, MemberDto.class))
-//                .collect(Collectors.toList());
-//    }
 @Override
 public List<MemberDto> getMembersCreatedByUser(String createdByEmail) {
     List<Member> members = iMembersRepository.findByCreatedByAndDeletedFalse(createdByEmail);

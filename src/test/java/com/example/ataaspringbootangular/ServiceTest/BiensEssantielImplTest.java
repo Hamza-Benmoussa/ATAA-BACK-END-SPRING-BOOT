@@ -13,6 +13,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,21 +49,25 @@ class BiensEssantielImplTest {
         utilisateurDto.setPassword("testPassword");
         utilisateurDto.setAddress("TestAddress");
         utilisateurDto.setTele("+123456789");
-        utilisateurDto.setEmail("member-" + System.currentTimeMillis() + "@gmail.com");
+        utilisateurDto.setEmail("user@gmail.com");
         utilisateurDto.setDateNaissance(dateFormat.parse("1990-01-01"));
         utilisateurDto.setRoleUser(RoleUser.PresidantAssociation);
         utilisateurDto.setGenre(Genre.Male);
         utilisateurDto = iUtilisateurService.ajouterUtilisateur(utilisateurDto);
+        Authentication authentication = new UsernamePasswordAuthenticationToken("user@gmail.com", "password");
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
+
+        // Create Ville
         villeDto = new VilleDto();
         villeDto.setNomVille("TestVille");
         villeDto = iVilleService.ajouterVille(villeDto);
-
+        // Create Association
         associationDto = new AssociationDto();
         associationDto.setNomAssociation("TestAssociation");
         associationDto.setNomPresidantId(utilisateurDto.getId());
-        associationDto.setNbrSerie("koko"+ System.currentTimeMillis() +"koko");
-        associationDto.setVilleId(villeDto.getId());
+        associationDto.setNbrSerie("fghjkfghj");
+        associationDto.setVilleId(villeDto.getId()); // Associate with the created Ville
         associationDto = iAssociationService.ajouterAssociation(associationDto);
 
         biensEssantielDto = new BiensEssantielDto();
@@ -76,28 +84,14 @@ class BiensEssantielImplTest {
         iBiensEssantielService.deleteBiensEssantiel(biensEssantielDto.getId());
         iUtilisateurService.deleteUtilisateur(utilisateurDto.getId());
         iVilleService.deleteVille(villeDto.getId());
+        SecurityContextHolder.clearContext();
+
     }
     @Test
     void ajouterBiensEssantiel() throws BiensEssentielFoundException {
         assertNotNull(biensEssantielDto, "biensEssentiel not inserted");
         BiensEssantielDto retrievedBiensEssentielDto = iBiensEssantielService.getBiensEssantielsById(biensEssantielDto.getId());
         assertNotNull(retrievedBiensEssentielDto, "biensEssentiel not found in the database");
-    }
-
-    @Test
-    void getBiensEssantiels() {
-        List<BiensEssantielDto> bienKafilaDtos = iBiensEssantielService.getBiensEssantiels();
-        assertNotNull(bienKafilaDtos, "List is empty");
-    }
-
-    @Test
-    void getAllBienEseentielsByPresidentAssociationId() throws AssociationFoundException, MemberFoundException {
-        Long presidentAssociationId = 123L;
-
-        List<BiensEssantielDto> biensEssentielDtos = iBiensEssantielService.getAllBiensEssentilesByPresidentAssociationId(presidentAssociationId);
-
-        // Assertions
-        assertNotNull(biensEssentielDtos, "List is empty");
     }
     @Test
     void getBiensEssantielsById() throws BiensEssentielFoundException {

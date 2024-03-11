@@ -14,7 +14,6 @@ public interface IMemebreService {
 
 
     List<MemberDto> getMembersCreatedByUser(String createdByEmail);
-    //    List<MemberDto> getAllMembersByPresidentAssociationId(Long presidentAssociationId);
 
     MemberDto getMembersById(Long id) throws MemberFoundException;
 

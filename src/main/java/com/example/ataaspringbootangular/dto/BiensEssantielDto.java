@@ -22,6 +22,7 @@ public class BiensEssantielDto implements Serializable {
     @NotNull(message = "quantity not be null")
     int quantity;
     Long associationId;
+    String createdBy;
 
     boolean deleted;
 }

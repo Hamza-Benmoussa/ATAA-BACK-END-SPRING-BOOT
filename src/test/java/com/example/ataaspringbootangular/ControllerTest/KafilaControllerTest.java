@@ -1,8 +1,8 @@
+
 package com.example.ataaspringbootangular.ControllerTest;
 
 import com.example.ataaspringbootangular.controller.KafilaController;
 import com.example.ataaspringbootangular.dto.KafilaDto;
-import com.example.ataaspringbootangular.dto.MemberDto;
 import com.example.ataaspringbootangular.exception.except.*;
 import com.example.ataaspringbootangular.service.IKafilaService;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 
 import java.text.ParseException;
 import java.util.Collections;
@@ -46,33 +47,21 @@ public class KafilaControllerTest {
     }
 
     @Test
-    void getKafilas() {
-        List<KafilaDto> kafilaDtos = Collections.singletonList(new KafilaDto());
-        when(kafilaService.getKafilas()).thenReturn(kafilaDtos);
+    void getKafilasCreatedByCurrentUser() {
+        String currentUserEmail = "test@example.com";
 
-        ResponseEntity<List<KafilaDto>> responseEntity = kafilaController.getKafilas();
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(kafilaDtos, responseEntity.getBody());
-        verify(kafilaService, times(1)).getKafilas();
-    }
-
-    @Test
-    void getAllKafilasByPresidentAssociationId() throws MemberFoundException {
-        // Assuming you have a known president association ID for testing purposes
-        Long presidentAssociationId = 123L;
-
-        // Mock the behavior of your service method
         List<KafilaDto> mockKafilas = Collections.singletonList(new KafilaDto());
-        when(kafilaService.getAllKafilasByPresidentAssociationId(presidentAssociationId)).thenReturn(mockKafilas);
+        when(kafilaService.getKafilasCreatedByUser(currentUserEmail)).thenReturn(mockKafilas);
 
-        // Call the controller method
-        ResponseEntity<List<KafilaDto>> responseEntity = kafilaController.getAllMembersByPresidentAssociationId(presidentAssociationId);
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn(currentUserEmail);
+
+        ResponseEntity<List<KafilaDto>> responseEntity = kafilaController.getKafilasCreatedByCurrentUser(authentication);
 
         // Assertions
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(mockKafilas, responseEntity.getBody());
-        verify(kafilaService, times(1)).getAllKafilasByPresidentAssociationId(presidentAssociationId);
+        verify(kafilaService, times(1)).getKafilasCreatedByUser(currentUserEmail);
     }
 
     @Test

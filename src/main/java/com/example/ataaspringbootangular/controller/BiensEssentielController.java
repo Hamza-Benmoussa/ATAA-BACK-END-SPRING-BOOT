@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,20 +29,13 @@ public class BiensEssentielController {
         return new ResponseEntity<>(savedBiensEssentiel, HttpStatus.CREATED);
     }
 
-    @GetMapping("/bienByPres/{presidentAssociationId}")
+    @GetMapping("/createdByCurrentUser")
     @PreAuthorize("hasAuthority('PresidantAssociation')")
-    public ResponseEntity<List<BiensEssantielDto>> getAllMembersByPresidentAssociationId(@PathVariable Long presidentAssociationId) {
-        List<BiensEssantielDto> members = biensEssantielService.getAllBiensEssentilesByPresidentAssociationId(presidentAssociationId);
-        return new ResponseEntity<>(members, HttpStatus.OK);
+    public ResponseEntity<List<BiensEssantielDto>> getKafilasCreatedByCurrentUser(Authentication authentication) {
+        String currentUserEmail = authentication.getName();
+        List<BiensEssantielDto> membersCreatedByCurrentUser = biensEssantielService.getBiensEssentielsCreatedByUser(currentUserEmail);
+        return ResponseEntity.ok(membersCreatedByCurrentUser);
     }
-
-    @GetMapping
-    @PreAuthorize("hasAuthority('PresidantAssociation')")
-    public ResponseEntity<List<BiensEssantielDto>> getBiensEssentiels() {
-        List<BiensEssantielDto> biensEssentiels = biensEssantielService.getBiensEssantiels();
-        return new ResponseEntity<>(biensEssentiels, HttpStatus.OK);
-    }
-
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('PresidantAssociation')")
     public ResponseEntity<BiensEssantielDto> getBiensEssentielById(@PathVariable Long id) throws BiensEssentielFoundException, BiensEssentielFoundException {

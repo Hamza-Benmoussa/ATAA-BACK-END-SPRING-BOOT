@@ -18,6 +18,9 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,11 +63,14 @@ class MemberServiceImplTest {
         utilisateurDto.setPassword("testPassword");
         utilisateurDto.setAddress("TestAddress");
         utilisateurDto.setTele("+123456789");
-        utilisateurDto.setEmail("testuser@gmail.com");
+        utilisateurDto.setEmail("test@gmail.com");
         utilisateurDto.setDateNaissance(dateFormat.parse("1990-01-01"));
         utilisateurDto.setRoleUser(RoleUser.PresidantAssociation);
         utilisateurDto.setGenre(Genre.Male);
         utilisateurDto = iUtilisateurService.ajouterUtilisateur(utilisateurDto);
+        Authentication authentication = new UsernamePasswordAuthenticationToken("test@gmail.com", "password");
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
 
         // Create Ville
         villeDto = new VilleDto();
@@ -99,6 +105,7 @@ class MemberServiceImplTest {
         iAssociationService.deleteAssociation(associationDto.getId());
         iUtilisateurService.deleteUtilisateur(utilisateurDto.getId());
         iVilleService.deleteVille(villeDto.getId());
+        SecurityContextHolder.clearContext();
     }
 
     @Test
@@ -107,16 +114,6 @@ class MemberServiceImplTest {
         MemberDto retrievedMemberDto = iMemebreService.getMembersById(memberDto.getId());
         assertNotNull(retrievedMemberDto, "Member not found in the database");
     }
-
-//    @Test
-//    void getAllMembersByPresidentAssociationId() throws AssociationFoundException, MemberFoundException {
-//        Long presidentAssociationId = 123L;
-//
-//        List<MemberDto> memberDtos = iMemebreService.getAllMembersByPresidentAssociationId(presidentAssociationId);
-//
-//        // Assertions
-//        assertNotNull(memberDtos, "List is empty");
-//    }
 
     @Test
     void getMembersById() throws MemberFoundException {

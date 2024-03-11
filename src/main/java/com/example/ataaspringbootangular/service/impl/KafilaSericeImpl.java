@@ -10,6 +10,7 @@
     import com.example.ataaspringbootangular.service.*;
     import org.modelmapper.ModelMapper;
     import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.security.core.context.SecurityContextHolder;
     import org.springframework.stereotype.Service;
     import org.springframework.transaction.annotation.Transactional;
     import java.util.List;
@@ -38,19 +39,25 @@
         private IBiensEssantielService iBiensEssantielService;
         @Override
         public KafilaDto ajouterKafila(KafilaDto kafilaDto) throws DowarFoundException, AssociationFoundException, BiensEssentielFoundException {
+            String createdByEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+
+            Association association = iAssociationService.getAssociationByPresidentEmail(createdByEmail);
+
+            if (association == null) {
+                throw new AssociationFoundException("Association not found for president email: " + createdByEmail);
+            }
+
+            kafilaDto.setCreatedBy(createdByEmail);
+            kafilaDto.setAssociationId(association.getId());
+
             Kafila kafila = modelMapper.map(kafilaDto, Kafila.class);
 
             DowarDto dowarDto = iDowarService.getDowarsById(kafilaDto.getDowarId());
             Dowar dowar = modelMapper.map(dowarDto, Dowar.class);
-
-            AssociationDto associationDto = iAssociationService.getAssociationsById(kafilaDto.getAssociationId());
-            Association association = modelMapper.map(associationDto, Association.class);
-
             kafila.setAssociation(association);
             kafila.setDowar(dowar);
 
             Kafila saveKafila = iKafilaRepository.save(kafila);
-
             if (kafilaDto.getBienKafilaDtos() != null) {
                 for (BienKafilaDto bienKafilaDto : kafilaDto.getBienKafilaDtos()) {
                     BiensEssantielDto biensEssentielDto = iBiensEssantielService.getBiensEssantielsById(bienKafilaDto.getBiensEssentielsId());
@@ -62,17 +69,14 @@
                         if (availableQuantity >= requestedQuantity && requestedQuantity > 0) {
                             BiensEssantiel biensEssentiel = modelMapper.map(biensEssentielDto, BiensEssantiel.class);
 
-                            // Mise à jour de la quantité dans BiensEssentiel
                             biensEssentiel.setQuantity(availableQuantity - requestedQuantity);
                             iBiensEssantielService.updateBiensEssentiel(modelMapper.map(biensEssentiel, BiensEssantielDto.class), bienKafilaDto.getBiensEssentielsId());
 
-                            // Création de BienKafila
                             BienKafila bienKafila = new BienKafila();
                             bienKafila.setBiensEssentiels(biensEssentiel);
                             bienKafila.setKafila(saveKafila);
                             bienKafila.setQuantityBienKafila(requestedQuantity);
 
-                            // Enregistrement dans BienKafilaRepository
                             iBienKafilaRepository.save(bienKafila);
                         } else {
                             throw new BiensEssentielFoundException("Not enough quantity available for BiensEssentiel with ID: " + bienKafilaDto.getBiensEssentielsId());
@@ -87,16 +91,13 @@
         }
 
 
-
         @Override
-        public List<KafilaDto> getKafilas() {
-            List<Kafila> kafilas = iKafilaRepository.findByDeletedFalse();
-
+        public List<KafilaDto> getKafilasCreatedByUser(String createdByEmail) {
+            List<Kafila> kafilas = iKafilaRepository.findByCreatedByAndDeletedFalse(createdByEmail);
             return kafilas.stream()
                     .map(kafila -> {
                         KafilaDto kafilaDto = modelMapper.map(kafila, KafilaDto.class);
 
-                        // Fetch and map the related BienKafila entities
                         List<BienKafilaDto> bienKafilaDtos = kafila.getBienKafilas().stream()
                                 .map(bienKafila -> modelMapper.map(bienKafila, BienKafilaDto.class))
                                 .collect(Collectors.toList());
@@ -108,20 +109,11 @@
         }
 
         @Override
-        public List<KafilaDto> getAllKafilasByPresidentAssociationId(Long presidentAssociationId) {
-            List<Kafila> members = iKafilaRepository.findByAssociationNomPresidantIdAndDeletedFalse(presidentAssociationId);
-            return members.stream()
-                    .map(kafila -> modelMapper.map(kafila, KafilaDto.class))
-                    .collect(Collectors.toList());
-        }
-
-        @Override
         public KafilaDto getKafilasById(Long id) throws KafilaFoundException {
             return iKafilaRepository.findByIdAndDeletedFalse(id)
                     .map(kafila -> {
                         KafilaDto kafilaDto = modelMapper.map(kafila, KafilaDto.class);
 
-                        // Fetch and map the related BienKafila entities
                         List<BienKafilaDto> bienKafilaDtos = kafila.getBienKafilas().stream()
                                 .map(bienKafila -> modelMapper.map(bienKafila, BienKafilaDto.class))
                                 .collect(Collectors.toList());

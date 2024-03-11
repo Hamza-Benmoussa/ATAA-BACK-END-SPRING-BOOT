@@ -9,6 +9,5 @@ import java.util.Optional;
 public interface IKafilaRepository extends JpaRepository<Kafila,Long> {
     List<Kafila> findByDeletedFalse();
     Optional<Kafila> findByIdAndDeletedFalse(Long id);
-
-    List<Kafila> findByAssociationNomPresidantIdAndDeletedFalse(Long presidentAssociationId);
+    List<Kafila> findByCreatedByAndDeletedFalse(String createdByEmail);
 }

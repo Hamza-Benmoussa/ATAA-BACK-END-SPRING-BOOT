@@ -27,10 +27,12 @@ public class KafilaDto implements Serializable {
     @NotNull(message = "Date cannot be null")
     Date dateArrivee;
     Long dowarId;
-    Long associationId;
     List<BienKafilaDto> bienKafilaDtos;
 
     boolean arrivedKafila;
+
+    Long associationId;
+    String createdBy;
 
     boolean deleted;
 }

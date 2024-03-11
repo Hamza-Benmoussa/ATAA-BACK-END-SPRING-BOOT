@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,18 +33,12 @@ public class KafilaController {
         return new ResponseEntity<>(savedKafila, HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @GetMapping("/createdByCurrentUser")
     @PreAuthorize("hasAuthority('PresidantAssociation')")
-    public ResponseEntity<List<KafilaDto>> getKafilas() {
-        List<KafilaDto> kafilas = kafilaService.getKafilas();
-        return new ResponseEntity<>(kafilas, HttpStatus.OK);
-    }
-
-    @GetMapping("/kafilaByPres/{presidentAssociationId}")
-    @PreAuthorize("hasAuthority('PresidantAssociation')")
-    public ResponseEntity<List<KafilaDto>> getAllMembersByPresidentAssociationId(@PathVariable Long presidentAssociationId) {
-        List<KafilaDto> members = kafilaService.getAllKafilasByPresidentAssociationId(presidentAssociationId);
-        return new ResponseEntity<>(members, HttpStatus.OK);
+    public ResponseEntity<List<KafilaDto>> getKafilasCreatedByCurrentUser(Authentication authentication) {
+        String currentUserEmail = authentication.getName();
+        List<KafilaDto> membersCreatedByCurrentUser = kafilaService.getKafilasCreatedByUser(currentUserEmail);
+        return ResponseEntity.ok(membersCreatedByCurrentUser);
     }
 
     @GetMapping("/{id}")

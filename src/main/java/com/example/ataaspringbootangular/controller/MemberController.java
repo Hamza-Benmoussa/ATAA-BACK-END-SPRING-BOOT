@@ -29,18 +29,6 @@ public class MemberController {
         MemberDto savedMember = memebreService.ajouterMember(memberDto);
         return new ResponseEntity<>(savedMember, HttpStatus.CREATED);
     }
-//    @GetMapping("/memberByPres/{presidentAssociationId}")
-//    @PreAuthorize("hasAuthority('PresidantAssociation')")
-//    public ResponseEntity<List<MemberDto>> getAllMembersByPresidentAssociationId(@PathVariable Long presidentAssociationId) {
-//        List<MemberDto> members = memebreService.getAllMembersByPresidentAssociationId(presidentAssociationId);
-//        return new ResponseEntity<>(members, HttpStatus.OK);
-//    }
-//    @GetMapping
-//    @PreAuthorize("hasAuthority('PresidantAssociation')")
-//    public ResponseEntity<List<MemberDto>> getAllMembers() {
-//        List<MemberDto> members = memebreService.getMembers();
-//        return new ResponseEntity<>(members, HttpStatus.OK);
-//    }
 @GetMapping("/createdByCurrentUser")
 @PreAuthorize("hasAuthority('PresidantAssociation')")
 public ResponseEntity<List<MemberDto>> getMembersCreatedByCurrentUser(Authentication authentication) {

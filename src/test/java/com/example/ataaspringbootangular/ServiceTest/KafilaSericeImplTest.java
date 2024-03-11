@@ -11,6 +11,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
@@ -21,6 +25,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
+
 class KafilaSericeImplTest {
 
     @Autowired
@@ -55,27 +60,25 @@ class KafilaSericeImplTest {
         utilisateurDto.setPassword("testPassword");
         utilisateurDto.setAddress("TestAddress");
         utilisateurDto.setTele("+123456789");
-        utilisateurDto.setEmail("member-" + System.currentTimeMillis() + "@gmail.com");
+        utilisateurDto.setEmail("test" + System.currentTimeMillis() + "@gmail.com"); // Use a dynamic email address
         utilisateurDto.setDateNaissance(dateFormat.parse("1990-01-01"));
         utilisateurDto.setRoleUser(RoleUser.PresidantAssociation);
         utilisateurDto.setGenre(Genre.Male);
         utilisateurDto = iUtilisateurService.ajouterUtilisateur(utilisateurDto);
 
+        Authentication authentication = new UsernamePasswordAuthenticationToken(utilisateurDto.getEmail(), "password");
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Create Ville
         villeDto = new VilleDto();
         villeDto.setNomVille("TestVille");
         villeDto = iVilleService.ajouterVille(villeDto);
-
-        dowarDto = new DowarDto();
-        dowarDto.setNomDowars("Tamri");
-        dowarDto.setNmbrResidant(15);
-        dowarDto.setVilleId(villeDto.getId());
-        dowarDto =iDowarService.ajouterDowar(dowarDto);
-
+        // Create Association
         associationDto = new AssociationDto();
         associationDto.setNomAssociation("TestAssociation");
         associationDto.setNomPresidantId(utilisateurDto.getId());
-        associationDto.setNbrSerie("koko"+ System.currentTimeMillis() +"koko");
-        associationDto.setVilleId(villeDto.getId());
+        associationDto.setNbrSerie("fgjkfghj");
+        associationDto.setVilleId(villeDto.getId()); // Associate with the created Ville
         associationDto = iAssociationService.ajouterAssociation(associationDto);
 
         biensEssantielDto = new BiensEssantielDto();
@@ -83,6 +86,12 @@ class KafilaSericeImplTest {
         biensEssantielDto.setQuantity(12);
         biensEssantielDto.setAssociationId(associationDto.getId());
         biensEssantielDto = iBiensEssantielService.ajouterBiensEssantiel(biensEssantielDto);
+
+        dowarDto = new DowarDto();
+        dowarDto.setNomDowars("Tamri");
+        dowarDto.setNmbrResidant(15);
+        dowarDto.setVilleId(villeDto.getId());
+        dowarDto =iDowarService.ajouterDowar(dowarDto);
 
         kafilaDto = new KafilaDto();
         kafilaDto.setNomKfila("khayr");
@@ -101,6 +110,7 @@ class KafilaSericeImplTest {
         iDowarService.deleteDowar(dowarDto.getId());
         iVilleService.deleteVille(villeDto.getId());
         iBiensEssantielService.deleteBiensEssantiel(biensEssantielDto.getId());
+        SecurityContextHolder.clearContext();
     }
     @Test
     void ajouterKafila() throws KafilaFoundException {
@@ -110,11 +120,6 @@ class KafilaSericeImplTest {
     }
 
 
-    @Test
-    void getKafilas() {
-        List<KafilaDto> kafilaDtos = iKafilaService.getKafilas();
-        assertNotNull(kafilaDtos, "List is empty");
-    }
 
     @Test
     void getKafilasById() throws KafilaFoundException {
@@ -122,15 +127,6 @@ class KafilaSericeImplTest {
         assertNotNull(retrievedKafilaDto, "Kafila Not found");
     }
 
-    @Test
-    void getAllKafilasByPresidentAssociationId() throws AssociationFoundException, MemberFoundException {
-        Long presidentAssociationId = 123L;
-
-        List<KafilaDto> kafilaDtos = iKafilaService.getAllKafilasByPresidentAssociationId(presidentAssociationId);
-
-        // Assertions
-        assertNotNull(kafilaDtos, "List is empty");
-    }
 
     @Test
     void updateKafila() throws ParseException {

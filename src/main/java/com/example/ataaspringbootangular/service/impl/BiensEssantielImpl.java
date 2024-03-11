@@ -3,9 +3,11 @@ package com.example.ataaspringbootangular.service.impl;
 import com.example.ataaspringbootangular.dto.AssociationDto;
 import com.example.ataaspringbootangular.dto.BiensEssantielDto;
 import com.example.ataaspringbootangular.dto.KafilaDto;
+import com.example.ataaspringbootangular.dto.MemberDto;
 import com.example.ataaspringbootangular.entity.Association;
 import com.example.ataaspringbootangular.entity.BiensEssantiel;
 import com.example.ataaspringbootangular.entity.Kafila;
+import com.example.ataaspringbootangular.entity.Member;
 import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
 import com.example.ataaspringbootangular.exception.except.BiensEssentielFoundException;
 import com.example.ataaspringbootangular.exception.except.DowarFoundException;
@@ -15,6 +17,7 @@ import com.example.ataaspringbootangular.service.IBienKafilaService;
 import com.example.ataaspringbootangular.service.IBiensEssantielService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,21 +35,23 @@ public class BiensEssantielImpl implements IBiensEssantielService {
     private IAssociationService iAssociationService;
     @Override
     public BiensEssantielDto ajouterBiensEssantiel(BiensEssantielDto biensEssantielDto) throws AssociationFoundException {
-        AssociationDto associationDto = iAssociationService.getAssociationsById(biensEssantielDto.getAssociationId());
-        Association association = modelMapper.map(associationDto , Association.class);
-        BiensEssantiel biensEssantiel = modelMapper.map(biensEssantielDto , BiensEssantiel.class);
+        String createdByEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Association association = iAssociationService.getAssociationByPresidentEmail(createdByEmail);
+
+        if (association == null) {
+            throw new AssociationFoundException("Association not found for president email: " + createdByEmail);
+        }
+
+        biensEssantielDto.setCreatedBy(createdByEmail);
+        biensEssantielDto.setAssociationId(association.getId());
+
+        BiensEssantiel biensEssantiel = modelMapper.map(biensEssantielDto, BiensEssantiel.class);
         biensEssantiel.setAssociation(association);
+
         BiensEssantiel saveBiensEssantiel = iBiensEssantielsRepository.save(biensEssantiel);
+
         return modelMapper.map(saveBiensEssantiel, BiensEssantielDto.class);
-    }
-
-    @Override
-    public List<BiensEssantielDto> getBiensEssantiels() {
-        List<BiensEssantiel> biensEssantiels = iBiensEssantielsRepository.findByDeletedFalse();
-
-        return biensEssantiels.stream()
-                .map(biensEssantiel -> modelMapper.map(biensEssantiel , BiensEssantielDto.class))
-                .collect(Collectors.toList());
     }
 
     @Override
@@ -58,8 +63,8 @@ public class BiensEssantielImpl implements IBiensEssantielService {
     }
 
     @Override
-    public List<BiensEssantielDto> getAllBiensEssentilesByPresidentAssociationId(Long presidentAssociationId) {
-        List<BiensEssantiel> members = iBiensEssantielsRepository.findByAssociationNomPresidantIdAndDeletedFalse(presidentAssociationId);
+    public List<BiensEssantielDto> getBiensEssentielsCreatedByUser(String createdByEmail) {
+        List<BiensEssantiel> members = iBiensEssantielsRepository.findByCreatedByAndDeletedFalse(createdByEmail);
         return members.stream()
                 .map(biensEssantiel -> modelMapper.map(biensEssantiel, BiensEssantielDto.class))
                 .collect(Collectors.toList());

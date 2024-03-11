@@ -11,12 +11,12 @@ public interface IBiensEssantielService {
     BiensEssantielDto ajouterBiensEssantiel(BiensEssantielDto biensEssantielDto) throws AssociationFoundException;
 
 
-    List<BiensEssantielDto> getBiensEssantiels();
+
 
     BiensEssantielDto getBiensEssantielsById(Long id) throws BiensEssentielFoundException;
 
     BiensEssantielDto updateBiensEssentiel(BiensEssantielDto biensEssantielDto, Long id);
 
     void deleteBiensEssantiel(Long id);
-    List<BiensEssantielDto> getAllBiensEssentilesByPresidentAssociationId(Long presidentAssociationId);
+    List<BiensEssantielDto> getBiensEssentielsCreatedByUser(String createdByEmail);
 }
