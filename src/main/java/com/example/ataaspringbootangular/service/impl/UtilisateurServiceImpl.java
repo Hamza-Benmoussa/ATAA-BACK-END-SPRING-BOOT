@@ -1,6 +1,7 @@
 package com.example.ataaspringbootangular.service.impl;
 
 import com.example.ataaspringbootangular.dto.UtilisateurDto;
+import com.example.ataaspringbootangular.entity.Enum.RoleUser;
 import com.example.ataaspringbootangular.entity.Utilisateur;
 import com.example.ataaspringbootangular.exception.except.EmailDejaExisteException;
 import com.example.ataaspringbootangular.exception.except.UtilisateurFoundException;
@@ -90,7 +91,14 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
 
     @Override
     public List<UtilisateurDto> getUsersWithRole(String role) {
-        List<Utilisateur> users = iUtilisateurRepository.findByRole(role);
+        RoleUser userRole = null;
+        try {
+            userRole = RoleUser.valueOf(role);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid role: " + role);
+        }
+
+        List<Utilisateur> users = iUtilisateurRepository.findByRoleUser(userRole);
         return users.stream()
                 .map(user -> modelMapper.map(user, UtilisateurDto.class))
                 .collect(Collectors.toList());
