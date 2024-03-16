@@ -61,7 +61,7 @@ class KafilaSericeImplTest {
         utilisateurDto.setAddress("TestAddress");
         utilisateurDto.setTele("+123456789");
         utilisateurDto.setEmail("test" + System.currentTimeMillis() + "@gmail.com"); // Use a dynamic email address
-        utilisateurDto.setDateNaissance(dateFormat.parse("1990-01-01"));
+        utilisateurDto.setDateNaissance(LocalDate.now());
         utilisateurDto.setRoleUser(RoleUser.PresidantAssociation);
         utilisateurDto.setGenre(Genre.Male);
         utilisateurDto = iUtilisateurService.ajouterUtilisateur(utilisateurDto);

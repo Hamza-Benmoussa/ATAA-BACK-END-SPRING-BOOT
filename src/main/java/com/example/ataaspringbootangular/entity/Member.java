@@ -2,6 +2,7 @@ package com.example.ataaspringbootangular.entity;
 
 import com.example.ataaspringbootangular.entity.Enum.Genre;
 import com.example.ataaspringbootangular.entity.Enum.RoleMembers;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,7 @@ public class Member {
     private String nomMembres;
 
     @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date dateNaissance;
 
     @Enumerated(EnumType.STRING)

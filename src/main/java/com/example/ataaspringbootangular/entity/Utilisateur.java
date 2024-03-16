@@ -2,11 +2,13 @@ package com.example.ataaspringbootangular.entity;
 
 import com.example.ataaspringbootangular.entity.Enum.Genre;
 import com.example.ataaspringbootangular.entity.Enum.RoleUser;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -27,8 +29,8 @@ public class Utilisateur {
     private String tele;
 
     private String email;
-
-    private Date dateNaissance;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private LocalDate dateNaissance;
 
     @Enumerated(EnumType.STRING)
     private RoleUser roleUser;

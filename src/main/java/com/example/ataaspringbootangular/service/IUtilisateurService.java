@@ -15,7 +15,7 @@ public interface IUtilisateurService {
     Utilisateur loadUserByEmail(String email);
 
     UtilisateurDto getUtilisateursById(Long id) throws UtilisateurFoundException;
-
+    List<UtilisateurDto> getUsersWithRole(String role);
     UtilisateurDto updateUtilisateur(UtilisateurDto utilisateurDto, Long id) throws ParseException;
 
     void deleteUtilisateur(Long id);

@@ -3,12 +3,14 @@ package com.example.ataaspringbootangular.dto;
 import com.example.ataaspringbootangular.entity.Enum.Genre;
 import com.example.ataaspringbootangular.entity.Enum.RoleUser;
 import com.example.ataaspringbootangular.entity.Utilisateur;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -35,7 +37,8 @@ public class UtilisateurDto implements Serializable {
     @NotBlank(message = "not blank")
     String email;
     @NotNull(message = "dateNaissance not be null")
-    Date dateNaissance;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    LocalDate dateNaissance;
     @NotNull(message = "Role not be null")
     RoleUser roleUser;
     @NotNull(message = "Genre not be null")

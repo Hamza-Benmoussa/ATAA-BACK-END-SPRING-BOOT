@@ -3,6 +3,7 @@ package com.example.ataaspringbootangular.dto;
 import com.example.ataaspringbootangular.entity.Enum.Genre;
 import com.example.ataaspringbootangular.entity.Enum.RoleMembers;
 import com.example.ataaspringbootangular.entity.Member;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ public class MemberDto implements Serializable {
     String nomMembres;
 
     @NotNull(message = "Date of birth cannot be null")
+    @JsonFormat(pattern="yyyy-MM-dd")
     Date dateNaissance;
 
     @NotNull(message = "Genre cannot be null")

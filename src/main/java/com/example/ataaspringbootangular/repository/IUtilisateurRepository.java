@@ -9,5 +9,6 @@ import java.util.Optional;
 public interface IUtilisateurRepository extends JpaRepository<Utilisateur,Long> {
     Utilisateur findByEmailAndDeletedFalse(String email);
     List<Utilisateur> findByDeletedFalse();
+    List<Utilisateur> findByRole(String role);
     Optional<Utilisateur> findByIdAndDeletedFalse(Long id);
 }

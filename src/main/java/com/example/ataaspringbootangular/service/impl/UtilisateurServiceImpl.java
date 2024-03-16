@@ -40,7 +40,7 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
     public List<UtilisateurDto> getUtilisateurs() {
         List<Utilisateur> utilisateurs = iUtilisateurRepository.findByDeletedFalse();
         return utilisateurs.stream()
-                .map(utilisateur -> modelMapper.map(utilisateur , UtilisateurDto.class))
+                .map(utilisateur -> maskPasswordInDto(modelMapper.map(utilisateur , UtilisateurDto.class)))
                 .collect(Collectors.toList());
     }
 
@@ -88,6 +88,13 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
         }
     }
 
+    @Override
+    public List<UtilisateurDto> getUsersWithRole(String role) {
+        List<Utilisateur> users = iUtilisateurRepository.findByRole(role);
+        return users.stream()
+                .map(user -> modelMapper.map(user, UtilisateurDto.class))
+                .collect(Collectors.toList());
+    }
     @Override
     public Utilisateur loadUserByEmail(String email) {
         return iUtilisateurRepository.findByEmailAndDeletedFalse(email);

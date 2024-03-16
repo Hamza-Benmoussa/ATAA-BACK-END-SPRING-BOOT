@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -64,7 +65,7 @@ class MemberServiceImplTest {
         utilisateurDto.setAddress("TestAddress");
         utilisateurDto.setTele("+123456789");
         utilisateurDto.setEmail("test@gmail.com");
-        utilisateurDto.setDateNaissance(dateFormat.parse("1990-01-01"));
+        utilisateurDto.setDateNaissance(LocalDate.now());
         utilisateurDto.setRoleUser(RoleUser.PresidantAssociation);
         utilisateurDto.setGenre(Genre.Male);
         utilisateurDto = iUtilisateurService.ajouterUtilisateur(utilisateurDto);

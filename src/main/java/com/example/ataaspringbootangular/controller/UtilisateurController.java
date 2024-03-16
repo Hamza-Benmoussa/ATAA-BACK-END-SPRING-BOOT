@@ -21,6 +21,11 @@ public class UtilisateurController {
     @Autowired
     private IUtilisateurService utilisateurService;
 
+    @GetMapping("/role/{role}")
+    public ResponseEntity<List<UtilisateurDto>> getUsersByRole(@PathVariable String role) {
+        List<UtilisateurDto> users = utilisateurService.getUsersWithRole(role);
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
     @PostMapping("/ajouterUtilisateur")
     @PreAuthorize("hasAuthority('AdminApp')")
     public ResponseEntity<UtilisateurDto> ajouterUtilisateur(@RequestBody @Valid UtilisateurDto utilisateurDto) {
