@@ -29,7 +29,7 @@ public class MemberController {
         MemberDto savedMember = memebreService.ajouterMember(memberDto);
         return new ResponseEntity<>(savedMember, HttpStatus.CREATED);
     }
-@GetMapping("/createdByCurrentUser")
+@GetMapping()
 @PreAuthorize("hasAuthority('PresidantAssociation')")
 public ResponseEntity<List<MemberDto>> getMembersCreatedByCurrentUser(Authentication authentication) {
     String currentUserEmail = authentication.getName();

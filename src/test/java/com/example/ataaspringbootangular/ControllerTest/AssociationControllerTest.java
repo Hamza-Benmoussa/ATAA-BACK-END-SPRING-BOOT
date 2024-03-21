@@ -74,7 +74,7 @@ public class AssociationControllerTest {
     }
 
     @Test
-    void updateAssociation() {
+    void updateAssociation() throws UtilisateurFoundException, VilleFoundException {
         Long id = 1L;
         AssociationDto associationDto = new AssociationDto();
         when(associationService.updateAssociation(associationDto, id)).thenReturn(associationDto);

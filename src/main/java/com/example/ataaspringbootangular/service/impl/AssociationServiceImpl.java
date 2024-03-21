@@ -83,13 +83,19 @@ public class AssociationServiceImpl implements IAssociationService {
         return null;
     }
     @Override
-    public AssociationDto updateAssociation(AssociationDto associationDto, Long id) {
+    public AssociationDto updateAssociation(AssociationDto associationDto, Long id) throws UtilisateurFoundException, VilleFoundException {
         Association existingAssociation = iAssociationsRepository.findByIdAndDeletedFalse(id).orElse(null);
         if (!existingAssociation.getNbrSerie().equals(associationDto.getNbrSerie())){
             checkNbrSerieExist(associationDto.getNbrSerie());
         }
             existingAssociation.setNomAssociation(associationDto.getNomAssociation());
             existingAssociation.setNbrSerie(associationDto.getNbrSerie());
+        UtilisateurDto nouvelUtilisateurDto = iUtilisateurService.getUtilisateursById(associationDto.getNomPresidantId());
+        Utilisateur nouvelUtilisateur = modelMapper.map(nouvelUtilisateurDto, Utilisateur.class);
+        existingAssociation.setNomPresidant(nouvelUtilisateur);
+        VilleDto villeDto = iVilleService.getVillesById(associationDto.getVilleId());
+        Ville ville = modelMapper.map(villeDto , Ville.class);
+        existingAssociation.setVille(ville);
         try {
             Association updateAssociation = iAssociationsRepository.save(existingAssociation);
             return modelMapper.map(updateAssociation, AssociationDto.class);

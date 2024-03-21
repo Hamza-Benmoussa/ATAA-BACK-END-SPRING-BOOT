@@ -33,7 +33,7 @@ public class KafilaController {
         return new ResponseEntity<>(savedKafila, HttpStatus.CREATED);
     }
 
-    @GetMapping("/createdByCurrentUser")
+    @GetMapping()
     @PreAuthorize("hasAuthority('PresidantAssociation')")
     public ResponseEntity<List<KafilaDto>> getKafilasCreatedByCurrentUser(Authentication authentication) {
         String currentUserEmail = authentication.getName();

@@ -88,7 +88,7 @@ class AssociationServiceImplTest {
     }
 
     @Test
-    void updateAssociation() {
+    void updateAssociation() throws UtilisateurFoundException, VilleFoundException {
         associationDto.setNbrSerie("kakakakaka");
         AssociationDto updateAssociation = iAssociationService.updateAssociation(associationDto, associationDto.getId());
         assertEquals("kakakakaka", updateAssociation.getNbrSerie(), "Association should be updated");

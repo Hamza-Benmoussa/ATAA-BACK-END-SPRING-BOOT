@@ -76,7 +76,7 @@ public class DowarControllerTest {
     }
 
     @Test
-    void updateDowar() {
+    void updateDowar() throws VilleFoundException {
         Long id = 1L;
         DowarDto dowarDto = new DowarDto();
         when(dowarService.updateDowar(dowarDto, id)).thenReturn(dowarDto);

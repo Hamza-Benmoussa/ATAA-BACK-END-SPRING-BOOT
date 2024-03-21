@@ -54,11 +54,13 @@ public class DowarServiceImpl implements IDowarService {
     }
 
     @Override
-    public DowarDto updateDowar(DowarDto dowarDto, Long id) {
+    public DowarDto updateDowar(DowarDto dowarDto, Long id) throws VilleFoundException {
         Dowar existingDowar = iDowarsRepository.findByIdAndDeletedFalse(id).orElse(null);
         if (existingDowar != null){
         existingDowar.setNomDowars(dowarDto.getNomDowars());
         existingDowar.setNmbrResidant(dowarDto.getNmbrResidant());
+            VilleDto ville = iVilleService.getVillesById(dowarDto.getVilleId());
+            existingDowar.setVille(modelMapper.map(ville , Ville.class));
         Dowar updateDowar = iDowarsRepository.save(existingDowar);
         updateDowar.setId(id);
         return modelMapper.map(updateDowar, DowarDto.class);

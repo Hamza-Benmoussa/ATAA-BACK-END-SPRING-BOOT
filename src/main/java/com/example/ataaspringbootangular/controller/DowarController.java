@@ -44,7 +44,7 @@ public class DowarController {
 
     @PutMapping("/updateDowar/{id}")
     @PreAuthorize("hasAuthority('AdminApp')")
-    public ResponseEntity<DowarDto> updateDowar(@PathVariable Long id, @Valid @RequestBody DowarDto dowarDto) {
+    public ResponseEntity<DowarDto> updateDowar(@PathVariable Long id, @Valid @RequestBody DowarDto dowarDto) throws VilleFoundException {
         DowarDto updatedDowar = dowarService.updateDowar(dowarDto, id);
         return new ResponseEntity<>(updatedDowar, HttpStatus.OK);
     }

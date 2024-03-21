@@ -29,7 +29,7 @@ public class BiensEssentielController {
         return new ResponseEntity<>(savedBiensEssentiel, HttpStatus.CREATED);
     }
 
-    @GetMapping("/createdByCurrentUser")
+    @GetMapping()
     @PreAuthorize("hasAuthority('PresidantAssociation')")
     public ResponseEntity<List<BiensEssantielDto>> getKafilasCreatedByCurrentUser(Authentication authentication) {
         String currentUserEmail = authentication.getName();

@@ -47,7 +47,6 @@ public class BiensEssantielImpl implements IBiensEssantielService {
         biensEssantielDto.setAssociationId(association.getId());
 
         BiensEssantiel biensEssantiel = modelMapper.map(biensEssantielDto, BiensEssantiel.class);
-        biensEssantiel.setAssociation(association);
 
         BiensEssantiel saveBiensEssantiel = iBiensEssantielsRepository.save(biensEssantiel);
 

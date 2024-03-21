@@ -73,7 +73,7 @@ class DowarServiceImplTest {
 
     @Rollback(value = false)
     @Test
-    void updateDowar() {
+    void updateDowar() throws VilleFoundException {
         dowarDto.setNomDowars("imzwagn");
         DowarDto updateDowarDto = iDowarService.updateDowar(dowarDto ,dowarDto.getId());
         assertEquals("imzwagn", updateDowarDto.getNomDowars(), "DowarNom should be updated");

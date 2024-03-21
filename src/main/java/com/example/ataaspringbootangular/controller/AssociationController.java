@@ -45,7 +45,7 @@ public class AssociationController {
 
     @PutMapping("/updateAssociation/{id}")
     @PreAuthorize("hasAuthority('AdminApp')")
-    public ResponseEntity<AssociationDto> updateAssociation(@PathVariable Long id, @Valid @RequestBody AssociationDto associationDto) {
+    public ResponseEntity<AssociationDto> updateAssociation(@PathVariable Long id, @Valid @RequestBody AssociationDto associationDto) throws UtilisateurFoundException, VilleFoundException {
         AssociationDto updatedAssociation = associationService.updateAssociation(associationDto, id);
         return new ResponseEntity<>(updatedAssociation, HttpStatus.OK);
     }
