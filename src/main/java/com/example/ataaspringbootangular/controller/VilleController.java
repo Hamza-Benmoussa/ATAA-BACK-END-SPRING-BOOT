@@ -1,6 +1,7 @@
 package com.example.ataaspringbootangular.controller;
 
 import com.example.ataaspringbootangular.dto.VilleDto;
+import com.example.ataaspringbootangular.entity.Dowar;
 import com.example.ataaspringbootangular.exception.except.VilleFoundException;
 import com.example.ataaspringbootangular.service.IVilleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,14 @@ public class VilleController {
         VilleDto savedVille = villeService.ajouterVille(villeDto);
         return new ResponseEntity<>(savedVille, HttpStatus.CREATED);
     }
-
+    @GetMapping("/getDowarsForVille/{nomVille}")
+    @PreAuthorize("hasAuthority('PresidantAssociation')")
+    public ResponseEntity<List<Dowar>> getDowarsForVille(@PathVariable String nomVille) {
+        List<Dowar> dowars = villeService.getDowarsForVille(nomVille);
+        return new ResponseEntity<>(dowars, HttpStatus.OK);
+    }
     @GetMapping
-    @PreAuthorize("hasAuthority('AdminApp')")
+    @PreAuthorize("hasAnyAuthority('AdminApp','PresidantAssociation')")
     public ResponseEntity<List<VilleDto>> getVilles() {
         List<VilleDto> villes = villeService.getVilles();
         return new ResponseEntity<>(villes, HttpStatus.OK);

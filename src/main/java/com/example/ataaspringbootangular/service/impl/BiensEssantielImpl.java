@@ -52,7 +52,9 @@ public class BiensEssantielImpl implements IBiensEssantielService {
 
         return modelMapper.map(saveBiensEssantiel, BiensEssantielDto.class);
     }
-
+    public long getNumberOfBiens() {
+        return iBiensEssantielsRepository.count();
+    }
     @Override
     public BiensEssantielDto getBiensEssantielsById(Long id) throws BiensEssentielFoundException {
         return iBiensEssantielsRepository.findByIdAndDeletedFalse(id)

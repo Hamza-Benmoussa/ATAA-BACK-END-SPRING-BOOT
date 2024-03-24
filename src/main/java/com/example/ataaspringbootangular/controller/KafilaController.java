@@ -7,6 +7,7 @@ import com.example.ataaspringbootangular.exception.except.BiensEssentielFoundExc
 import com.example.ataaspringbootangular.exception.except.DowarFoundException;
 import com.example.ataaspringbootangular.exception.except.KafilaFoundException;
 import com.example.ataaspringbootangular.service.IKafilaService;
+import com.example.ataaspringbootangular.service.impl.KafilaSericeImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ import java.util.List;
 public class KafilaController {
 
     @Autowired
-    private IKafilaService kafilaService;
+    private KafilaSericeImpl kafilaService;
 
     @PostMapping("/ajouterKafila")
     @PreAuthorize("hasAuthority('PresidantAssociation')")
@@ -32,7 +33,11 @@ public class KafilaController {
         KafilaDto savedKafila = kafilaService.ajouterKafila(kafilaDto);
         return new ResponseEntity<>(savedKafila, HttpStatus.CREATED);
     }
-
+    @GetMapping("/count")
+    public ResponseEntity<Long> getNumberOfKafilas() {
+        long count = kafilaService.getNumberOfKafilas();
+        return ResponseEntity.ok(count);
+    }
     @GetMapping()
     @PreAuthorize("hasAuthority('PresidantAssociation')")
     public ResponseEntity<List<KafilaDto>> getKafilasCreatedByCurrentUser(Authentication authentication) {

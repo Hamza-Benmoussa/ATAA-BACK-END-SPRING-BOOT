@@ -88,7 +88,9 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
 
         }
     }
-
+    public long getNumberOfUtilisatuers() {
+        return iUtilisateurRepository.count();
+    }
     @Override
     public List<UtilisateurDto> getUsersWithRole(String role) {
         RoleUser userRole = null;

@@ -48,7 +48,11 @@ public class DowarController {
         DowarDto updatedDowar = dowarService.updateDowar(dowarDto, id);
         return new ResponseEntity<>(updatedDowar, HttpStatus.OK);
     }
-
+    @GetMapping("/count")
+    public ResponseEntity<Long> getNumberOfDowars() {
+        long count = dowarService.getNumberOfDowars();
+        return ResponseEntity.ok(count);
+    }
     @DeleteMapping("/deleteDowar/{id}")
     @PreAuthorize("hasAuthority('AdminApp')")
     public ResponseEntity<String> deleteDowar(@PathVariable("id") Long id) {
@@ -57,7 +61,7 @@ public class DowarController {
     }
 
     @GetMapping("/totalKafilas/{dowarId}")
-    @PreAuthorize("hasAuthority('AdminApp')")
+    @PreAuthorize("hasAuthority('PresidantAssociation')")
     public ResponseEntity<Integer> getTotalKafilasForDowar(@PathVariable Long dowarId) throws DowarFoundException {
         int totalKafilas = dowarService.calculateTotalArrivedKafilasForDowar(dowarId);
         return new ResponseEntity<>(totalKafilas, HttpStatus.OK);

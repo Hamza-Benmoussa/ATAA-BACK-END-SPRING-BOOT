@@ -16,6 +16,7 @@ public interface IUtilisateurService {
 
     UtilisateurDto getUtilisateursById(Long id) throws UtilisateurFoundException;
     List<UtilisateurDto> getUsersWithRole(String role);
+    long getNumberOfUtilisatuers();
     UtilisateurDto updateUtilisateur(UtilisateurDto utilisateurDto, Long id) throws ParseException;
 
     void deleteUtilisateur(Long id);

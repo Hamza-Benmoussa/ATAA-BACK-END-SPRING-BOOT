@@ -82,6 +82,9 @@ public class AssociationServiceImpl implements IAssociationService {
         }
         return null;
     }
+    public long getNumberOfAssociations() {
+        return iAssociationsRepository.count();
+    }
     @Override
     public AssociationDto updateAssociation(AssociationDto associationDto, Long id) throws UtilisateurFoundException, VilleFoundException {
         Association existingAssociation = iAssociationsRepository.findByIdAndDeletedFalse(id).orElse(null);

@@ -10,7 +10,7 @@ import java.util.List;
 public interface IDowarService {
     DowarDto ajouterDowar(DowarDto dowarDto) throws DowarFoundException, VilleFoundException;
 
-
+    long getNumberOfDowars();
     List<DowarDto> getDowars();
 
     DowarDto getDowarsById(Long id) throws DowarFoundException;

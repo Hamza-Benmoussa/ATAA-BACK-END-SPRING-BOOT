@@ -13,7 +13,7 @@ public interface IAssociationService {
     AssociationDto ajouterAssociation(AssociationDto associationDto) throws UtilisateurFoundException, VilleFoundException;
     Association getAssociationByName(String associationName);
     List<AssociationDto> getAssociations();
-
+    long getNumberOfAssociations();
     AssociationDto getAssociationsById(Long id) throws AssociationFoundException;
 
 //    List<AssociationDto> getAssociationsForCurrentUser() throws UtilisateurFoundException;

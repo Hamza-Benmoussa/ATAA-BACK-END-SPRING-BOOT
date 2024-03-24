@@ -4,6 +4,7 @@ import com.example.ataaspringbootangular.dto.MemberDto;
 import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
 import com.example.ataaspringbootangular.exception.except.MemberFoundException;
 import com.example.ataaspringbootangular.service.IMemebreService;
+import com.example.ataaspringbootangular.service.impl.MemberServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ import java.util.List;
 public class MemberController {
 
     @Autowired
-    private IMemebreService memebreService;
+    private MemberServiceImpl memebreService;
 
     @PostMapping("/ajouterMember")
     @PreAuthorize("hasAuthority('PresidantAssociation')")
@@ -36,6 +37,11 @@ public ResponseEntity<List<MemberDto>> getMembersCreatedByCurrentUser(Authentica
     List<MemberDto> membersCreatedByCurrentUser = memebreService.getMembersCreatedByUser(currentUserEmail);
     return ResponseEntity.ok(membersCreatedByCurrentUser);
 }
+    @GetMapping("/count")
+    public ResponseEntity<Long> getNumberOfMembers() {
+        long count = memebreService.getNumberOfMembers();
+        return ResponseEntity.ok(count);
+    }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('PresidantAssociation')")

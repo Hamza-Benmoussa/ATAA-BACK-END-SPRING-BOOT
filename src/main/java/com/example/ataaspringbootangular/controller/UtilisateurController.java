@@ -32,7 +32,11 @@ public class UtilisateurController {
         UtilisateurDto savedUtilisateur = utilisateurService.ajouterUtilisateur(utilisateurDto);
         return new ResponseEntity<>(savedUtilisateur, HttpStatus.CREATED);
     }
-
+    @GetMapping("/count")
+    public ResponseEntity<Long> getNumberOfUtilisateurs() {
+        long count = utilisateurService.getNumberOfUtilisatuers();
+        return ResponseEntity.ok(count);
+    }
     @GetMapping
     @PreAuthorize("hasAuthority('AdminApp')")
     public ResponseEntity<List<UtilisateurDto>> getUtilisateurs() {

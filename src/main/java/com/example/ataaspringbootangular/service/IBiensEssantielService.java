@@ -19,4 +19,6 @@ public interface IBiensEssantielService {
 
     void deleteBiensEssantiel(Long id);
     List<BiensEssantielDto> getBiensEssentielsCreatedByUser(String createdByEmail);
+
+    long getNumberOfBiens();
 }

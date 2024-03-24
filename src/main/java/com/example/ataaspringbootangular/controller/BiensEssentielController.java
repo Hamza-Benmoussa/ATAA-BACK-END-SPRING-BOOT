@@ -28,7 +28,11 @@ public class BiensEssentielController {
         BiensEssantielDto savedBiensEssentiel = biensEssantielService.ajouterBiensEssantiel(biensEssantielDto);
         return new ResponseEntity<>(savedBiensEssentiel, HttpStatus.CREATED);
     }
-
+    @GetMapping("/count")
+    public ResponseEntity<Long> getNumberOfbiens() {
+        long count = biensEssantielService.getNumberOfBiens();
+        return ResponseEntity.ok(count);
+    }
     @GetMapping()
     @PreAuthorize("hasAuthority('PresidantAssociation')")
     public ResponseEntity<List<BiensEssantielDto>> getKafilasCreatedByCurrentUser(Authentication authentication) {

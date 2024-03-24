@@ -42,6 +42,11 @@ public class AssociationController {
         AssociationDto association = associationService.getAssociationsById(id);
         return new ResponseEntity<>(association, HttpStatus.OK);
     }
+    @GetMapping("/count")
+    public ResponseEntity<Long> getNumberOfAssociations() {
+        long count = associationService.getNumberOfAssociations();
+        return ResponseEntity.ok(count);
+    }
 
     @PutMapping("/updateAssociation/{id}")
     @PreAuthorize("hasAuthority('AdminApp')")

@@ -123,7 +123,9 @@
                     })
                     .orElseThrow(() -> new KafilaFoundException("Kafila Not found with id = " + id));
         }
-
+        public long getNumberOfKafilas() {
+            return iKafilaRepository.count();
+        }
         @Override
         public KafilaDto updateKafila(KafilaDto kafilaDto, Long id){
             Kafila existingKafila = iKafilaRepository.findByIdAndDeletedFalse(id).orElse(null);

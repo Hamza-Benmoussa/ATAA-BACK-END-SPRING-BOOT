@@ -63,6 +63,9 @@ public class MemberServiceImpl implements IMemebreService {
 
         return modelMapper.map(saveMember, MemberDto.class);
     }
+    public long getNumberOfMembers() {
+        return iMembersRepository.count();
+    }
     @Override
     public MemberDto getMembersById(Long id) throws MemberFoundException {
         return iMembersRepository.findByIdAndDeletedFalse(id)
