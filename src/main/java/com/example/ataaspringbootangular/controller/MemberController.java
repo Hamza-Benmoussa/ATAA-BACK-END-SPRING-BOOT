@@ -26,10 +26,37 @@ public class MemberController {
 
     @PostMapping("/ajouterMember")
     @PreAuthorize("hasAuthority('PresidantAssociation')")
-    public ResponseEntity<MemberDto> ajouterMember(@RequestBody @Valid MemberDto memberDto) throws AssociationFoundException {
-        MemberDto savedMember = memebreService.ajouterMember(memberDto);
-        return new ResponseEntity<>(savedMember, HttpStatus.CREATED);
+    public ResponseEntity<String> ajouterMember(@RequestBody @Valid MemberDto memberDto) throws AssociationFoundException {
+        try {
+            MemberDto savedMember = memebreService.ajouterMember(memberDto);
+            return new ResponseEntity<>("000", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
+    @PutMapping("/updateMember/{id}")
+    @PreAuthorize("hasAuthority('PresidantAssociation')")
+    public ResponseEntity<String> updateMember(@PathVariable Long id, @Valid @RequestBody MemberDto memberDto) throws ParseException {
+        try {
+            MemberDto updatedMember = memebreService.updateMember(memberDto, id);
+            return new ResponseEntity<>("000", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/deleteMember/{id}")
+    @PreAuthorize("hasAuthority('PresidantAssociation')")
+    public ResponseEntity<String> deleteMember(@PathVariable("id") Long id) {
+        try {
+            memebreService.deleteMember(id);
+            return new ResponseEntity<>("000", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 @GetMapping()
 @PreAuthorize("hasAuthority('PresidantAssociation')")
 public ResponseEntity<List<MemberDto>> getMembersCreatedByCurrentUser(Authentication authentication) {
@@ -50,17 +77,5 @@ public ResponseEntity<List<MemberDto>> getMembersCreatedByCurrentUser(Authentica
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
 
-    @PutMapping("/updateMember/{id}")
-    @PreAuthorize("hasAuthority('PresidantAssociation')")
-    public ResponseEntity<MemberDto> updateMember(@PathVariable Long id, @Valid @RequestBody MemberDto memberDto) throws ParseException, ParseException {
-        MemberDto updatedMember = memebreService.updateMember(memberDto, id);
-        return new ResponseEntity<>(updatedMember, HttpStatus.OK);
-    }
 
-    @DeleteMapping("/deleteMember/{id}")
-    @PreAuthorize("hasAuthority('PresidantAssociation')")
-    public ResponseEntity<String> deleteMember(@PathVariable("id") Long id) {
-        memebreService.deleteMember(id);
-        return ResponseEntity.ok("Member with id " +id+ " was deleted succes");
-    }
 }

@@ -41,7 +41,7 @@ public class AssociationControllerTest {
         AssociationDto associationDto = new AssociationDto();
         when(associationService.ajouterAssociation(associationDto)).thenReturn(associationDto);
 
-        ResponseEntity<AssociationDto> responseEntity = associationController.ajouterAssociation(associationDto);
+        ResponseEntity<String> responseEntity = associationController.ajouterAssociation(associationDto);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(associationDto, responseEntity.getBody());
@@ -79,7 +79,7 @@ public class AssociationControllerTest {
         AssociationDto associationDto = new AssociationDto();
         when(associationService.updateAssociation(associationDto, id)).thenReturn(associationDto);
 
-        ResponseEntity<AssociationDto> responseEntity = associationController.updateAssociation(id, associationDto);
+        ResponseEntity<String> responseEntity = associationController.updateAssociation(id, associationDto);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(associationDto, responseEntity.getBody());

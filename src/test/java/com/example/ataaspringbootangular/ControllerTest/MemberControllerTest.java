@@ -38,7 +38,7 @@ public class MemberControllerTest {
         MemberDto memberDto = new MemberDto();
         when(memebreService.ajouterMember(memberDto)).thenReturn(memberDto);
 
-        ResponseEntity<MemberDto> responseEntity = memberController.ajouterMember(memberDto);
+        ResponseEntity<String> responseEntity = memberController.ajouterMember(memberDto);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(memberDto, responseEntity.getBody());
@@ -64,7 +64,7 @@ public class MemberControllerTest {
         MemberDto memberDto = new MemberDto();
         when(memebreService.updateMember(memberDto, id)).thenReturn(memberDto);
 
-        ResponseEntity<MemberDto> responseEntity = memberController.updateMember(id, memberDto);
+        ResponseEntity<String> responseEntity = memberController.updateMember(id, memberDto);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(memberDto, responseEntity.getBody());

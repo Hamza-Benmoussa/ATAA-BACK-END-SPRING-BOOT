@@ -22,9 +22,35 @@ public class VilleController {
 
     @PostMapping("/ajouterVille")
     @PreAuthorize("hasAuthority('AdminApp')")
-    public ResponseEntity<VilleDto> ajouterVille(@RequestBody @Valid VilleDto villeDto) {
-        VilleDto savedVille = villeService.ajouterVille(villeDto);
-        return new ResponseEntity<>(savedVille, HttpStatus.CREATED);
+    public ResponseEntity<String> ajouterVille(@RequestBody @Valid VilleDto villeDto) {
+        try {
+            VilleDto savedVille = villeService.ajouterVille(villeDto);
+            return new ResponseEntity<>("000", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/updateVille/{id}")
+    @PreAuthorize("hasAuthority('AdminApp')")
+    public ResponseEntity<String> updateVille(@PathVariable Long id, @Valid @RequestBody VilleDto villeDto) {
+        try {
+            VilleDto updatedVille = villeService.updateVille(villeDto, id);
+            return new ResponseEntity<>("000", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/deleteVille/{id}")
+    @PreAuthorize("hasAuthority('AdminApp')")
+    public ResponseEntity<String> deleteVille(@PathVariable("id") Long id) {
+        try {
+            villeService.deleteVille(id);
+            return new ResponseEntity<>("000", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     @GetMapping
     @PreAuthorize("hasAnyAuthority('AdminApp','PresidantAssociation')")
@@ -43,19 +69,5 @@ public class VilleController {
     public ResponseEntity<VilleDto> getVilleById(@PathVariable Long id) throws VilleFoundException, VilleFoundException {
         VilleDto ville = villeService.getVillesById(id);
         return new ResponseEntity<>(ville, HttpStatus.OK);
-    }
-
-    @PutMapping("/updateVille/{id}")
-    @PreAuthorize("hasAuthority('AdminApp')")
-    public ResponseEntity<VilleDto> updateVille(@PathVariable Long id, @Valid @RequestBody VilleDto villeDto) {
-        VilleDto updatedVille = villeService.updateVille(villeDto, id);
-        return new ResponseEntity<>(updatedVille, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/deleteVille/{id}")
-    @PreAuthorize("hasAuthority('AdminApp')")
-    public ResponseEntity<String> deleteVille(@PathVariable("id") Long id) {
-        villeService.deleteVille(id);
-        return ResponseEntity.ok("Ville with id " +id+ " was deleted succes");
     }
 }

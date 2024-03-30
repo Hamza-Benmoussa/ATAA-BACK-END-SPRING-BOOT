@@ -12,4 +12,6 @@ public interface IUtilisateurRepository extends JpaRepository<Utilisateur,Long> 
     List<Utilisateur> findByDeletedFalse();
     List<Utilisateur> findByRoleUser(RoleUser role);
     Optional<Utilisateur> findByIdAndDeletedFalse(Long id);
+
+    List<Utilisateur> findByRoleUserAndDeletedFalse(RoleUser userRole);
 }

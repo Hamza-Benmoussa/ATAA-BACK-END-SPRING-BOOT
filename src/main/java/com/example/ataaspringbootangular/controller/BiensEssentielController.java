@@ -24,9 +24,35 @@ public class BiensEssentielController {
 
     @PostMapping("/ajouterBiensEssentiel")
     @PreAuthorize("hasAuthority('PresidantAssociation')")
-    public ResponseEntity<BiensEssantielDto> ajouterBiensEssentiel(@RequestBody @Valid BiensEssantielDto biensEssantielDto) throws AssociationFoundException, AssociationFoundException {
-        BiensEssantielDto savedBiensEssentiel = biensEssantielService.ajouterBiensEssantiel(biensEssantielDto);
-        return new ResponseEntity<>(savedBiensEssentiel, HttpStatus.CREATED);
+    public ResponseEntity<String> ajouterBiensEssentiel(@RequestBody @Valid BiensEssantielDto biensEssantielDto) throws AssociationFoundException, AssociationFoundException {
+        try {
+            BiensEssantielDto savedBiensEssentiel = biensEssantielService.ajouterBiensEssantiel(biensEssantielDto);
+            return new ResponseEntity<>("000", HttpStatus.CREATED); // Return 000 for success
+        } catch (Exception e) {
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR); // Return 001 for failure
+        }
+    }
+
+    @PutMapping("/updateBiensEssentiel/{id}")
+    @PreAuthorize("hasAuthority('PresidantAssociation')")
+    public ResponseEntity<String> updateBiensEssentiel(@PathVariable Long id, @Valid @RequestBody BiensEssantielDto biensEssantielDto) {
+        try {
+            BiensEssantielDto updatedBiensEssentiel = biensEssantielService.updateBiensEssentiel(biensEssantielDto, id);
+            return new ResponseEntity<>("000", HttpStatus.OK); // Return 000 for success
+        } catch (Exception e) {
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR); // Return 001 for failure
+        }
+    }
+
+    @DeleteMapping("/deleteBiensEssentiel/{id}")
+    @PreAuthorize("hasAuthority('PresidantAssociation')")
+    public ResponseEntity<String> deleteBiensEssentiel(@PathVariable("id") Long id) {
+        try {
+            biensEssantielService.deleteBiensEssantiel(id);
+            return new ResponseEntity<>("000", HttpStatus.OK); // Return 000 for success
+        } catch (Exception e) {
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR); // Return 001 for failure
+        }
     }
     @GetMapping("/count")
     public ResponseEntity<Long> getNumberOfbiens() {
@@ -47,17 +73,7 @@ public class BiensEssentielController {
         return new ResponseEntity<>(biensEssentiel, HttpStatus.OK);
     }
 
-    @PutMapping("/updateBiensEssentiel/{id}")
-    @PreAuthorize("hasAuthority('PresidantAssociation')")
-    public ResponseEntity<BiensEssantielDto> updateBiensEssentiel(@PathVariable Long id, @Valid @RequestBody BiensEssantielDto biensEssantielDto) {
-        BiensEssantielDto updatedBiensEssentiel = biensEssantielService.updateBiensEssentiel(biensEssantielDto, id);
-        return new ResponseEntity<>(updatedBiensEssentiel, HttpStatus.OK);
-    }
 
-    @DeleteMapping("/deleteBiensEssentiel/{id}")
-    @PreAuthorize("hasAuthority('PresidantAssociation')")
-    public ResponseEntity<String> deleteBiensEssentiel(@PathVariable("id") Long id) {
-        biensEssantielService.deleteBiensEssantiel(id);
-        return ResponseEntity.ok("BiensEssentiel with id " +id+ " was deleted succes");
-    }
+
+
 }

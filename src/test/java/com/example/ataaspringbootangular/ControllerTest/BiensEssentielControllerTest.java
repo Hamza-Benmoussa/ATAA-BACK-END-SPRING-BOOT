@@ -40,7 +40,7 @@ public class BiensEssentielControllerTest {
         BiensEssantielDto biensEssantielDto = new BiensEssantielDto();
         when(biensEssantielService.ajouterBiensEssantiel(biensEssantielDto)).thenReturn(biensEssantielDto);
 
-        ResponseEntity<BiensEssantielDto> responseEntity = biensEssentielController.ajouterBiensEssentiel(biensEssantielDto);
+        ResponseEntity<String> responseEntity = biensEssentielController.ajouterBiensEssentiel(biensEssantielDto);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(biensEssantielDto, responseEntity.getBody());
@@ -66,7 +66,7 @@ public class BiensEssentielControllerTest {
         BiensEssantielDto biensEssantielDto = new BiensEssantielDto();
         when(biensEssantielService.updateBiensEssentiel(biensEssantielDto, id)).thenReturn(biensEssantielDto);
 
-        ResponseEntity<BiensEssantielDto> responseEntity = biensEssentielController.updateBiensEssentiel(id, biensEssantielDto);
+        ResponseEntity<String> responseEntity = biensEssentielController.updateBiensEssentiel(id, biensEssantielDto);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(biensEssantielDto, responseEntity.getBody());

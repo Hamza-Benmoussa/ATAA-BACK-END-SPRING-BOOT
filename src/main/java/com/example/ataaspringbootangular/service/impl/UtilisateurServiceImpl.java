@@ -78,10 +78,9 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
         existingUtilisateur.setDateNaissance(utilisateurDto.getDateNaissance());
 
         try {
-            // Save the updated user
+
             Utilisateur updatedUtilisateur = iUtilisateurRepository.save(existingUtilisateur);
 
-            // Map and return the updated user DTO
             return modelMapper.map(updatedUtilisateur, UtilisateurDto.class);
         } catch (EmailDejaExisteException ex) {
             throw new EmailDejaExisteException("Email déjà existant dans la base de données.");
@@ -92,6 +91,10 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
         return iUtilisateurRepository.count();
     }
     @Override
+    public Utilisateur loadUserByEmail(String email) {
+        return iUtilisateurRepository.findByEmailAndDeletedFalse(email);
+    }
+    @Override
     public List<UtilisateurDto> getUsersWithRole(String role) {
         RoleUser userRole = null;
         try {
@@ -100,16 +103,11 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
             throw new IllegalArgumentException("Invalid role: " + role);
         }
 
-        List<Utilisateur> users = iUtilisateurRepository.findByRoleUser(userRole);
+        List<Utilisateur> users = iUtilisateurRepository.findByRoleUserAndDeletedFalse(userRole);
         return users.stream()
                 .map(user -> modelMapper.map(user, UtilisateurDto.class))
                 .collect(Collectors.toList());
     }
-    @Override
-    public Utilisateur loadUserByEmail(String email) {
-        return iUtilisateurRepository.findByEmailAndDeletedFalse(email);
-    }
-
 
     private void checkExistEmail(String email) {
         if (getByEmail(email) != null) {

@@ -36,7 +36,7 @@ public class VilleControllerTest {
         VilleDto villeDto = new VilleDto();
         when(villeService.ajouterVille(villeDto)).thenReturn(villeDto);
 
-        ResponseEntity<VilleDto> responseEntity = villeController.ajouterVille(villeDto);
+        ResponseEntity<String> responseEntity = villeController.ajouterVille(villeDto);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(villeDto, responseEntity.getBody());
@@ -74,7 +74,7 @@ public class VilleControllerTest {
         VilleDto villeDto = new VilleDto();
         when(villeService.updateVille(villeDto, id)).thenReturn(villeDto);
 
-        ResponseEntity<VilleDto> responseEntity = villeController.updateVille(id, villeDto);
+        ResponseEntity<String> responseEntity = villeController.updateVille(id, villeDto);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(villeDto, responseEntity.getBody());

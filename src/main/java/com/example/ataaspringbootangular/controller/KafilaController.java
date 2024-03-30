@@ -29,9 +29,35 @@ public class KafilaController {
 
     @PostMapping("/ajouterKafila")
     @PreAuthorize("hasAuthority('PresidantAssociation')")
-    public ResponseEntity<KafilaDto> ajouterKafila(@RequestBody @Valid KafilaDto kafilaDto) throws DowarFoundException, AssociationFoundException, BiensEssentielFoundException, AssociationFoundException, BiensEssentielFoundException, DowarFoundException {
-        KafilaDto savedKafila = kafilaService.ajouterKafila(kafilaDto);
-        return new ResponseEntity<>(savedKafila, HttpStatus.CREATED);
+    public ResponseEntity<String> ajouterKafila(@RequestBody @Valid KafilaDto kafilaDto) throws DowarFoundException, AssociationFoundException, BiensEssentielFoundException, AssociationFoundException, BiensEssentielFoundException, DowarFoundException {
+        try {
+            KafilaDto savedKafila = kafilaService.ajouterKafila(kafilaDto);
+            return new ResponseEntity<>("000", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/updateKafila/{id}")
+    @PreAuthorize("hasAuthority('PresidantAssociation')")
+    public ResponseEntity<String> updateKafila(@PathVariable("id") Long id , @Valid @RequestBody KafilaDto kafilaDto) throws ParseException {
+        try {
+            KafilaDto updateKafila = kafilaService.updateKafila(kafilaDto,id);
+            return new ResponseEntity<>("000", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/deleteKafila/{id}")
+    @PreAuthorize("hasAuthority('PresidantAssociation')")
+    public ResponseEntity<String> deleteKafila(@PathVariable("id") Long id) {
+        try {
+            kafilaService.deleteKafila(id);
+            return new ResponseEntity<>("000", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     @GetMapping("/count")
     public ResponseEntity<Long> getNumberOfKafilas() {
@@ -53,17 +79,5 @@ public class KafilaController {
         return new ResponseEntity<>(kafila, HttpStatus.OK);
     }
 
-    @PutMapping("/updateKafila/{id}")
-    @PreAuthorize("hasAuthority('PresidantAssociation')")
-    public ResponseEntity<KafilaDto> deletkafila(@PathVariable("id") Long id , @Valid @RequestBody KafilaDto kafilaDto) throws ParseException {
-        KafilaDto updateKafila = kafilaService.updateKafila(kafilaDto,id);
-        return new ResponseEntity<>(updateKafila , HttpStatus.OK);
-    }
 
-    @DeleteMapping("/deleteKafila/{id}")
-    @PreAuthorize("hasAuthority('PresidantAssociation')")
-    public ResponseEntity<String> deleteKafila(@PathVariable("id") Long id) {
-        kafilaService.deleteKafila(id);
-        return ResponseEntity.ok("Kafila with id " +id+ " was deleted succes");
-    }
 }

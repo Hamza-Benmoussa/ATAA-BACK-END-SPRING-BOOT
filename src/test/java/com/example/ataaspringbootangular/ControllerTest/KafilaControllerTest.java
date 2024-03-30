@@ -39,7 +39,7 @@ public class KafilaControllerTest {
         KafilaDto kafilaDto = new KafilaDto();
         when(kafilaService.ajouterKafila(kafilaDto)).thenReturn(kafilaDto);
 
-        ResponseEntity<KafilaDto> responseEntity = kafilaController.ajouterKafila(kafilaDto);
+        ResponseEntity<String> responseEntity = kafilaController.ajouterKafila(kafilaDto);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(kafilaDto, responseEntity.getBody());
@@ -83,7 +83,7 @@ public class KafilaControllerTest {
         KafilaDto kafilaDto = new KafilaDto();
         when(kafilaService.updateKafila(kafilaDto, id)).thenReturn(kafilaDto);
 
-        ResponseEntity<KafilaDto> responseEntity = kafilaController.deletkafila(id, kafilaDto);
+        ResponseEntity<String> responseEntity = kafilaController.deleteKafila(id);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(kafilaDto, responseEntity.getBody());
