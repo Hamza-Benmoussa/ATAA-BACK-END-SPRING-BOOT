@@ -43,7 +43,7 @@ public class DowarControllerTest {
         DowarDto dowarDto = new DowarDto();
         when(dowarService.ajouterDowar(dowarDto)).thenReturn(dowarDto);
 
-        ResponseEntity<DowarDto> responseEntity = dowarController.ajouterDowar(dowarDto);
+        ResponseEntity<String> responseEntity = dowarController.ajouterDowar(dowarDto);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(dowarDto, responseEntity.getBody());
@@ -81,7 +81,7 @@ public class DowarControllerTest {
         DowarDto dowarDto = new DowarDto();
         when(dowarService.updateDowar(dowarDto, id)).thenReturn(dowarDto);
 
-        ResponseEntity<DowarDto> responseEntity = dowarController.updateDowar(id, dowarDto);
+        ResponseEntity<String> responseEntity = dowarController.updateDowar(id, dowarDto);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(dowarDto, responseEntity.getBody());

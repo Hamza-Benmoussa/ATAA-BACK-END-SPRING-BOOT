@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -97,5 +98,8 @@ public class DowarServiceImpl implements IDowarService {
         }
 
         return totalArrivedKafilas;
+    }
+    public List<Dowar> getDowarsByVille(Long villeId) {
+        return iDowarsRepository.findByVilleId(villeId);
     }
 }

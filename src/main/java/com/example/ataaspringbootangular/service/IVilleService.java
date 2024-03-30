@@ -11,9 +11,11 @@ import java.util.List;
 public interface IVilleService {
     VilleDto ajouterVille(VilleDto villeDto);
 
+    long getNumberOfVilles();
+
     Ville getByNomVille(String nomVille);
+
     List<VilleDto> getVilles();
-    List<Dowar> getDowarsForVille(String nomVille);
     VilleDto getVillesById(Long id) throws VilleFoundException;
 
     VilleDto updateVille(VilleDto villeDto, Long id);

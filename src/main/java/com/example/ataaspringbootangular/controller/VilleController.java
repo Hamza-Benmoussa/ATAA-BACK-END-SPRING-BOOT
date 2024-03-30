@@ -26,12 +26,6 @@ public class VilleController {
         VilleDto savedVille = villeService.ajouterVille(villeDto);
         return new ResponseEntity<>(savedVille, HttpStatus.CREATED);
     }
-    @GetMapping("/getDowarsForVille/{nomVille}")
-    @PreAuthorize("hasAuthority('PresidantAssociation')")
-    public ResponseEntity<List<Dowar>> getDowarsForVille(@PathVariable String nomVille) {
-        List<Dowar> dowars = villeService.getDowarsForVille(nomVille);
-        return new ResponseEntity<>(dowars, HttpStatus.OK);
-    }
     @GetMapping
     @PreAuthorize("hasAnyAuthority('AdminApp','PresidantAssociation')")
     public ResponseEntity<List<VilleDto>> getVilles() {
@@ -39,6 +33,11 @@ public class VilleController {
         return new ResponseEntity<>(villes, HttpStatus.OK);
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<Long> getNumberOfVilles() {
+        long count = villeService.getNumberOfVilles();
+        return ResponseEntity.ok(count);
+    }
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('AdminApp')")
     public ResponseEntity<VilleDto> getVilleById(@PathVariable Long id) throws VilleFoundException, VilleFoundException {

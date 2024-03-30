@@ -28,9 +28,24 @@ public class UtilisateurController {
     }
     @PostMapping("/ajouterUtilisateur")
     @PreAuthorize("hasAuthority('AdminApp')")
-    public ResponseEntity<UtilisateurDto> ajouterUtilisateur(@RequestBody @Valid UtilisateurDto utilisateurDto) {
-        UtilisateurDto savedUtilisateur = utilisateurService.ajouterUtilisateur(utilisateurDto);
-        return new ResponseEntity<>(savedUtilisateur, HttpStatus.CREATED);
+    public ResponseEntity<String> ajouterUtilisateur(@RequestBody @Valid UtilisateurDto utilisateurDto) {
+        try {
+            UtilisateurDto savedUtilisateur = utilisateurService.ajouterUtilisateur(utilisateurDto);
+            return new ResponseEntity<>("000", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/updateUtilisateur/{id}")
+    @PreAuthorize("hasAuthority('AdminApp')")
+    public ResponseEntity<String> updateUtilisateur(@PathVariable Long id, @Valid @RequestBody UtilisateurDto utilisateurDto) throws ParseException {
+        try {
+            UtilisateurDto updatedUtilisateur = utilisateurService.updateUtilisateur(utilisateurDto, id);
+            return new ResponseEntity<>("000", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     @GetMapping("/count")
     public ResponseEntity<Long> getNumberOfUtilisateurs() {
@@ -51,17 +66,16 @@ public class UtilisateurController {
         return new ResponseEntity<>(utilisateur, HttpStatus.OK);
     }
 
-    @PutMapping("/updateUtilisateur/{id}")
-    @PreAuthorize("hasAuthority('AdminApp')")
-    public ResponseEntity<UtilisateurDto> updateUtilisateur(@PathVariable Long id, @Valid @RequestBody UtilisateurDto utilisateurDto) throws ParseException {
-        UtilisateurDto updatedUtilisateur = utilisateurService.updateUtilisateur(utilisateurDto, id);
-        return new ResponseEntity<>(updatedUtilisateur, HttpStatus.OK);
-    }
+
 
     @DeleteMapping("/deleteUtilisateur/{id}")
     @PreAuthorize("hasAuthority('AdminApp')")
     public ResponseEntity<String> deleteUtilisateur(@PathVariable("id") Long id) {
-        utilisateurService.deleteUtilisateur(id);
-        return ResponseEntity.ok("Utilisateur with id " +id+ " was deleted succes");
+        try {
+            utilisateurService.deleteUtilisateur(id);
+            return new ResponseEntity<>("000", HttpStatus.OK); // Return 000 for success
+        } catch (Exception e) {
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR); // Return 001 for failure
+        }
     }
 }

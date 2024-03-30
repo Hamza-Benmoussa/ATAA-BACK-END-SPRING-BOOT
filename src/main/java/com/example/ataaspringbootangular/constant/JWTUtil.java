@@ -1,7 +1,7 @@
 package com.example.ataaspringbootangular.constant;
 
 public class JWTUtil {
-    public static final long EXPIRE_ACCESS_TOKEN = 10*60*1000;
+    public static final long EXPIRE_ACCESS_TOKEN = 100*60*1000;
     public static final String ISSUER = "SpringBootApp";
     public static final  String SECRET_KEY = "Hamza15122001";
     public static final String BEARER_PRIFIX="Bearer ";

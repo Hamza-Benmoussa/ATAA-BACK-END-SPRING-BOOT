@@ -1,9 +1,7 @@
 package com.example.ataaspringbootangular.service.impl;
 
 import com.example.ataaspringbootangular.dto.VilleDto;
-import com.example.ataaspringbootangular.entity.Dowar;
 import com.example.ataaspringbootangular.entity.Ville;
-import com.example.ataaspringbootangular.exception.except.UtilisateurFoundException;
 import com.example.ataaspringbootangular.exception.except.VilleFoundException;
 import com.example.ataaspringbootangular.repository.IVilleRepository;
 import com.example.ataaspringbootangular.service.IVilleService;
@@ -12,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,15 +41,7 @@ public class VilleServiceImpl implements IVilleService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<Dowar> getDowarsForVille(String nomVille) {
-        Ville ville= (Ville) iVilleRepository.findAllDowarsByNomVille(nomVille);
-        if (ville != null) {
-            return ville.getDowars();
-        } else {
-            return Collections.emptyList();
-        }
-    }
+
 
     @Override
     public VilleDto getVillesById(Long id) throws VilleFoundException {
@@ -73,6 +62,10 @@ public class VilleServiceImpl implements IVilleService {
         return null;
     }
 
+    @Override
+    public long getNumberOfVilles() {
+        return iVilleRepository.count();
+    }
     @Override
     public void deleteVille(Long id) {
         Ville ville = iVilleRepository.findByIdAndDeletedFalse(id).orElse(null);

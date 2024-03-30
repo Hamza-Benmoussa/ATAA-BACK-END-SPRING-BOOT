@@ -42,7 +42,7 @@ class UtilisateurControllerTest {
         UtilisateurDto utilisateurDto = new UtilisateurDto();
         when(utilisateurService.ajouterUtilisateur(any())).thenReturn(utilisateurDto);
 
-        ResponseEntity<UtilisateurDto> responseEntity = utilisateurController.ajouterUtilisateur(utilisateurDto);
+        ResponseEntity<String> responseEntity = utilisateurController.ajouterUtilisateur(utilisateurDto);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(utilisateurDto, responseEntity.getBody());
@@ -75,7 +75,7 @@ class UtilisateurControllerTest {
         UtilisateurDto utilisateurDto = new UtilisateurDto();
         when(utilisateurService.updateUtilisateur(any(), any())).thenReturn(utilisateurDto);
 
-        ResponseEntity<UtilisateurDto> responseEntity = utilisateurController.updateUtilisateur(1L, utilisateurDto);
+        ResponseEntity<String> responseEntity = utilisateurController.updateUtilisateur(1L, utilisateurDto);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(utilisateurDto, responseEntity.getBody());

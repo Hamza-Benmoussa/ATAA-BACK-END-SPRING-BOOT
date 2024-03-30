@@ -10,4 +10,6 @@ public interface IDowarsRepository extends JpaRepository<Dowar,Long> {
     List<Dowar> findByDeletedFalse();
     Optional<Dowar> findById(Long id);
     Optional<Dowar> findByIdAndDeletedFalse(Long id);
+
+    List<Dowar> findByVilleId(Long villeId);
 }

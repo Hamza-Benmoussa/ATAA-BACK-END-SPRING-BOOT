@@ -2,6 +2,7 @@ package com.example.ataaspringbootangular.service;
 
 import com.example.ataaspringbootangular.dto.BiensEssantielDto;
 import com.example.ataaspringbootangular.dto.DowarDto;
+import com.example.ataaspringbootangular.entity.Dowar;
 import com.example.ataaspringbootangular.exception.except.DowarFoundException;
 import com.example.ataaspringbootangular.exception.except.VilleFoundException;
 
@@ -11,6 +12,8 @@ public interface IDowarService {
     DowarDto ajouterDowar(DowarDto dowarDto) throws DowarFoundException, VilleFoundException;
 
     long getNumberOfDowars();
+    List<Dowar> getDowarsByVille(Long villeId);
+
     List<DowarDto> getDowars();
 
     DowarDto getDowarsById(Long id) throws DowarFoundException;
