@@ -11,6 +11,7 @@
     import org.modelmapper.ModelMapper;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.security.core.context.SecurityContextHolder;
+    import org.springframework.security.core.userdetails.UserDetails;
     import org.springframework.stereotype.Service;
     import org.springframework.transaction.annotation.Transactional;
     import java.util.List;
@@ -123,18 +124,24 @@
                     })
                     .orElseThrow(() -> new KafilaFoundException("Kafila Not found with id = " + id));
         }
-        public long getNumberOfKafilas() {
-            return iKafilaRepository.count();
+        public Long getNumberOfKafilasForCurrentUser() {
+            String currentUsername = getCurrentUsername();
+            List<Kafila> kafilas = iKafilaRepository.findByCreatedByAndDeletedFalse(currentUsername);
+            return (long) kafilas.size();
+        }
+        public String getCurrentUsername() {
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+            if (principal instanceof UserDetails) {
+                return ((UserDetails) principal).getUsername();
+            } else {
+                return principal.toString();
+            }
         }
         @Override
         public KafilaDto updateKafila(KafilaDto kafilaDto, Long id){
             Kafila existingKafila = iKafilaRepository.findByIdAndDeletedFalse(id).orElse(null);
             if (existingKafila != null){
-                existingKafila.setNomKfila(kafilaDto.getNomKfila());
-                Dowar dowar = iDowarsRepository.findById(kafilaDto.getDowarId()).orElse(null);
-                existingKafila.setDowar(dowar);
-                existingKafila.setDateArrivee(kafilaDto.getDateArrivee());
-                existingKafila.setDateDepart(kafilaDto.getDateDepart());
                 existingKafila.setArrivedKafila(kafilaDto.isArrivedKafila());
                 Kafila updateKafila = iKafilaRepository.save(existingKafila);
                 updateKafila.setId(id);

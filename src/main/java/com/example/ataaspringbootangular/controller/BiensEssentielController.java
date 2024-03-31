@@ -5,6 +5,7 @@ import com.example.ataaspringbootangular.dto.KafilaDto;
 import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
 import com.example.ataaspringbootangular.exception.except.BiensEssentielFoundException;
 import com.example.ataaspringbootangular.service.IBiensEssantielService;
+import com.example.ataaspringbootangular.service.impl.BiensEssantielImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ import java.util.List;
 @CrossOrigin("*")
 public class BiensEssentielController {
     @Autowired
-    private IBiensEssantielService biensEssantielService;
+    private BiensEssantielImpl biensEssantielService;
 
     @PostMapping("/ajouterBiensEssentiel")
     @PreAuthorize("hasAuthority('PresidantAssociation')")
@@ -56,7 +57,7 @@ public class BiensEssentielController {
     }
     @GetMapping("/count")
     public ResponseEntity<Long> getNumberOfbiens() {
-        long count = biensEssantielService.getNumberOfBiens();
+        Long count = biensEssantielService.getNumberOfBiensEssentislsForCurrentUser();
         return ResponseEntity.ok(count);
     }
     @GetMapping()

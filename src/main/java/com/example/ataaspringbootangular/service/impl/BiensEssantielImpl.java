@@ -18,6 +18,7 @@ import com.example.ataaspringbootangular.service.IBiensEssantielService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,8 +53,19 @@ public class BiensEssantielImpl implements IBiensEssantielService {
 
         return modelMapper.map(saveBiensEssantiel, BiensEssantielDto.class);
     }
-    public long getNumberOfBiens() {
-        return iBiensEssantielsRepository.count();
+    public Long getNumberOfBiensEssentislsForCurrentUser() {
+        String currentUsername = getCurrentUsername();
+        List<BiensEssantiel> biensEssantiels = iBiensEssantielsRepository.findByCreatedByAndDeletedFalse(currentUsername);
+        return (long) biensEssantiels.size();
+    }
+    public String getCurrentUsername() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            return ((UserDetails) principal).getUsername();
+        } else {
+            return principal.toString();
+        }
     }
     @Override
     public BiensEssantielDto getBiensEssantielsById(Long id) throws BiensEssentielFoundException {

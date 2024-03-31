@@ -61,7 +61,7 @@ public class KafilaController {
     }
     @GetMapping("/count")
     public ResponseEntity<Long> getNumberOfKafilas() {
-        long count = kafilaService.getNumberOfKafilas();
+        long count = kafilaService.getNumberOfKafilasForCurrentUser();
         return ResponseEntity.ok(count);
     }
     @GetMapping()
