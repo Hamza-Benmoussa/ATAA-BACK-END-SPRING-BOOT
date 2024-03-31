@@ -88,7 +88,8 @@ public class UtilisateurServiceImpl implements IUtilisateurService {
         }
     }
     public long getNumberOfUtilisatuers() {
-        return iUtilisateurRepository.count();
+        List<Utilisateur> utilisateurs = iUtilisateurRepository.findByDeletedFalse();
+        return utilisateurs.size();
     }
     @Override
     public Utilisateur loadUserByEmail(String email) {

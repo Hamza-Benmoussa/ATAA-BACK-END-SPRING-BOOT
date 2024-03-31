@@ -20,12 +20,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,8 +65,19 @@ public class MemberServiceImpl implements IMemebreService {
 
         return modelMapper.map(saveMember, MemberDto.class);
     }
-    public long getNumberOfMembers() {
-        return iMembersRepository.count();
+    public Long getNumberOfMembersForCurrentUser() {
+        String currentUsername = getCurrentUsername();
+        List<Member> members = iMembersRepository.findByCreatedByAndDeletedFalse(currentUsername);
+        return (long) members.size();
+    }
+    public String getCurrentUsername() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            return ((UserDetails) principal).getUsername();
+        } else {
+            return principal.toString();
+        }
     }
     @Override
     public MemberDto getMembersById(Long id) throws MemberFoundException {

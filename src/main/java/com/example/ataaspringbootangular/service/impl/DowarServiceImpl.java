@@ -69,7 +69,8 @@ public class DowarServiceImpl implements IDowarService {
         return null;
     }
     public long getNumberOfDowars() {
-        return iDowarsRepository.count();
+        List<Dowar> dowars = iDowarsRepository.findByDeletedFalse();
+        return dowars.size();
     }
     @Override
     public void deleteDowar(Long id) {

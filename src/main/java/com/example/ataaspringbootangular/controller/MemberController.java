@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/members")
@@ -65,8 +66,8 @@ public ResponseEntity<List<MemberDto>> getMembersCreatedByCurrentUser(Authentica
     return ResponseEntity.ok(membersCreatedByCurrentUser);
 }
     @GetMapping("/count")
-    public ResponseEntity<Long> getNumberOfMembers() {
-        long count = memebreService.getNumberOfMembers();
+    public ResponseEntity<Long> getNumberOfMembersForCurrentUser() {
+        Long count = memebreService.getNumberOfMembersForCurrentUser();
         return ResponseEntity.ok(count);
     }
 

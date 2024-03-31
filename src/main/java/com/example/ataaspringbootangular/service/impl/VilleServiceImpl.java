@@ -64,7 +64,8 @@ public class VilleServiceImpl implements IVilleService {
 
     @Override
     public long getNumberOfVilles() {
-        return iVilleRepository.count();
+        List<Ville> villes = iVilleRepository.findByDeletedFalse();
+        return villes.size();
     }
     @Override
     public void deleteVille(Long id) {

@@ -83,7 +83,8 @@ public class AssociationServiceImpl implements IAssociationService {
         return null;
     }
     public long getNumberOfAssociations() {
-        return iAssociationsRepository.count();
+        List<Association> associations = iAssociationsRepository.findByDeletedFalse();
+        return associations.size();
     }
     @Override
     public AssociationDto updateAssociation(AssociationDto associationDto, Long id) throws UtilisateurFoundException, VilleFoundException {

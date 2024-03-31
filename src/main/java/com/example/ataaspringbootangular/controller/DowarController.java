@@ -56,7 +56,7 @@ public class DowarController {
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasAuthority('AdminApp')")
+    @PreAuthorize("hasAnyAuthority('AdminApp','PresidantAssociation')")
     public ResponseEntity<List<DowarDto>> getDowars() {
         List<DowarDto> dowars = dowarService.getDowars();
         return new ResponseEntity<>(dowars, HttpStatus.OK);
