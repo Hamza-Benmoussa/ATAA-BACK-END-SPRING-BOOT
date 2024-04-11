@@ -1,10 +1,12 @@
 package com.example.ataaspringbootangular.controller;
 
 import com.example.ataaspringbootangular.dto.DowarDto;
+import com.example.ataaspringbootangular.dto.DowarWithKafilaCountDto;
 import com.example.ataaspringbootangular.entity.Dowar;
 import com.example.ataaspringbootangular.exception.except.DowarFoundException;
 import com.example.ataaspringbootangular.exception.except.VilleFoundException;
 import com.example.ataaspringbootangular.service.IDowarService;
+import com.example.ataaspringbootangular.service.impl.DowarServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +22,16 @@ import java.util.List;
 public class DowarController {
 
     @Autowired
-    private IDowarService dowarService;
+    private DowarServiceImpl dowarService;
 
     @PostMapping("/ajouterDowar")
     @PreAuthorize("hasAuthority('AdminApp')")
     public ResponseEntity<String> ajouterDowar(@RequestBody @Valid DowarDto dowarDto) throws VilleFoundException, DowarFoundException {
         try {
             DowarDto savedDowar = dowarService.ajouterDowar(dowarDto);
-            return new ResponseEntity<>("000", HttpStatus.CREATED); // Return 000 for success
+            return new ResponseEntity<>("000", HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR); // Return 001 for failure
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -38,9 +40,9 @@ public class DowarController {
     public ResponseEntity<String> updateDowar(@PathVariable Long id, @Valid @RequestBody DowarDto dowarDto) throws VilleFoundException {
         try {
             DowarDto updatedDowar = dowarService.updateDowar(dowarDto, id);
-            return new ResponseEntity<>("000", HttpStatus.OK); // Return 000 for success
+            return new ResponseEntity<>("000", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR); // Return 001 for failure
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -49,9 +51,9 @@ public class DowarController {
     public ResponseEntity<String> deleteDowar(@PathVariable("id") Long id) {
         try {
             dowarService.deleteDowar(id);
-            return new ResponseEntity<>("000", HttpStatus.OK); // Return 000 for success
+            return new ResponseEntity<>("000", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR); // Return 001 for failure
+            return new ResponseEntity<>("001", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -81,10 +83,10 @@ public class DowarController {
         int totalKafilas = dowarService.calculateTotalArrivedKafilasForDowar(dowarId);
         return new ResponseEntity<>(totalKafilas, HttpStatus.OK);
     }
-    @GetMapping("/villes/{villeId}/dowars")
-    public ResponseEntity<List<Dowar>> getDowarsByVille(@PathVariable Long villeId) {
-        List<Dowar> dowars = dowarService.getDowarsByVille(villeId);
-        return new ResponseEntity<>(dowars, HttpStatus.OK);
+    @GetMapping("/villes/{villeId}/dowarsWithKafilaCount")
+    public ResponseEntity<List<DowarWithKafilaCountDto>> getDowarsWithKafilaCountByVille(@PathVariable Long villeId) {
+        List<DowarWithKafilaCountDto> dowarsWithKafilaCount = dowarService.getDowarsWithKafilaCountByVille(villeId);
+        return new ResponseEntity<>(dowarsWithKafilaCount, HttpStatus.OK);
     }
 
 }

@@ -27,6 +27,8 @@ public class DowarDto implements Serializable {
     int nmbrResidant;
     Long villeId;
     List<Kafila> kafilas;
+     int arrivedKafilaCount;
+
 
     boolean deleted;
 

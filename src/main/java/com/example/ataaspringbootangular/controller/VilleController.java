@@ -4,6 +4,7 @@ import com.example.ataaspringbootangular.dto.VilleDto;
 import com.example.ataaspringbootangular.entity.Dowar;
 import com.example.ataaspringbootangular.exception.except.VilleFoundException;
 import com.example.ataaspringbootangular.service.IVilleService;
+import com.example.ataaspringbootangular.service.impl.VilleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import java.util.List;
 @CrossOrigin("*")
 public class VilleController {
     @Autowired
-    private IVilleService villeService;
+    private VilleServiceImpl villeService;
 
     @PostMapping("/ajouterVille")
     @PreAuthorize("hasAuthority('AdminApp')")
@@ -58,7 +59,11 @@ public class VilleController {
         List<VilleDto> villes = villeService.getVilles();
         return new ResponseEntity<>(villes, HttpStatus.OK);
     }
-
+    @GetMapping("/villesWithDowarsAndArrivedKafilas")
+    public ResponseEntity<List<VilleDto>> getVillesWithDowarsAndArrivedKafilas() {
+        List<VilleDto> villesWithDowarsAndArrivedKafilas = villeService.getVillesWithDowarsAndArrivedKafilas();
+        return new ResponseEntity<>(villesWithDowarsAndArrivedKafilas, HttpStatus.OK);
+    }
     @GetMapping("/count")
     public ResponseEntity<Long> getNumberOfVilles() {
         long count = villeService.getNumberOfVilles();

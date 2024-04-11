@@ -1,6 +1,7 @@
 package com.example.ataaspringbootangular.service.impl;
 
 import com.example.ataaspringbootangular.dto.DowarDto;
+import com.example.ataaspringbootangular.dto.DowarWithKafilaCountDto;
 import com.example.ataaspringbootangular.dto.VilleDto;
 import com.example.ataaspringbootangular.entity.Dowar;
 import com.example.ataaspringbootangular.entity.Kafila;
@@ -9,6 +10,7 @@ import com.example.ataaspringbootangular.exception.except.DowarFoundException;
 import com.example.ataaspringbootangular.exception.except.UtilisateurFoundException;
 import com.example.ataaspringbootangular.exception.except.VilleFoundException;
 import com.example.ataaspringbootangular.repository.IDowarsRepository;
+import com.example.ataaspringbootangular.repository.IKafilaRepository;
 import com.example.ataaspringbootangular.service.IDowarService;
 import com.example.ataaspringbootangular.service.IVilleService;
 import org.modelmapper.ModelMapper;
@@ -29,6 +31,8 @@ public class DowarServiceImpl implements IDowarService {
     private ModelMapper modelMapper;
     @Autowired
     private IVilleService iVilleService;
+    @Autowired
+    private IKafilaRepository kafilaRepository;
     @Override
     public DowarDto ajouterDowar(DowarDto dowarDto) throws VilleFoundException {
         VilleDto villeDto = iVilleService.getVillesById(dowarDto.getVilleId());
@@ -102,5 +106,13 @@ public class DowarServiceImpl implements IDowarService {
     }
     public List<Dowar> getDowarsByVille(Long villeId) {
         return iDowarsRepository.findByVilleId(villeId);
+    }
+    public List<DowarWithKafilaCountDto> getDowarsWithKafilaCountByVille(Long villeId) {
+        List<Dowar> dowars = iDowarsRepository.findByVilleId(villeId);
+        return dowars.stream().map(dowar -> {
+            DowarDto dowarDto = modelMapper.map(dowar, DowarDto.class);
+            int arrivedKafilaCount = kafilaRepository.countByDowarIdAndArrivedKafila(dowar.getId(), true);
+            return new DowarWithKafilaCountDto(dowarDto, arrivedKafilaCount);
+        }).collect(Collectors.toList());
     }
 }

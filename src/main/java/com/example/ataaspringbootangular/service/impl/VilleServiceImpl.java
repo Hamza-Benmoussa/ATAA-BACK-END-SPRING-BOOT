@@ -1,8 +1,10 @@
 package com.example.ataaspringbootangular.service.impl;
 
+import com.example.ataaspringbootangular.dto.DowarDto;
 import com.example.ataaspringbootangular.dto.VilleDto;
 import com.example.ataaspringbootangular.entity.Ville;
 import com.example.ataaspringbootangular.exception.except.VilleFoundException;
+import com.example.ataaspringbootangular.repository.IKafilaRepository;
 import com.example.ataaspringbootangular.repository.IVilleRepository;
 import com.example.ataaspringbootangular.service.IVilleService;
 import org.modelmapper.ModelMapper;
@@ -20,6 +22,8 @@ public class VilleServiceImpl implements IVilleService {
     private IVilleRepository iVilleRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private IKafilaRepository iKafilaRepository;
     @Override
     public VilleDto ajouterVille(VilleDto villeDto) {
         Ville ville = modelMapper.map(villeDto , Ville.class);
@@ -74,5 +78,23 @@ public class VilleServiceImpl implements IVilleService {
             ville.setDeleted(true);
             iVilleRepository.save(ville);
         }
+    }
+    public List<VilleDto> getVillesWithDowarsAndArrivedKafilas() {
+        List<Ville> villes = iVilleRepository.findByDeletedFalse();
+        return villes.stream()
+                .map(ville -> {
+                    VilleDto villeDto = modelMapper.map(ville, VilleDto.class);
+                    List<DowarDto> dowars = ville.getDowars().stream()
+                            .map(dowar -> {
+                                DowarDto dowarDto = modelMapper.map(dowar, DowarDto.class);
+                                int arrivedKafilaCount = iKafilaRepository.countByDowarIdAndArrivedKafila(dowar.getId(), true);
+                                dowarDto.setArrivedKafilaCount(arrivedKafilaCount);
+                                return dowarDto;
+                            })
+                            .collect(Collectors.toList());
+                    villeDto.setDowars(dowars);
+                    return villeDto;
+                })
+                .collect(Collectors.toList());
     }
 }

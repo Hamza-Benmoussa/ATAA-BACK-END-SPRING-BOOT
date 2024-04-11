@@ -10,4 +10,6 @@ public interface IKafilaRepository extends JpaRepository<Kafila,Long> {
     List<Kafila> findByDeletedFalse();
     Optional<Kafila> findByIdAndDeletedFalse(Long id);
     List<Kafila> findByCreatedByAndDeletedFalse(String createdByEmail);
+
+    int countByDowarIdAndArrivedKafila(Long id, boolean b);
 }
