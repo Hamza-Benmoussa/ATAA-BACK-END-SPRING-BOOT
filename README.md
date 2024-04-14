@@ -1,17 +1,4 @@
 # ATAA
-َو َم ن
-حيَا َها
-َ
-َم أ ا
-َّ
-ن
-َ
-فَ َكأ حيَا
-َ
-َس أ
-َّا
-الن
-َجِميعا
 
 ## INTRODUCTION
 Le projet vise à concevoir et développer une application web pour les Associations caritatifs fournissant une aide humanitaire, tels que des matelas, des vêtements, de la nourriture, etc., dans des zones reculées. L'objectif principal est de résoudre le problème des associations qui ont du mal à identifier les domaines non couverts par les subventions, en facilitant la coordination entre les associations, en apportant une aide ciblée, et en digitalisé le processus.
