@@ -1,30 +1,33 @@
-
 package com.example.ataaspringbootangular.ControllerTest;
 
 import com.example.ataaspringbootangular.controller.KafilaController;
 import com.example.ataaspringbootangular.dto.KafilaDto;
-import com.example.ataaspringbootangular.exception.except.*;
-import com.example.ataaspringbootangular.service.IKafilaService;
+import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
+import com.example.ataaspringbootangular.exception.except.BiensEssentielFoundException;
+import com.example.ataaspringbootangular.exception.except.DowarFoundException;
+import com.example.ataaspringbootangular.exception.except.KafilaFoundException;
+import com.example.ataaspringbootangular.service.impl.KafilaSericeImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 
-import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class KafilaControllerTest {
 
     @Mock
-    private IKafilaService kafilaService;
+    private KafilaSericeImpl kafilaService;
 
     @InjectMocks
     private KafilaController kafilaController;
@@ -35,34 +38,54 @@ public class KafilaControllerTest {
     }
 
     @Test
-    void ajouterKafila() throws DowarFoundException, AssociationFoundException, BiensEssentielFoundException, KafilaFoundException, ParseException {
+    void ajouterKafila() throws DowarFoundException, AssociationFoundException, BiensEssentielFoundException {
         KafilaDto kafilaDto = new KafilaDto();
         when(kafilaService.ajouterKafila(kafilaDto)).thenReturn(kafilaDto);
 
         ResponseEntity<String> responseEntity = kafilaController.ajouterKafila(kafilaDto);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals(kafilaDto, responseEntity.getBody());
+        assertEquals("000", responseEntity.getBody());
         verify(kafilaService, times(1)).ajouterKafila(kafilaDto);
     }
 
     @Test
-    void getKafilasCreatedByCurrentUser() {
-        String currentUserEmail = "test@example.com";
+    void updateKafila() throws Exception {
+        Long id = 1L;
+        KafilaDto kafilaDto = new KafilaDto();
+        when(kafilaService.updateKafila(kafilaDto, id)).thenReturn(kafilaDto);
 
-        List<KafilaDto> mockKafilas = Collections.singletonList(new KafilaDto());
-        when(kafilaService.getKafilasCreatedByUser(currentUserEmail)).thenReturn(mockKafilas);
+        ResponseEntity<String> responseEntity = kafilaController.updateKafila(id, kafilaDto);
 
-        Authentication authentication = mock(Authentication.class);
-        when(authentication.getName()).thenReturn(currentUserEmail);
-
-        ResponseEntity<List<KafilaDto>> responseEntity = kafilaController.getKafilasCreatedByCurrentUser(authentication);
-
-        // Assertions
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(mockKafilas, responseEntity.getBody());
-        verify(kafilaService, times(1)).getKafilasCreatedByUser(currentUserEmail);
+        assertEquals("000", responseEntity.getBody());
+        verify(kafilaService, times(1)).updateKafila(kafilaDto, id);
     }
+
+    @Test
+    void deleteKafila() {
+        Long id = 1L;
+        doNothing().when(kafilaService).deleteKafila(id);
+
+        ResponseEntity<String> responseEntity = kafilaController.deleteKafila(id);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals("000", responseEntity.getBody());
+        verify(kafilaService, times(1)).deleteKafila(id);
+    }
+
+    @Test
+    void getNumberOfKafilas() {
+        long count = 5L;
+        when(kafilaService.getNumberOfKafilasForCurrentUser()).thenReturn(count);
+
+        ResponseEntity<Long> responseEntity = kafilaController.getNumberOfKafilas();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(count, responseEntity.getBody());
+        verify(kafilaService, times(1)).getNumberOfKafilasForCurrentUser();
+    }
+
 
     @Test
     void getKafilaById() throws KafilaFoundException {
@@ -75,30 +98,5 @@ public class KafilaControllerTest {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(kafilaDto, responseEntity.getBody());
         verify(kafilaService, times(1)).getKafilasById(id);
-    }
-
-    @Test
-    void updateKafila() throws ParseException {
-        Long id = 1L;
-        KafilaDto kafilaDto = new KafilaDto();
-        when(kafilaService.updateKafila(kafilaDto, id)).thenReturn(kafilaDto);
-
-        ResponseEntity<String> responseEntity = kafilaController.deleteKafila(id);
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(kafilaDto, responseEntity.getBody());
-        verify(kafilaService, times(1)).updateKafila(kafilaDto, id);
-    }
-
-    @Test
-    void deleteKafila() {
-        Long id = 1L;
-        doNothing().when(kafilaService).deleteKafila(id);
-
-        ResponseEntity<String> responseEntity = kafilaController.deleteKafila(id);
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals("Kafila with id 1 was deleted succes", responseEntity.getBody());
-        verify(kafilaService, times(1)).deleteKafila(id);
     }
 }

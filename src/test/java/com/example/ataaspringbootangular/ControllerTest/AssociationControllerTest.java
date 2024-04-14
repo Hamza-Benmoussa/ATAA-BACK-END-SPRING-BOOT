@@ -3,9 +3,8 @@ package com.example.ataaspringbootangular.ControllerTest;
 import com.example.ataaspringbootangular.controller.AssociationController;
 import com.example.ataaspringbootangular.dto.AssociationDto;
 import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
-import com.example.ataaspringbootangular.exception.except.UtilisateurFoundException;
-import com.example.ataaspringbootangular.exception.except.VilleFoundException;
 import com.example.ataaspringbootangular.service.IAssociationService;
+import com.example.ataaspringbootangular.service.IUtilisateurService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,12 +20,15 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-@ExtendWith(MockitoExtension.class)
 
+@ExtendWith(MockitoExtension.class)
 public class AssociationControllerTest {
 
     @Mock
     private IAssociationService associationService;
+
+    @Mock
+    private IUtilisateurService utilisateurService;
 
     @InjectMocks
     private AssociationController associationController;
@@ -37,15 +39,40 @@ public class AssociationControllerTest {
     }
 
     @Test
-    void ajouterAssociation() throws UtilisateurFoundException, VilleFoundException {
+    void ajouterAssociation() throws Exception {
         AssociationDto associationDto = new AssociationDto();
         when(associationService.ajouterAssociation(associationDto)).thenReturn(associationDto);
 
         ResponseEntity<String> responseEntity = associationController.ajouterAssociation(associationDto);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals(associationDto, responseEntity.getBody());
+        assertEquals("000", responseEntity.getBody());
         verify(associationService, times(1)).ajouterAssociation(associationDto);
+    }
+
+    @Test
+    void updateAssociation() throws Exception {
+        Long id = 1L;
+        AssociationDto associationDto = new AssociationDto();
+        when(associationService.updateAssociation(associationDto, id)).thenReturn(associationDto);
+
+        ResponseEntity<String> responseEntity = associationController.updateAssociation(id, associationDto);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals("000", responseEntity.getBody());
+        verify(associationService, times(1)).updateAssociation(associationDto, id);
+    }
+
+    @Test
+    void deleteAssociation() {
+        Long id = 1L;
+        doNothing().when(associationService).deleteAssociation(id);
+
+        ResponseEntity<String> responseEntity = associationController.deleteAssociation(id);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals("000", responseEntity.getBody());
+        verify(associationService, times(1)).deleteAssociation(id);
     }
 
     @Test
@@ -74,27 +101,14 @@ public class AssociationControllerTest {
     }
 
     @Test
-    void updateAssociation() throws UtilisateurFoundException, VilleFoundException {
-        Long id = 1L;
-        AssociationDto associationDto = new AssociationDto();
-        when(associationService.updateAssociation(associationDto, id)).thenReturn(associationDto);
+    void getNumberOfAssociations() {
+        long count = 5L;
+        when(associationService.getNumberOfAssociations()).thenReturn(count);
 
-        ResponseEntity<String> responseEntity = associationController.updateAssociation(id, associationDto);
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(associationDto, responseEntity.getBody());
-        verify(associationService, times(1)).updateAssociation(associationDto, id);
-    }
-
-    @Test
-    void deleteAssociation() {
-        Long id = 1L;
-        doNothing().when(associationService).deleteAssociation(id);
-
-        ResponseEntity<String> responseEntity = associationController.deleteAssociation(id);
+        ResponseEntity<Long> responseEntity = associationController.getNumberOfAssociations();
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals("Association with id 1 was deleted succes", responseEntity.getBody());
-        verify(associationService, times(1)).deleteAssociation(id);
+        assertEquals(count, responseEntity.getBody());
+        verify(associationService, times(1)).getNumberOfAssociations();
     }
 }

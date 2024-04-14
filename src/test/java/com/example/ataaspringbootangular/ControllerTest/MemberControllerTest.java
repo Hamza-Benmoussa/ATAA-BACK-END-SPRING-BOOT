@@ -4,26 +4,28 @@ import com.example.ataaspringbootangular.controller.MemberController;
 import com.example.ataaspringbootangular.dto.MemberDto;
 import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
 import com.example.ataaspringbootangular.exception.except.MemberFoundException;
-import com.example.ataaspringbootangular.service.IMemebreService;
+import com.example.ataaspringbootangular.service.impl.MemberServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class MemberControllerTest {
 
     @Mock
-    private IMemebreService memebreService;
+    private MemberServiceImpl memberService;
 
     @InjectMocks
     private MemberController memberController;
@@ -36,50 +38,50 @@ public class MemberControllerTest {
     @Test
     void ajouterMember() throws AssociationFoundException {
         MemberDto memberDto = new MemberDto();
-        when(memebreService.ajouterMember(memberDto)).thenReturn(memberDto);
+        when(memberService.ajouterMember(memberDto)).thenReturn(memberDto);
 
         ResponseEntity<String> responseEntity = memberController.ajouterMember(memberDto);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals(memberDto, responseEntity.getBody());
-        verify(memebreService, times(1)).ajouterMember(memberDto);
+        assertEquals("000", responseEntity.getBody());
+        verify(memberService, times(1)).ajouterMember(memberDto);
+    }
+
+    @Test
+    void updateMember() throws Exception {
+        Long id = 1L;
+        MemberDto memberDto = new MemberDto();
+        when(memberService.updateMember(memberDto, id)).thenReturn(memberDto);
+
+        ResponseEntity<String> responseEntity = memberController.updateMember(id, memberDto);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals("000", responseEntity.getBody());
+        verify(memberService, times(1)).updateMember(memberDto, id);
+    }
+
+    @Test
+    void deleteMember() {
+        Long id = 1L;
+        doNothing().when(memberService).deleteMember(id);
+
+        ResponseEntity<String> responseEntity = memberController.deleteMember(id);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals("000", responseEntity.getBody());
+        verify(memberService, times(1)).deleteMember(id);
     }
 
     @Test
     void getMemberById() throws MemberFoundException {
         Long id = 1L;
         MemberDto memberDto = new MemberDto();
-        when(memebreService.getMembersById(id)).thenReturn(memberDto);
+        when(memberService.getMembersById(id)).thenReturn(memberDto);
 
         ResponseEntity<MemberDto> responseEntity = memberController.getMemberById(id);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(memberDto, responseEntity.getBody());
-        verify(memebreService, times(1)).getMembersById(id);
-    }
-
-    @Test
-    void updateMember() throws ParseException {
-        Long id = 1L;
-        MemberDto memberDto = new MemberDto();
-        when(memebreService.updateMember(memberDto, id)).thenReturn(memberDto);
-
-        ResponseEntity<String> responseEntity = memberController.updateMember(id, memberDto);
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(memberDto, responseEntity.getBody());
-        verify(memebreService, times(1)).updateMember(memberDto, id);
-    }
-
-    @Test
-    void deleteMember() {
-        Long id = 1L;
-        doNothing().when(memebreService).deleteMember(id);
-
-        ResponseEntity<String> responseEntity = memberController.deleteMember(id);
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals("Member with id 1 was deleted succes", responseEntity.getBody());
-        verify(memebreService, times(1)).deleteMember(id);
+        verify(memberService, times(1)).getMembersById(id);
     }
 }

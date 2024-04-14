@@ -2,9 +2,8 @@ package com.example.ataaspringbootangular.ControllerTest;
 
 import com.example.ataaspringbootangular.controller.BiensEssentielController;
 import com.example.ataaspringbootangular.dto.BiensEssantielDto;
-import com.example.ataaspringbootangular.exception.except.AssociationFoundException;
 import com.example.ataaspringbootangular.exception.except.BiensEssentielFoundException;
-import com.example.ataaspringbootangular.service.IBiensEssantielService;
+import com.example.ataaspringbootangular.service.impl.BiensEssantielImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +24,7 @@ import static org.mockito.Mockito.*;
 public class BiensEssentielControllerTest {
 
     @Mock
-    private IBiensEssantielService biensEssantielService;
+    private BiensEssantielImpl biensEssantielService;
 
     @InjectMocks
     private BiensEssentielController biensEssentielController;
@@ -36,32 +35,19 @@ public class BiensEssentielControllerTest {
     }
 
     @Test
-    void ajouterBiensEssentiel() throws BiensEssentielFoundException, AssociationFoundException {
+    void ajouterBiensEssentiel() throws Exception {
         BiensEssantielDto biensEssantielDto = new BiensEssantielDto();
         when(biensEssantielService.ajouterBiensEssantiel(biensEssantielDto)).thenReturn(biensEssantielDto);
 
         ResponseEntity<String> responseEntity = biensEssentielController.ajouterBiensEssentiel(biensEssantielDto);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals(biensEssantielDto, responseEntity.getBody());
+        assertEquals("000", responseEntity.getBody());
         verify(biensEssantielService, times(1)).ajouterBiensEssantiel(biensEssantielDto);
     }
 
     @Test
-    void getBiensEssentielById() throws BiensEssentielFoundException {
-        Long id = 1L;
-        BiensEssantielDto biensEssentielDto = new BiensEssantielDto();
-        when(biensEssantielService.getBiensEssantielsById(id)).thenReturn(biensEssentielDto);
-
-        ResponseEntity<BiensEssantielDto> responseEntity = biensEssentielController.getBiensEssentielById(id);
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(biensEssentielDto, responseEntity.getBody());
-        verify(biensEssantielService, times(1)).getBiensEssantielsById(id);
-    }
-
-    @Test
-    void updateBiensEssentiel() {
+    void updateBiensEssentiel() throws Exception {
         Long id = 1L;
         BiensEssantielDto biensEssantielDto = new BiensEssantielDto();
         when(biensEssantielService.updateBiensEssentiel(biensEssantielDto, id)).thenReturn(biensEssantielDto);
@@ -69,7 +55,7 @@ public class BiensEssentielControllerTest {
         ResponseEntity<String> responseEntity = biensEssentielController.updateBiensEssentiel(id, biensEssantielDto);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(biensEssantielDto, responseEntity.getBody());
+        assertEquals("000", responseEntity.getBody());
         verify(biensEssantielService, times(1)).updateBiensEssentiel(biensEssantielDto, id);
     }
 
@@ -81,7 +67,32 @@ public class BiensEssentielControllerTest {
         ResponseEntity<String> responseEntity = biensEssentielController.deleteBiensEssentiel(id);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals("BiensEssentiel with id 1 was deleted succes", responseEntity.getBody());
+        assertEquals("000", responseEntity.getBody());
         verify(biensEssantielService, times(1)).deleteBiensEssantiel(id);
+    }
+
+    @Test
+    void getNumberOfbiens() {
+        long count = 5L;
+        when(biensEssantielService.getNumberOfBiensEssentislsForCurrentUser()).thenReturn(count);
+
+        ResponseEntity<Long> responseEntity = biensEssentielController.getNumberOfbiens();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(count, responseEntity.getBody());
+        verify(biensEssantielService, times(1)).getNumberOfBiensEssentislsForCurrentUser();
+    }
+
+    @Test
+    void getBiensEssentielById() throws BiensEssentielFoundException {
+        Long id = 1L;
+        BiensEssantielDto biensEssantielDto = new BiensEssantielDto();
+        when(biensEssantielService.getBiensEssantielsById(id)).thenReturn(biensEssantielDto);
+
+        ResponseEntity<BiensEssantielDto> responseEntity = biensEssentielController.getBiensEssentielById(id);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(biensEssantielDto, responseEntity.getBody());
+        verify(biensEssantielService, times(1)).getBiensEssantielsById(id);
     }
 }

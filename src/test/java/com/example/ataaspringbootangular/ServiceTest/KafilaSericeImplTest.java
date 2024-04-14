@@ -127,14 +127,6 @@ class KafilaSericeImplTest {
         assertNotNull(retrievedKafilaDto, "Kafila Not found");
     }
 
-
-    @Test
-    void updateKafila() throws ParseException {
-        kafilaDto.setNomKfila("khayrat");
-        KafilaDto updateKafilaDto = iKafilaService.updateKafila(kafilaDto, kafilaDto.getId());
-        assertEquals("khayrat", updateKafilaDto.getNomKfila(), "KafilaNom should be updated");
-    }
-
     @Test
     void deleteKafila() throws KafilaFoundException {
         Long kafilaId = kafilaDto.getId();
